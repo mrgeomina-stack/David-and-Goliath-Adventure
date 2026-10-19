@@ -27,7 +27,10 @@ Required: model tests, typecheck, production build, browser gameplay and offline
 Optional/unavailable: physical projector readability, Windows/Edge and human classroom timing.
 
 ## Final illustration specifications
-Current assets are editable original procedural Canvas artwork, bundled locally.
+Current assets combine locally embedded original generated cover illustrations
+and editable procedural Canvas character rigs and scenery. The version 1.1 title,
+maze and delivery treatment is described in VISUAL_DESIGN.md. Other environment
+illustration passes remain future milestones.
 Maintain David's blue headcloth, cream tunic, rust belt, brown sandals and woven bag
 across all poses; expressive eyes/brows/mouth. Use honey light, sage/forest foliage,
 ocher sandstone, turquoise water, navy UI, bronze equipment. Logical scene 1280x720.

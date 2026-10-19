@@ -1,5 +1,22 @@
 import { clamp, lerp, rng, type Point, type Gear } from "./model";
 export type Ctx = CanvasRenderingContext2D;
+export type Paint = string | CanvasGradient | CanvasPattern;
+let artTime = 0;
+export function setArtTime(time: number) {
+  artTime = time;
+}
+export function gradient(
+  c: Ctx,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  colors: string[],
+): CanvasGradient {
+  const g = c.createLinearGradient(x, y, x + w, y + h);
+  colors.forEach((color, i) => g.addColorStop(i / (colors.length - 1), color));
+  return g;
+}
 const palette = { ink: "#253d43", grass: "#81ac59", gold: "#efbd57" };
 export function ellipse(
   c: Ctx,
@@ -7,7 +24,7 @@ export function ellipse(
   y: number,
   rx: number,
   ry: number,
-  fill: string,
+  fill: Paint,
   stroke?: string,
 ) {
   c.beginPath();
@@ -27,7 +44,7 @@ export function round(
   w: number,
   h: number,
   r: number,
-  fill: string,
+  fill: Paint,
   stroke?: string,
 ) {
   c.beginPath();
@@ -40,7 +57,7 @@ export function round(
     c.stroke();
   }
 }
-export function line(c: Ctx, points: number[][], color: string, width = 3) {
+export function line(c: Ctx, points: number[][], color: Paint, width = 3) {
   c.beginPath();
   points.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y)));
   c.strokeStyle = color;
@@ -49,12 +66,7 @@ export function line(c: Ctx, points: number[][], color: string, width = 3) {
   c.lineJoin = "round";
   c.stroke();
 }
-export function poly(
-  c: Ctx,
-  points: number[][],
-  fill: string,
-  stroke?: string,
-) {
+export function poly(c: Ctx, points: number[][], fill: Paint, stroke?: string) {
   c.beginPath();
   points.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y)));
   c.closePath();
@@ -317,6 +329,7 @@ export type Pose = {
   sit?: number;
   tilt?: number;
   bag?: boolean;
+  bagOpen?: number;
   gear?: Set<Gear>;
   wave?: boolean;
   skin?: string;
@@ -324,110 +337,251 @@ export type Pose = {
   headcloth?: string;
   helmetSlip?: number;
   happy?: boolean;
+  mature?: boolean;
+  beard?: boolean;
+  look?: number;
 };
 export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
   c.save();
   c.translate(x, y);
   c.scale(s, s);
-  shadow(c, 0, 1, 34);
+  shadow(c, 0, 2, 34);
   c.rotate(p.tilt || 0);
   const walk = p.walk || 0,
     sit = p.sit || 0,
-    skin = p.skin || "#ce945e",
-    cloth = p.tunic || "#f6e4b4";
-  // Articulated legs bend independently during a stumble and seated recovery.
+    strain = p.strain || 0,
+    arm = p.arm || 0;
+  const skin = p.skin || "#d99861",
+    cloth = p.tunic || "#f4e4bf";
+  c.translate(0, -Math.abs(walk) * 1.6);
   const hipY = -53 + sit * 25;
-  line(
-    c,
-    [
-      [-14, hipY],
-      [-15 - walk * 12 - sit * 14, -26 + sit * 12],
-      [-17 - walk * 20 - sit * 25, -7],
-    ],
-    skin,
-    15,
-  );
-  line(
-    c,
-    [
-      [13, hipY],
-      [15 + walk * 12 + sit * 25, -26 + sit * 20],
-      [18 + walk * 20 + sit * 33, -7],
-    ],
-    skin,
-    15,
-  );
-  ellipse(c, -17 - walk * 20 - sit * 25, -5, 14, 6, "#71503a");
-  ellipse(c, 18 + walk * 20 + sit * 33, -5, 14, 6, "#71503a");
+  const feet = [
+    {
+      hip: -14,
+      knee: -15 - walk * 12 - sit * 14,
+      foot: -17 - walk * 20 - sit * 25,
+    },
+    {
+      hip: 13,
+      knee: 15 + walk * 12 + sit * 25,
+      foot: 18 + walk * 20 + sit * 33,
+    },
+  ];
+  for (const l of feet) {
+    line(
+      c,
+      [
+        [l.hip, hipY],
+        [l.knee, -26 + sit * 15],
+        [l.foot, -7],
+      ],
+      "#9e623e",
+      15,
+    );
+    line(
+      c,
+      [
+        [l.hip - 2, hipY],
+        [l.knee - 2, -26 + sit * 15],
+        [l.foot - 2, -10],
+      ],
+      skin,
+      10,
+    );
+    ellipse(c, l.foot, -5, 14, 6, "#614632");
+    ellipse(c, l.foot - 1, -7, 12, 4, "#a57748");
+    line(
+      c,
+      [
+        [l.foot - 7, -10],
+        [l.foot + 5, -4],
+      ],
+      "#e0b579",
+      2,
+    );
+  }
   c.save();
-  c.translate(0, sit * 17);
-  poly(
-    c,
-    [
-      [-22, -99],
-      [19, -99],
-      [30, -45],
-      [-30, -45],
-    ],
-    cloth,
-    "#b79566",
-  );
-  poly(
-    c,
-    [
-      [-20, -97],
-      [-10, -97],
-      [-17, -47],
-      [-28, -47],
-    ],
-    "#ffefd0",
-  );
-  round(c, -26, -65, 52, 9, 3, "#a85f43");
-  round(c, 0, -64, 12, 7, 2, "#eac47a");
-  const arm = p.arm || 0;
-  const strain = p.strain || 0;
+  c.translate(0, sit * 17 + Math.sin(artTime * 2 + x * 0.01) * 0.5);
+  // Curved linen silhouette with seams and shaded folds rather than a flat trapezoid.
+  c.beginPath();
+  c.moveTo(-12, -101);
+  c.quadraticCurveTo(-23, -103, -30, -89);
+  c.lineTo(-26, -77);
+  c.lineTo(-22, -81);
+  c.quadraticCurveTo(-23, -62, -31, -43);
+  c.quadraticCurveTo(0, -36, 31, -43);
+  c.quadraticCurveTo(23, -65, 22, -81);
+  c.lineTo(29, -77);
+  c.lineTo(32, -91);
+  c.quadraticCurveTo(23, -102, 12, -101);
+  c.closePath();
+  c.fillStyle = gradient(c, -30, -100, 60, 58, ["#fff4d4", cloth, "#bf9c6b"]);
+  c.fill();
+  c.strokeStyle = "#9c7d5544";
+  c.lineWidth = 1.3;
+  c.stroke();
   line(
     c,
     [
-      [-22, -91],
-      [-36 - strain * 8, -72 - arm * 18],
-      [-37 - strain * 11, -51 - arm * 40],
+      [-18, -77],
+      [-23, -48],
     ],
-    skin,
-    12,
+    "#fff2ce",
+    3,
   );
   line(
     c,
     [
-      [23, -91],
-      [36 + strain * 10, -75 - arm * 10],
-      [37 + arm * 16 + strain * 10, -55 - arm * 41],
+      [13, -78],
+      [19, -47],
     ],
-    skin,
-    12,
+    "#b9986850",
+    2,
   );
+  line(
+    c,
+    [
+      [-27, -44],
+      [0, -41],
+      [27, -44],
+    ],
+    "#bc9e70",
+    2,
+  );
+  for (let i = 0; i < 12; i++)
+    line(
+      c,
+      [
+        [-25 + i * 4, -45],
+        [-24 + i * 4, -42],
+      ],
+      "#8c997a",
+      0.7,
+    );
+  // A split neckline, linen sleeves and woven blue embroidery.
+  poly(
+    c,
+    [
+      [-10, -101],
+      [0, -91],
+      [10, -101],
+    ],
+    "#b3895c",
+  );
+  line(
+    c,
+    [
+      [-12, -102],
+      [0, -87],
+      [12, -102],
+    ],
+    "#738c82",
+    2,
+  );
+  round(
+    c,
+    -25,
+    -64,
+    50,
+    8,
+    3,
+    gradient(c, -25, -64, 0, 9, ["#cb8959", "#965b3a"]),
+  );
+  round(c, 2, -64, 11, 8, 2, "#d4b575", "#835a38");
+  const left = [
+    [-25, -88],
+    [-36 - strain * 8 - walk * 3, -72 - arm * 18],
+    [-37 - strain * 11 - walk * 5, -51 - arm * 40],
+  ];
+  const right = [
+    [25, -88],
+    [36 + strain * 10 + walk * 3, -75 - arm * 10],
+    [37 + arm * 16 + strain * 10 + walk * 5, -55 - arm * 41],
+  ];
+  for (const limb of [left, right]) {
+    line(c, limb, "#ac6f46", 12);
+    line(
+      c,
+      limb.map(([a, b]) => [a - 1.6, b - 1]),
+      skin,
+      9,
+    );
+    const hand = limb[2];
+    ellipse(c, hand[0], hand[1], 6.4, 7, skin);
+    line(
+      c,
+      [
+        [hand[0] + 2, hand[1]],
+        [hand[0] + 2, hand[1] + 3],
+      ],
+      "#b2734a",
+      0.7,
+    );
+  }
   if (p.bag) {
     line(
       c,
       [
-        [-19, -99],
-        [28, -49],
+        [-17, -99],
+        [31, -48],
       ],
-      "#a46e42",
-      6,
+      "#725038",
+      5,
     );
-    round(c, 19, -61, 32, 39, 9, "#bd8a4e", "#92613b");
-    for (let j = 0; j < 4; j++)
+    line(
+      c,
+      [
+        [-18, -99],
+        [30, -48],
+      ],
+      "#cfaa72",
+      2,
+    );
+    c.save();
+    c.translate(35 + walk, -43 + Math.abs(walk) * 2);
+    c.rotate(walk * 0.025);
+    round(
+      c,
+      -17,
+      -19,
+      34,
+      43,
+      10,
+      gradient(c, -17, -19, 34, 43, ["#d7b77c", "#b1864b", "#90663a"]),
+      "#8d683e",
+    );
+    for (let j = 0; j < 6; j++)
       line(
         c,
         [
-          [22, -54 + j * 7],
-          [47, -54 + j * 7],
+          [-14, -13 + j * 6],
+          [0, -11 + j * 6],
+          [14, -13 + j * 6],
         ],
-        "#dfb16a",
-        2,
+        "#edd4a04d",
+        1.3,
       );
-    ellipse(c, 35, -62, 16, 5, "#e1b978");
+    for (let j = 0; j < 7; j++)
+      line(
+        c,
+        [
+          [-12 + j * 4, -16],
+          [-11 + j * 4, 20],
+        ],
+        "#75592b3b",
+        0.7,
+      );
+    ellipse(c, 0, -20, 18, 5, "#dbbb81", "#9b7848");
+    ellipse(c, 0, -21, 13, 3, "#7d5833");
+    if (!p.bagOpen) bread(c, 0, -24, 0.45);
+    if (p.bagOpen) {
+      c.save();
+      c.translate(-15, -21);
+      c.rotate(-p.bagOpen * 1.1);
+      ellipse(c, 15, 0, 17, 4, "#dbbb81");
+      c.restore();
+    }
+    c.restore();
   }
   const gear = p.gear;
   if (gear?.has("tunic")) round(c, -25, -99, 50, 53, 8, "#a64d3a", "#793e31");
@@ -490,94 +644,173 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     );
     c.restore();
   }
-  round(c, -9, -111, 18, 18, 4, skin);
-  // Hair, warm facial shading, expressive eyes and brows.
-  ellipse(c, 0, -128, 31, 36, "#533b30");
-  ellipse(c, -29, -125, 6, 9, skin);
-  ellipse(c, 29, -125, 6, 9, skin);
-  ellipse(c, 0, -126, 26, 31, skin);
-  ellipse(c, -7, -132, 18, 24, "#e4ad75");
-  poly(
+
+  round(c, -8, -111, 16, 16, 4, skin);
+  // Warm dimensional face and soft curls. The face remains in the tested helmet/head region.
+  ellipse(c, 0, -130, 31, 35, "#493526");
+  ellipse(c, -28, -124, 6, 9, "#b9784e");
+  ellipse(c, 28, -124, 6, 9, skin);
+  c.beginPath();
+  c.moveTo(-25, -139);
+  c.bezierCurveTo(-24, -162, 24, -163, 26, -138);
+  c.bezierCurveTo(31, -112, 18, -99, 1, -98);
+  c.bezierCurveTo(-17, -98, -30, -115, -25, -139);
+  c.closePath();
+  c.fillStyle = gradient(c, -24, -144, 54, 38, [
+    "#f0be86",
+    "#e2a46b",
+    "#bb784e",
+  ]);
+  c.fill();
+  ellipse(c, -17, -118, 7, 4, "#d88d5d44");
+  ellipse(c, 18, -118, 7, 4, "#d88d5d44");
+  const hc = p.headcloth || "#3c7f88";
+  // Hair curls and cloth retain the same silhouette at all sprite sizes.
+  for (let i = 0; i < 11; i++) {
+    const xx = -24 + i * 4.8,
+      yy = -148 - Math.sin(i * 0.38) * 9;
+    ellipse(
+      c,
+      xx,
+      yy,
+      7,
+      8,
+      gradient(c, xx - 5, yy - 7, 10, 14, ["#80543a", "#493125"]),
+    );
+    line(
+      c,
+      [
+        [xx - 2, yy - 3],
+        [xx + 1, yy - 5],
+      ],
+      "#ad7a4e66",
+      1,
+    );
+  }
+  c.save();
+  c.translate(24, -148);
+  c.rotate(Math.sin(artTime * 2 + x) * 0.03);
+  c.beginPath();
+  c.moveTo(0, 0);
+  c.bezierCurveTo(13, 7, 8, 25, 18, 40);
+  c.lineTo(6, 34);
+  c.bezierCurveTo(2, 23, 6, 13, -3, 7);
+  c.closePath();
+  c.fillStyle = gradient(c, 0, 0, 15, 40, [hc, "#28535b"]);
+  c.fill();
+  c.restore();
+  c.beginPath();
+  c.moveTo(-28, -150);
+  c.quadraticCurveTo(0, -165, 29, -149);
+  c.lineTo(28, -141);
+  c.quadraticCurveTo(0, -154, -28, -142);
+  c.closePath();
+  c.fillStyle = gradient(c, -28, -157, 56, 12, [hc, hc, "#305864"]);
+  c.fill();
+  line(
     c,
     [
-      [-28, -139],
-      [-19, -160],
-      [5, -164],
-      [26, -147],
-      [26, -139],
-      [7, -148],
-      [-7, -140],
-      [-14, -145],
+      [-25, -148],
+      [-7, -153],
+      [12, -151],
+      [25, -146],
     ],
-    "#4d382d",
+    "#c4d2b267",
+    1.3,
   );
-  const hc = p.headcloth || "#337b89";
-  poly(
+  for (let i = 0; i < 5; i++)
+    ellipse(c, -17 + i * 7, -144 + Math.sin(i) * 2, 4, 5, "#513628");
+  if (p.beard) {
+    c.beginPath();
+    c.moveTo(-23, -119);
+    c.quadraticCurveTo(-15, -101, -2, -94);
+    c.quadraticCurveTo(14, -96, 24, -119);
+    c.quadraticCurveTo(13, -108, 0, -110);
+    c.quadraticCurveTo(-15, -107, -23, -119);
+    c.closePath();
+    c.fillStyle = gradient(c, -22, -119, 40, 25, ["#72513a", "#4b382b"]);
+    c.fill();
+  }
+  const blink = (artTime + x * 0.003) % 4.7 > 4.55;
+  for (const side of [-1, 1]) {
+    const ex = side * 10,
+      ey = -126 + strain * 2;
+    if (blink) {
+      line(
+        c,
+        [
+          [ex - 5, ey],
+          [ex, ey + 1],
+          [ex + 5, ey],
+        ],
+        "#6e4934",
+        1.8,
+      );
+    } else {
+      ellipse(c, ex, ey, p.mature ? 5 : 6.3, p.mature ? 5.3 : 6.6, "#ffefd4");
+      ellipse(c, ex + 0.5 + (p.look || 0) * 1.3, ey + 0.3, 3.8, 5, "#8a5932");
+      ellipse(c, ex + 0.7 + (p.look || 0) * 1.3, ey + 0.4, 2.5, 4, "#273537");
+      ellipse(c, ex - 1, ey - 2, 1.5, 1.7, "#fff6dd");
+      c.beginPath();
+      c.ellipse(
+        ex,
+        ey,
+        p.mature ? 5 : 6.3,
+        p.mature ? 5.3 : 6.6,
+        0,
+        Math.PI,
+        Math.PI * 2,
+      );
+      c.strokeStyle = "#654333";
+      c.lineWidth = 1.4;
+      c.stroke();
+    }
+  }
+  line(
     c,
     [
-      [-28, -148],
-      [-26, -160],
-      [10, -166],
-      [29, -151],
-      [29, -144],
-      [8, -151],
-      [-11, -148],
+      [-16, -138 - strain * 2],
+      [-11, -140],
+      [-5, -138 + strain * 3],
     ],
-    hc,
-  );
-  poly(
-    c,
-    [
-      [23, -149],
-      [35, -140],
-      [38, -108],
-      [27, -115],
-    ],
-    hc,
+    "#684531",
+    2.5,
   );
   line(
     c,
     [
-      [-24, -155],
-      [9, -159],
-      [23, -151],
+      [5, -138 + strain * 3],
+      [11, -140],
+      [16, -138 - strain * 2],
     ],
-    "#8ac2bb",
-    3,
+    "#684531",
+    2.5,
   );
-  const eyeY = -127 + strain * 2;
-  ellipse(c, -10, eyeY, 3, 4, "#2e3937");
-  ellipse(c, 10, eyeY, 3, 4, "#2e3937");
-  ellipse(c, -11, eyeY - 1, 1, 1, "#fff");
-  ellipse(c, 9, eyeY - 1, 1, 1, "#fff");
-  line(
-    c,
-    [
-      [-15, -138 - strain * 2],
-      [-6, -138 + strain * 3],
-    ],
-    "#5b3f30",
-    2.8,
-  );
-  line(
-    c,
-    [
-      [6, -138 + strain * 3],
-      [15, -138 - strain * 2],
-    ],
-    "#5b3f30",
-    2.8,
-  );
-  ellipse(c, -17, -116, 6, 3, "#dc8c64");
-  ellipse(c, 17, -116, 6, 3, "#dc8c64");
+  c.beginPath();
+  c.moveTo(0, -125);
+  c.quadraticCurveTo(-3, -117, 1, -117);
+  c.strokeStyle = "#ac6f48";
+  c.lineWidth = 1.1;
+  c.stroke();
+  ellipse(c, 2, -119, 2, 1, "#f2c08b");
   if (strain > 0.4) {
-    ellipse(c, 0, -111, 6, 4, "#714436");
+    ellipse(c, 0, -108, 5, 3.5, "#714436");
   } else {
     c.beginPath();
-    c.arc(0, -116, 8, 0.15, Math.PI - 0.15);
-    c.strokeStyle = "#854c3b";
-    c.lineWidth = 2.5;
+    c.moveTo(-8, -111);
+    c.quadraticCurveTo(0, -104, 9, -112);
+    c.strokeStyle = "#8d5139";
+    c.lineWidth = 1.6;
     c.stroke();
+    line(
+      c,
+      [
+        [-3, -108],
+        [4, -109],
+      ],
+      "#e6aa79",
+      1,
+    );
   }
   if (gear?.has("helmet")) {
     c.save();
@@ -622,6 +855,7 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     );
     c.restore();
   }
+
   c.restore();
   c.restore();
 }
@@ -878,6 +1112,8 @@ export function giant(c: Ctx, x: number, y: number, time: number, fall = 0) {
   const s = 2.4;
   person(c, 0, 0, s, {
     tunic: "#697b68",
+    mature: true,
+    beard: true,
     headcloth: "#8d6343",
     strain: fall > 0.2 ? 0.6 : 0,
     arm: Math.sin(time) * 0.08,

@@ -8,6 +8,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
+await page.waitForSelector('#stage[data-ready="true"]');
 const state = () => page.evaluate(() => window.adventureQA.snapshot());
 async function key(code, ms) {
   await page.keyboard.down(code);

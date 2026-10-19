@@ -496,3 +496,211 @@ body.lang-ar .settings select {
 #message-tag {
   line-height: 1.5;
 }
+
+/* Storybook art direction — shared chrome, with a quiet readable play field. */
+#toolbar {
+  background: linear-gradient(115deg, #fff5e5f5, #fff9edf0);
+  box-shadow: 0 2px 18px #273f2e0b;
+  border-bottom: 1px solid #d9c59a70;
+}
+.brand-mark {
+  background: radial-gradient(circle at 35% 25%, #f8db96, #d4a14c);
+  box-shadow:
+    inset 0 0 0 1px #fff1c5,
+    0 2px 0 #b98c4655;
+  color: #46634f;
+}
+nav button {
+  font-size: 18px;
+  border-radius: 11px;
+  transition:
+    background 0.18s,
+    transform 0.18s;
+}
+nav button:hover {
+  background: #e7ddc4a1;
+  transform: translateY(-1px);
+}
+.title-card {
+  left: 65px;
+  top: 142px;
+  width: 600px;
+  animation: storybook-enter 0.7s ease-out both;
+}
+.title-card .eyebrow {
+  color: #967141;
+  letter-spacing: 3.2px;
+  font-size: 12px;
+}
+.arabic-title {
+  font-size: 28px;
+  color: #477162;
+  margin-top: 18px;
+}
+h1 {
+  font-size: 77px;
+  letter-spacing: -3.8px;
+  line-height: 0.98;
+  color: #204749;
+  text-shadow: 0 2px 0 #fff5d9;
+}
+h1 em {
+  font-size: 68px;
+  font-weight: normal;
+  font-style: italic;
+  color: #a76b3e;
+  letter-spacing: -2.5px;
+}
+.title-spark {
+  color: #b98a47;
+  left: 453px;
+  top: -10px;
+  font-size: 49px;
+}
+.title-card p {
+  font-size: 21px;
+  line-height: 1.5;
+  color: #526c5b;
+  margin-bottom: 20px;
+}
+.settings label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #65735a;
+}
+.settings select {
+  margin-top: 7px;
+  display: block;
+  font-size: 15px;
+  min-width: 385px;
+  max-width: 555px;
+  background: #fff9e7c9;
+  border: 1px solid #b7b58d88;
+  padding: 10px 14px;
+  border-radius: 9px;
+  box-shadow: 0 3px 12px #536b2f08;
+}
+.primary {
+  background: linear-gradient(135deg, #36645c, #244b49);
+  border: 1px solid #608273;
+  box-shadow:
+    0 4px 0 #183e3c,
+    0 8px 20px #183d3c25,
+    inset 0 1px 0 #82987d66;
+  border-radius: 12px;
+}
+.primary:hover {
+  background: linear-gradient(135deg, #497869, #315c52);
+}
+#start {
+  min-width: 290px;
+  font-size: 20px;
+}
+.title-card small {
+  margin-top: 25px;
+  font-size: 10px;
+  color: #738064;
+  letter-spacing: 1.8px;
+}
+.text-button {
+  font-size: 16px;
+  font-weight: bold;
+}
+#title-note {
+  bottom: 29px;
+  right: 44px;
+  font-size: 21px;
+  text-shadow: 0 2px 5px #29442f;
+}
+#mission > div {
+  background: #fff6dfd9;
+  border: 1px solid #e4d7b680;
+  border-radius: 14px;
+  padding: 7px 15px;
+  box-shadow: 0 3px 12px #294b2910;
+}
+#mission {
+  top: 97px;
+  gap: 12px;
+}
+#mission-badge {
+  background: linear-gradient(140deg, #fff8e2, #f0d9a3);
+  color: #6d6747;
+  box-shadow:
+    0 3px 0 #86905e44,
+    inset 0 0 0 3px #fff4d5;
+}
+#objective-ar {
+  font-size: 23px;
+}
+#objective-en {
+  font-size: 18px;
+}
+#progress {
+  font-size: 19px;
+  background: linear-gradient(140deg, #fff7df, #eee3bf);
+  border: 1px solid #d6c594;
+  box-shadow: 0 3px 0 #9a986633;
+}
+#bottom {
+  background: linear-gradient(110deg, #fff8e9f5, #f2ecd9f5);
+  box-shadow: 0 -5px 22px #29462c0a;
+  border-top: 1px solid #c9c6a488;
+}
+#directions button {
+  background: linear-gradient(#fff8e9, #e8e8d0);
+  border-color: #cbd0ae;
+  box-shadow:
+    0 3px 0 #a9b18b44,
+    inset 0 1px #fff8e5;
+}
+#hint {
+  background: linear-gradient(#f5eaca, #e9d9ac);
+  border: 1px solid #d7c89c;
+  color: #7b6b40;
+}
+#message {
+  border: 1px solid #f5e6bd;
+  background: linear-gradient(130deg, #fff9ecf7, #f5e8c9fa);
+  box-shadow:
+    0 15px 45px #173b3d35,
+    inset 0 0 0 5px #fff9e867;
+}
+#message h2 {
+  color: #365c52;
+}
+#message .eyebrow {
+  color: #9a7747;
+}
+#tutorial {
+  border: 1px solid #ead7a6;
+  background: linear-gradient(130deg, #fff9ebf5, #f6e8c9f5);
+  box-shadow: 0 8px 35px #173d3a25;
+}
+#modal {
+  background: linear-gradient(130deg, #fff9ed, #f5e9d1);
+}
+@keyframes storybook-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .title-card {
+    animation: none;
+  }
+  button {
+    transition: none;
+  }
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+  filter: saturate(0.6);
+}

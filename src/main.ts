@@ -82,6 +82,9 @@ function sync() {
     success = world.phase === "success",
     victory = world.phase === "victory",
     encounter = world.phase === "encounter";
+  $("stage").dataset.ready = String(world.ready);
+  $<HTMLButtonElement>("start").disabled = !world.ready;
+  $<HTMLButtonElement>("practice-toggle").disabled = !world.ready;
   $("title").hidden = !title;
   $("title-note").hidden = !title;
   $("mission").hidden = title || victory;
@@ -100,7 +103,7 @@ function sync() {
       ? "راعي صغير.<br>رحلة شجاعة ومحبة وإيمان."
       : "One small shepherd.<br>A journey of courage, kindness & faith.";
   $("practice-toggle").textContent =
-    lang === "ar" ? "اختار مهمة ↗" : "Choose a mission ↗";
+    lang === "ar" ? "اختار مهمة →" : "Choose a mission →";
   $("title-note").textContent =
     lang === "ar" ? "✦ خطوات صغيرة… وإيمان كبير." : "✦ Small steps. Big faith.";
   const difficultyLabels = [
@@ -217,7 +220,9 @@ function sync() {
   $("fullscreen").title = label("fullscreen", lang);
   $("restart").title = label("restart", lang);
   $("help").title = label("help", lang);
-  $("start").textContent = label("start", lang) + " →";
+  $("start").textContent = world.ready
+    ? label("start", lang) + " →"
+    : bilingual("Opening your adventure…", "بنجهّز المغامرة…");
   $("tutorial").hidden =
     world.phase !== "play" || world.tutorialTime <= 0 || world.paused;
   if (!$("tutorial").hidden)
@@ -362,8 +367,7 @@ for (const b of document.querySelectorAll<HTMLButtonElement>("[data-dir]")) {
     b.setPointerCapture(e.pointerId);
     const [x, y] = b.dataset.dir!.split(",").map(Number);
     if (!world.paused) {
-      world.stepDir = { x, y };
-      world.tutorialTime = 0;
+      world.pressDirection({ x, y });
     }
   };
   b.onpointerup = () => (world.stepDir = { x: 0, y: 0 });

@@ -4,6 +4,16 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled procedural artwork/audio.
 
+## Storybook visual update · 1.1
+
+The title screen, David's animated rig, food-delivery maze and handover cinematic
+now establish a richer illustrated style. All five missions remain playable;
+complete illustration passes for the other environments are the next milestones.
+See [visual design notes](docs/VISUAL_DESIGN.md).
+
+![Storybook title screen](qa/01-title.png)
+![Interactive food-delivery maze](qa/02-maze-start.png)
+
 ## Play
 
 Extract `Davids_Big_Adventure_Offline.zip` and open `index.html` in Chrome or Edge.
@@ -29,6 +39,9 @@ npm run preview
 npm run test:browser
 ```
 
+Visual/QA screenshots are packaged separately in `Davids_Big_Adventure_QA.zip`;
+the playable ZIP contains the complete game without the screenshot bundle.
+
 Browser checks require Chromium. In this environment it is `/usr/bin/chromium`.
 Set `CHROMIUM_PATH` to another installed Chromium binary when running elsewhere.
 `npm run test:browser` starts its own temporary HTTP server on port 4174, tests the
@@ -46,6 +59,7 @@ worker. `npm run build` regenerates it; no server is part of the final package.
 - `src/world.ts`: authoritative mission/phase state machine, Phaser loop/input,
   scene rendering and staged success animations.
 - `src/art.ts`: editable original Canvas illustrations and character rigs.
+- `src/scenery.ts`, `src/assets/`: cached maze painting and locally embedded cover illustrations.
 - `src/strings.ts`: narrative strings and localization.
 - `src/main.ts`, `src/style.css`: scaled accessible HTML UI and teacher controls.
 - `src/audio.ts`: gesture-initialized Web Audio effects and stingers.

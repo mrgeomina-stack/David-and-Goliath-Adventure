@@ -1,0 +1,9 @@
+{
+  "checks": "Title layouts in EN/AR, 1920 and tablet; actual full maze route via brief scaled touchscreen taps; cinematic and replay",
+  "frames": {
+    "frames": 120,
+    "seconds": 1.9832000000000007,
+    "estimatedFps": 60.00403388463088
+  },
+  "errors": []
+}

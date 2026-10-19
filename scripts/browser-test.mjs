@@ -17,6 +17,7 @@ try {
     "remaining-check",
     "story-check",
     "ui-offline-check",
+    "visual-check",
   ]) {
     const start = Date.now();
     const code = await new Promise((resolve) => {

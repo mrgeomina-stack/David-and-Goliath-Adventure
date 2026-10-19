@@ -9,6 +9,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
+await page.waitForSelector('#stage[data-ready="true"]');
 await page.waitForSelector("canvas");
 await page.screenshot({ path: "qa/01-title.png" });
 await page.click("#practice-toggle");

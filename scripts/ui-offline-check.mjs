@@ -21,6 +21,7 @@ page.on("request", (r) => {
   if (r.resourceType() !== "document") requests.push(r.url());
 });
 await page.goto("http://offline-game.test/?qa");
+await page.waitForSelector('#stage[data-ready="true"]');
 await page.waitForSelector("canvas");
 const state = () => page.evaluate(() => window.adventureQA.snapshot());
 await page.click("#start");

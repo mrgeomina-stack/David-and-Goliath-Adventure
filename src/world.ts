@@ -20,6 +20,10 @@ import {
   type Gear,
 } from "./model";
 import * as A from "./art";
+import landscapeUrl from "./assets/countryside.png";
+import heroUrl from "./assets/david-hero.png";
+import { MAZE, cover, motes, mazeBackdrop } from "./scenery";
+export { MAZE } from "./scenery";
 import { missionHints, type Language } from "./strings";
 import type { Sound } from "./audio";
 export type Phase = "title" | "play" | "success" | "encounter" | "victory";
@@ -28,8 +32,8 @@ export interface Hooks {
   toast: (s: string) => void;
   sound: Sound;
 }
-export const MAZE = { x: 215, y: 192, size: 59 };
 export class World extends Phaser.Scene {
+  ready = false;
   phase: Phase = "title";
   mission: Mission = "maze";
   maze = new MazeModel();
@@ -70,12 +74,27 @@ export class World extends Phaser.Scene {
   heard = false;
   heardTime = 0;
   practice = false;
+  private landscape!: HTMLImageElement;
+  private hero!: HTMLImageElement;
+  private mazePainting: HTMLCanvasElement | null = null;
+  private mazePaintingSeed = -1;
+  private deliveryCheered = false;
   private texture!: Phaser.Textures.CanvasTexture;
   private c!: CanvasRenderingContext2D;
   constructor(public hooks: Hooks) {
     super("Adventure");
   }
+  preload() {
+    this.load.image("painted-landscape", landscapeUrl);
+    this.load.image("painted-david", heroUrl);
+  }
   create() {
+    this.landscape = this.textures
+      .get("painted-landscape")
+      .getSourceImage() as HTMLImageElement;
+    this.hero = this.textures
+      .get("painted-david")
+      .getSourceImage() as HTMLImageElement;
     this.texture = this.textures.createCanvas("painted-world", 1280, 720)!;
     this.c = this.texture.context;
     this.add.image(0, 0, "painted-world").setOrigin(0);
@@ -111,6 +130,7 @@ export class World extends Phaser.Scene {
     this.input.on("pointerup", (p: Phaser.Input.Pointer) =>
       this.pointerUp({ x: p.x, y: p.y }),
     );
+    this.ready = true;
     this.hooks.changed();
   }
   start(mission: Mission = "sheep", practice = false) {
@@ -120,6 +140,7 @@ export class World extends Phaser.Scene {
     this.phase = "play";
     this.failed = false;
     this.successTime = 0;
+    this.deliveryCheered = false;
     this.hintTime = 0;
     this.tutorialTime = 2.5;
     this.moveWait = 0;
@@ -144,6 +165,26 @@ export class World extends Phaser.Scene {
     this.paused = value;
     this.clearInput();
     this.hooks.changed();
+  }
+  /** A brief touch/click must register even if pointerup precedes the next frame. */
+  pressDirection(dir: Point) {
+    if (this.paused || this.failed) return;
+    this.stepDir = dir;
+    this.tutorialTime = 0;
+    if (this.phase === "play" && this.mission === "maze" && this.moveWait <= 0)
+      this.stepMaze(dir);
+  }
+  private stepMaze(dir: Point) {
+    const moved = this.maze.move(
+      Math.abs(dir.x) >= Math.abs(dir.y) ? Math.sign(dir.x) : 0,
+      Math.abs(dir.y) > Math.abs(dir.x) ? Math.sign(dir.y) : 0,
+    );
+    this.moveWait = moved ? 0.18 : 0.22;
+    if (!moved) {
+      this.hooks.sound.play("wall");
+      this.bumpTime = 0.18;
+      this.bumpDir = dir;
+    }
   }
   action(down: boolean) {
     if (this.paused || this.phase !== "play") return;
@@ -221,8 +262,9 @@ export class World extends Phaser.Scene {
     if (this.phase !== "play") return;
     this.phase = "success";
     this.successTime = 0;
+    this.deliveryCheered = false;
     this.clearInput();
-    this.hooks.sound.play("win");
+    if (this.mission !== "maze") this.hooks.sound.play("win");
     this.hooks.changed();
   }
   continue() {
@@ -280,6 +322,14 @@ export class World extends Phaser.Scene {
       this.tutorialTime = Math.max(0, this.tutorialTime - dt);
       if (this.phase === "success") {
         this.successTime += dt;
+        if (
+          this.mission === "maze" &&
+          !this.deliveryCheered &&
+          this.successTime >= 2.55
+        ) {
+          this.deliveryCheered = true;
+          this.hooks.sound.play("win");
+        }
       }
       if (this.phase === "encounter") {
         this.encounterX = clamp(
@@ -304,16 +354,7 @@ export class World extends Phaser.Scene {
           this.maze.update(dt);
           this.moveWait -= dt;
           if (this.moveWait <= 0 && (dir.x || dir.y)) {
-            const moved = this.maze.move(
-              Math.abs(dir.x) >= Math.abs(dir.y) ? Math.sign(dir.x) : 0,
-              Math.abs(dir.y) > Math.abs(dir.x) ? Math.sign(dir.y) : 0,
-            );
-            this.moveWait = moved ? 0.18 : 0.22;
-            if (!moved) {
-              this.hooks.sound.play("wall");
-              this.bumpTime = 0.18;
-              this.bumpDir = dir;
-            }
+            this.stepMaze(dir);
           }
           if (this.maze.complete) this.finish();
         }
@@ -368,7 +409,18 @@ export class World extends Phaser.Scene {
   render() {
     const c = this.c;
     if (!c) return;
-    A.background(c, this.clock, this.mission === "sling" ? "valley" : "field");
+    A.setArtTime(this.clock);
+    const painted =
+      this.phase === "title" ||
+      (this.mission === "maze" &&
+        this.phase !== "encounter" &&
+        this.phase !== "victory");
+    if (!painted)
+      A.background(
+        c,
+        this.clock,
+        this.mission === "sling" ? "valley" : "field",
+      );
     if (this.phase === "title") this.drawTitle(c);
     else if (this.phase === "victory") this.drawVictory(c);
     else if (this.phase === "encounter") this.drawEncounter(c);
@@ -391,120 +443,84 @@ export class World extends Phaser.Scene {
     this.texture.refresh();
   }
   drawTitle(c: A.Ctx) {
-    // A quiet, open left half makes room for the title; the illustrated world lives on the right.
-    const light = c.createLinearGradient(0, 0, 830, 0);
-    light.addColorStop(0, "#f7efd6ee");
-    light.addColorStop(0.7, "#f7efd6ce");
-    light.addColorStop(1, "#f7efd600");
+    cover(c, this.landscape, 0, 0, 1280, 720);
+    const light = c.createLinearGradient(0, 0, 860, 0);
+    light.addColorStop(0, "#fff5dbf0");
+    light.addColorStop(0.6, "#fff4dfe6");
+    light.addColorStop(1, "#fff4df00");
     c.fillStyle = light;
-    c.fillRect(0, 88, 900, 632);
-    A.tent(c, 1054, 397, 0.7);
-    A.tree(c, 1195, 524, 1.2);
-    A.tree(c, 727, 423, 0.6);
-    A.poly(
+    c.fillRect(0, 88, 920, 632);
+    // The finished cover illustration is independent of the articulated in-game rig.
+    // Their palette, headband, curls, linen tunic and woven food bag share one design.
+    A.shadow(c, 934, 662, 99);
+    const breathe = Math.sin(this.clock * 1.8) * 1.8;
+    c.drawImage(this.hero, 762, 141 - breathe, 371, 557 + breathe);
+    A.sheep(c, 1132, 652, 1.12, Math.sin(this.clock * 2) * 0.08);
+    A.sheep(c, 708, 675, 0.82, Math.sin(this.clock * 1.7) * 0.07);
+    motes(c, this.clock, 24);
+    A.round(c, 1052, 175, 163, 39, 19, "#fff6dfa8", "#f1e0b1");
+    A.text(
       c,
-      [
-        [774, 720],
-        [965, 720],
-        [960, 588],
-        [1002, 459],
-        [957, 454],
-        [883, 571],
-      ],
-      "#e4c98c",
+      this.say("1 SAMUEL · 17", "١ صموئيل · ١٧"),
+      1134,
+      195,
+      14,
+      "#47634f",
     );
-    A.person(c, 882, 585, 2.05, {
-      bag: true,
-      arm: Math.sin(this.clock * 1.8) * 0.04,
-      happy: true,
-    });
-    A.line(
-      c,
-      [
-        [787, 573],
-        [793, 365],
-        [806, 348],
-        [820, 354],
-        [823, 369],
-      ],
-      "#8c653f",
-      7,
-    );
-    A.sheep(c, 1060, 592, 1.45, Math.sin(this.clock * 1.8));
-    A.sheep(c, 733, 636, 1.05, Math.sin(this.clock * 1.5));
-    A.bush(c, 1160, 650, 2.2);
-    A.bush(c, 691, 687, 1.5);
-    for (let i = 0; i < 10; i++)
-      A.flower(c, 720 + i * 45, 666 + Math.sin(i * 4) * 19, "#fff2bc", 1.4);
-    A.cloud(c, 910, 189, 0.7);
-    A.round(c, 1003, 229, 130, 47, 20, "#fff2d4e8");
-    A.text(c, "✦  1 Samuel 17", 1068, 253, 15, "#6d754b");
+    // A restrained brass compass motif belongs to the adventure's identity.
+    c.save();
+    c.translate(1192, 553);
+    c.rotate(-0.1);
+    c.strokeStyle = "#fff2bc8c";
+    c.lineWidth = 1;
+    c.beginPath();
+    c.arc(0, 0, 28, 0, Math.PI * 2);
+    c.stroke();
+    A.star(c, 0, 0, 20, "#ffefbf99", Math.PI / 2);
+    c.restore();
   }
   drawMaze(c: A.Ctx) {
     const { x, y, size: s } = MAZE;
-    A.tree(c, 85, 365, 0.72);
-    A.tent(c, 1061, 397, 0.83);
-    A.tent(c, 1150, 344, 0.49);
-    A.bush(c, 1138, 577, 1.6);
-    A.bush(c, 89, 578, 1.5);
-    A.round(c, x - 19, y - 16, s * 9 + 38, s * 7 + 35, 24, "#526d3d35");
-    A.round(
-      c,
-      x - 13,
-      y - 17,
-      s * 9 + 26,
-      s * 7 + 26,
-      23,
-      "#bdc18b",
-      "#fcf1c4",
-    );
-    A.round(c, x - 3, y - 3, s * 9 + 6, s * 7 + 6, 12, "#e8d29b");
-    const r = rng(64);
-    for (let i = 0; i < 180; i++)
-      A.ellipse(c, x + r() * s * 9, y + r() * s * 7, 1.5, 1, "#baa47855");
-    const wall = (ax: number, ay: number, bx: number, by: number) => {
-      A.line(
-        c,
-        [
-          [ax, ay + 4],
-          [bx, by + 4],
-        ],
-        "#6c744b55",
-        15,
-      );
-      A.line(
-        c,
-        [
-          [ax, ay],
-          [bx, by],
-        ],
-        "#5e8146",
-        12,
-      );
-      A.line(
-        c,
-        [
-          [ax, ay - 3],
-          [bx, by - 3],
-        ],
-        "#8bab5b",
-        6,
-      );
-    };
-    for (let i = 0; i < 63; i++) {
-      const px = x + (i % 9) * s,
-        py = y + Math.floor(i / 9) * s;
-      if (i % 9 === 0) wall(px, py, px, py + s);
-      if (i < 9) wall(px, py, px + s, py);
-      if (!this.maze.maze.edges[i].includes(i + 1) || i % 9 === 8)
-        wall(px + s, py, px + s, py + s);
-      if (!this.maze.maze.edges[i].includes(i + 9))
-        wall(px, py + s, px + s, py + s);
+    if (this.mazePaintingSeed !== this.maze.maze.seed) {
+      this.mazePainting = mazeBackdrop(this.maze.maze, this.landscape);
+      this.mazePaintingSeed = this.maze.maze.seed;
     }
+    if (this.mazePainting) c.drawImage(this.mazePainting, 0, 0);
     // Start and goal are readable; no route is revealed unless a one-step hint is requested.
-    A.ellipse(c, x + s / 2, y + s / 2, 23, 20, "#b9c88b");
+    A.ellipse(c, x + s / 2, y + s / 2, 19, 18, "#a9b27c80");
+    A.line(
+      c,
+      [
+        [x + 17, y + 31],
+        [x + 26, y + 26],
+        [x + 25, y + 35],
+      ],
+      "#fdf1cc",
+      2.5,
+    );
     A.ellipse(c, x + 8.5 * s, y + 6.5 * s, 23, 21, "#ecc36b");
-    A.text(c, "⚑", x + 8.5 * s, y + 6.5 * s, 32, "#91673d");
+    const flagX = x + 8.5 * s,
+      flagY = y + 6.5 * s;
+    A.line(
+      c,
+      [
+        [flagX - 6, flagY + 17],
+        [flagX - 6, flagY - 21],
+      ],
+      "#765b36",
+      3,
+    );
+    A.poly(
+      c,
+      [
+        [flagX - 5, flagY - 21],
+        [flagX + 16, flagY - 17 + Math.sin(this.clock * 3) * 2],
+        [flagX + 13, flagY - 6],
+        [flagX - 5, flagY - 9],
+      ],
+      "#a56839",
+      "#d9b46f",
+    );
     if (this.hintTime > 0) {
       const next = path(this.maze.maze, this.maze.cell)[1];
       if (next !== undefined) {
@@ -539,69 +555,161 @@ export class World extends Phaser.Scene {
       );
     }
     for (let i = 0; i < 3; i++)
-      A.person(c, 960 + i * 68, 506 + (i % 2) * 22, 0.75, {
+      A.person(c, 960 + i * 68, 506 + (i % 2) * 22, 0.8, {
+        mature: true,
+        beard: i !== 1,
+        look: -0.5,
         tunic: ["#bd7952", "#618e82", "#e0c185"][i],
         headcloth: ["#756b52", "#9f6544", "#557a72"][i],
         arm: 0.5 + Math.sin(this.clock * 2 + i) * 0.2,
       });
-    A.round(c, 881, 546, 300, 57, 15, "#fff2d2e8");
+    A.round(c, 865, 580, 326, 35, 12, "#f9ebcbeb", "#ccb98b");
     A.text(
       c,
       this.say("THE ISRAELITE CAMP", "معسكر إسرائيل"),
       1031,
-      565,
-      14,
+      598,
+      13,
       "#7b714a",
     );
-    A.text(
+    A.line(
       c,
-      this.say("Brothers waiting for lunch", "الإخوات مستنّيين الأكل"),
-      1031,
-      586,
-      17,
-      "#405c4a",
+      [
+        [96, 456],
+        [96, 510],
+      ],
+      "#7d6540",
+      8,
     );
-    A.round(c, 46, 397, 109, 63, 14, "#fff2d9");
-    A.text(c, this.say("START", "البداية"), 100, 417, 17, "#4a694e");
-    A.text(c, "→", 100, 443, 24, "#a7763e");
+    A.round(
+      c,
+      43,
+      403,
+      108,
+      56,
+      9,
+      A.gradient(c, 43, 403, 0, 56, ["#ecd4a2", "#c79e65"]),
+      "#a2804b",
+    );
+    A.text(c, this.say("START", "البداية"), 96, 422, 16, "#5b6140");
+    A.text(c, "→", 96, 446, 24, "#7c623b");
+    if (this.maze.moveTime < 0.16) {
+      const p = this.maze.position;
+      for (let i = 0; i < 4; i++) {
+        c.globalAlpha = 0.16;
+        A.ellipse(
+          c,
+          x + (p.x + 0.5) * s - 8 - i * 3,
+          y + (p.y + 0.5) * s + 22,
+          2 + i,
+          1.5,
+          "#927744",
+        );
+      }
+      c.globalAlpha = 1;
+    }
+    motes(c, this.clock, 9);
     if (this.phase === "success") this.drawHandover(c);
   }
   drawHandover(c: A.Ctx) {
     const t = this.successTime;
-    c.fillStyle = "#264c4070";
+    c.fillStyle = "#153d42a3";
     c.fillRect(0, 88, 1280, 539);
-    A.round(c, 270, 174, 740, 398, 30, "#f5e3b6", "#fff1c9");
-    A.tent(c, 819, 471, 1.35);
-    A.bush(c, 334, 520, 1.3);
-    A.person(c, lerp(387, 485, t / 0.8), 522, 1.35, {
+    const px = 218,
+      py = 177,
+      pw = 844,
+      ph = 407;
+    c.save();
+    c.shadowColor = "#173b3e66";
+    c.shadowBlur = 36;
+    c.shadowOffsetY = 12;
+    A.round(c, px, py, pw, ph, 26, "#f6e2b4");
+    c.restore();
+    c.save();
+    c.beginPath();
+    c.roundRect(px, py, pw, ph, 26);
+    c.clip();
+    cover(c, this.landscape, px, py, pw, ph);
+    const haze = c.createLinearGradient(0, py, 0, py + ph);
+    haze.addColorStop(0, "#fff0c68a");
+    haze.addColorStop(0.7, "#ffe7b733");
+    haze.addColorStop(1, "#b88f5870");
+    c.fillStyle = haze;
+    c.fillRect(px, py, pw, ph);
+    // Camera settles into the handover only after maze navigation has completed.
+    const zoom = 1 + clamp((t - 0.6) / 3, 0, 1) * 0.035;
+    c.translate(640, 475);
+    c.scale(zoom, zoom);
+    c.translate(-640, -475);
+    A.ellipse(c, 666, 535, 350, 47, "#d3b07580");
+    A.person(c, lerp(387, 485, t / 0.8), 542, 1.2, {
       bag: true,
+      bagOpen: t > 0.8 && t < 2.6 ? 1 : 0,
       walk: t < 0.8 ? Math.sin(t * 20) : 0,
       arm: t > 0.8 ? clamp((t - 0.8) * 2, 0, 1) : 0,
     });
     for (let i = 0; i < 3; i++)
-      A.person(c, 649 + i * 108, 522, 1.2, {
-        tunic: ["#c58c57", "#709b89", "#dfbe7e"][i],
-        headcloth: ["#8a7252", "#ad6348", "#537e7a"][i],
+      A.person(c, 649 + i * 108, 542, 1.35, {
+        mature: true,
+        beard: i !== 1,
+        look: -0.7,
+        tunic: ["#c99c68", "#709c8d", "#dfc795"][i],
+        headcloth: ["#927451", "#b67551", "#5a7d77"][i],
         arm: t > 1 ? 1 : 0.2,
       });
-    const foodX = lerp(550, 605, (t - 1.1) / 1.2),
-      foodY = 407 - Math.sin(clamp((t - 1.1) / 1.2, 0, 1) * Math.PI) * 40;
-    if (t > 1) A.bread(c, foodX, foodY, 1.3);
-    if (t > 2.2) {
-      A.bread(c, 821, 407, 1);
-      A.bread(c, 929, 407, 1);
-      A.burst(c, t - 2, 640, 368);
+    if (t > 0.8) {
+      // First lift the loaf out of the bag, then pass it into the brother's hand.
+      const lift = clamp((t - 0.8) / 0.5, 0, 1),
+        pass = clamp((t - 1.3) / 1, 0, 1);
+      const fx = lift < 1 ? lerp(527, 549, lift) : lerp(549, 599, pass);
+      const fy =
+        lift < 1
+          ? lerp(485, 427, lift) - Math.sin(lift * Math.PI) * 12
+          : lerp(427, 412, pass) - Math.sin(pass * Math.PI) * 26;
+      A.bread(c, fx, fy, 1.15);
     }
+    if (t > 2.3) {
+      const f = clamp((t - 2.3) / 0.45, 0, 1);
+      for (let i = 1; i < 3; i++)
+        A.bread(
+          c,
+          lerp(599, 599 + i * 108, f),
+          412 - Math.sin(f * Math.PI) * 22,
+          0.9,
+        );
+    }
+    if (t > 2.6) A.burst(c, t - 2.5, 650, 351);
+    motes(c, this.clock, 12);
+    c.restore();
+    c.strokeStyle = "#faedce";
+    c.lineWidth = 2;
+    c.beginPath();
+    c.roundRect(px, py, pw, ph, 26);
+    c.stroke();
+    A.round(c, 440, 196, 400, 50, 22, "#fff4d7e0");
     A.text(
       c,
       t < 1.3
-        ? this.say("A gift from home…", "هدية من البيت…")
-        : this.say("Thank you, David!", "شكرًا يا داود!"),
+        ? this.say(
+            "A little kindness, carried from home",
+            "خير ومحبة… من البيت",
+          )
+        : this.say("Welcome, David!", "أهلًا يا داود!"),
       640,
-      214,
-      25,
-      "#6d6749",
+      221,
+      23,
+      "#52644c",
     );
+    // Three small chapter dots communicate the scene's progress without a countdown.
+    for (let i = 0; i < 3; i++)
+      A.ellipse(
+        c,
+        622 + i * 18,
+        565,
+        3.5,
+        3.5,
+        t > i * 1.2 ? "#fff6dc" : "#d6c293",
+      );
   }
   drawArmor(c: A.Ctx) {
     const t = this.armor.fallTime;

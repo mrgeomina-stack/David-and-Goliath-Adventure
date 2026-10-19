@@ -1,8 +1,11 @@
 {
-  "html_sha256": "e0a563e415088b3a1b1f7518e51b8b8c8b8960cac18b6cbc478a79a5c8e30a6c",
-  "html_bytes": 1271120,
+  "version": "1.1.0",
+  "html_sha256": "83283ed83158885a30c9c121ebc4d293c8eaf3842f67a989b8f1f6350743101c",
+  "html_bytes": 8047871,
   "unit_tests_passed": 15,
-  "screenshots": 39,
+  "browser_checks_passed": 7,
+  "screenshots": 45,
   "direct_file_launch": "blocked by managed browser; unverified",
-  "offline_runtime": "passed with networking disabled; initial document supplied by routing"
+  "offline_runtime": "passed with networking disabled; initial document supplied by routing",
+  "visual_milestone": "title, David rig, maze and handover; other environment art passes remain pending"
 }

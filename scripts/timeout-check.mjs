@@ -6,6 +6,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 await page.clock.install();
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
+await page.waitForSelector('#stage[data-ready="true"]');
 await page.click("#start");
 // Advance browser time, not game state: exercise the same update loop and retry UI.
 await page.clock.runFor(101000);
