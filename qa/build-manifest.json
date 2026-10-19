@@ -1,11 +1,12 @@
 {
-  "version": "1.1.0",
-  "html_sha256": "83283ed83158885a30c9c121ebc4d293c8eaf3842f67a989b8f1f6350743101c",
-  "html_bytes": 8047871,
+  "version": "1.2.0",
+  "html_sha256": "0bec61b7b4063108e2561436ed1e1f0ed0d7134e7732c982a42de30ade7b5571",
+  "html_bytes": 32603688,
   "unit_tests_passed": 15,
   "browser_checks_passed": 7,
-  "screenshots": 45,
+  "screenshots": 49,
   "direct_file_launch": "blocked by managed browser; unverified",
-  "offline_runtime": "passed with networking disabled; initial document supplied by routing",
-  "visual_milestone": "title, David rig, maze and handover; other environment art passes remain pending"
+  "offline_runtime": "network disabled, initial document supplied by routing",
+  "visual_milestone": "all five painted settings; animated sheep and lion components; illustrated David face and linen on articulated rig; original adult Goliath and cast; textured armour and stones",
+  "final_targeted_checks": "sheep/brook gameplay rerun after adult keeper art adjustment"
 }

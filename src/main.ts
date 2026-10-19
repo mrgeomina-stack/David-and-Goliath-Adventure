@@ -345,6 +345,10 @@ $("help").onclick = () =>
     [{ label: label("resume", lang), run: close }],
   );
 $("continue").onclick = () => {
+  // Return keyboard control to the game after a retry or story transition.
+  const stage = $("stage");
+  stage.tabIndex = -1;
+  stage.focus({ preventScroll: true });
   sound.unlock();
   if (world.phase === "victory") {
     world.phase = "title";

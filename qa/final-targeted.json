@@ -1,0 +1,7 @@
+{
+  "html_sha256": "0bec61b7b4063108e2561436ed1e1f0ed0d7134e7732c982a42de30ade7b5571",
+  "checks": {
+    "remaining-check": "passed: herding, adult keeper, distinct stones and pickups",
+    "ui-offline-check": "passed: network-disabled final HTML, emulated touch, EN/AR, audio state, focus cancellation"
+  }
+}

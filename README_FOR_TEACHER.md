@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.1: storybook title, refreshed David, maze scenery and animated delivery.
+Version 1.2: richer illustrations across all five games, animated animals, detailed armour and stones, and a distinct Goliath.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Start:** Extract the offline ZIP completely and open `index.html` in Chrome or

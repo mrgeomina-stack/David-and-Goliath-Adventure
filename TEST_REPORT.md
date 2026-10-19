@@ -1,9 +1,6 @@
-# David’s Big Adventure — validation report · 1.1
+# David’s Big Adventure — validation report · 1.2
 
-Date: 19 October 2026. This is a playable five-mission implementation. Version 1.1 establishes the
-storybook visual direction in the title, David's rig, maze and food handover;
-other environment illustration passes remain future milestones. Human classroom
-acceptance testing is not claimed.
+Date: 19 October 2026. Version 1.2 extends the illustrated environments across all five missions and adds detailed animals, adult characters, armour and stones. David retains an articulated rig with illustrated face and linen texture. Human classroom acceptance testing is not claimed.
 
 ## Environment and commands
 
@@ -20,7 +17,7 @@ acceptance testing is not claimed.
 | `npm run build` | Typecheck and Vite production build passed; single-file offline HTML produced. |
 | `npm run test:browser` | All seven browser scripts passed against the production distribution. Results: `qa/browser-results.json`. |
 | Visual/touch check | EN/AR title layouts, widescreen/tablet bounds, full maze solved by brief touchscreen taps, cinematic and replay. |
-| Final targeted sheep/brook check | Passed after celebration drawing refinements. |
+| Sheep/brook browser check | Included in the complete production browser suite. |
 | Final `node scripts/ui-offline-check.mjs` | Passed on the final self-contained HTML with networking disabled. |
 | Prior 1.0 timeout validation | 101 seconds of simulated browser time yielded a gentle retry, no auto-win, and a clean reset. Timer behavior is unchanged; this long test was not rerun for the visual-only refinement. |
 | ZIP packaging | CRC and extracted-entry comparisons checked by the packaging script and final verification. |
@@ -31,8 +28,8 @@ Targeted HTTP checks use a running `npm run preview -- --port 4173` instance.
 timeout test advances the browser clock while exercising the actual game loop;
 it does not inject a win, move characters or alter the model.
 
-The complete seven-script production run covers the final visual build and short
-touch-press handling. No failing check remains in that run. The unchanged long
+The complete seven-script production run covers the visual upgrade and short
+touch-press handling. A final sheep/brook run also checks the adult keeper illustration adjustment. No failing check remains in that run. The unchanged long
 timeout test is retained as prior-build evidence. Direct-file/platform/human checks
 below remain unverified.
 
@@ -61,13 +58,10 @@ below remain unverified.
 - **Flow:** A real-input run completed sheep → maze → walk toward Goliath to hear
   him → return to Saul → armour → brook → sling → victory. The QA inspector only
   reads state and cannot force success, move characters or equip items.
-- **Visual update:** Character folds/shading, expressions and idle motions,
+- **Visual update:** Illustrated character textures, shaded limbs and idle motions,
   distinct adult brothers, shaded/mossy maze walls, animated flag and footsteps,
   bag opening/bread lift/handover, delayed music, and a gentle cinematic camera
-  settle. Static maze painting is cached by seed. The visual check samples 120
-  browser animation frames; observed timings are in `qa/visual-results.json`
-  with a measured sample of about **60.0 fps over 1.98 seconds** in the maze; this
-  does not certify sustained performance on classroom hardware.
+  settle. All five settings use embedded painted backgrounds. Animal components and prop surfaces are cached once. The visual check samples 120 browser frames in the maze and 60 in each other mission; actual observations are recorded in `qa/visual-results.json`. These short headless samples do not certify sustained performance on classroom hardware.
 - **UI:** Language modes and equipment labels, scaled touch anchors, pause/replay,
   restart, sound unlock/suspend, focus cancellation and muted continuation.
   Original Web Audio cues were scheduled without runtime errors; no human
@@ -113,6 +107,7 @@ start, interaction and payoff images were inspected visually, including:
 | Scaled touch and languages | `32-touch-1920.png`, `32-touch-1024.png`, `33-english.png`, `34-arabic.png` |
 | Genuine timeout/retry (prior 1.0 build) | `35-sheep-gentle-retry.png` |
 | New storybook title/layouts | `36-title-english.png`, `37-title-arabic.png`, `38-title-1920.png`, `39-title-tablet.png` |
+| All-mission art and short frame samples | `42-rich-sheep.png` through `45-rich-sling.png`; per-mission samples in `visual-results.json`. |
 | New maze and delivery at tablet size | `40-maze-tablet.png`, `41-delivery-tablet.png` |
 
 Snapshots show moments in animations, not substitute animations. The full sequences
@@ -125,10 +120,7 @@ headless gameplay, not claimed as human hands-on classroom play.
 - Speaker sound quality, native-speaker copy review and back-of-class readability.
 - Human difficulty/play-time calibration, operator rotation and touch comfort.
 - Sustained frame-rate measurements on the intended classroom laptop.
-- Further illustration milestones: the sheep, armour-tent, brook and valley
-  environments still use the earlier procedural scenery. This release introduces
-  original locally bundled generated cover illustrations and a richer editable
-  Canvas rig/maze. See `docs/VISUAL_DESIGN.md` and `docs/IMPLEMENTATION.md`.
+- Human art and animation review. All five environments now have original painted backgrounds; David keeps his articulated Canvas limbs with illustrated face and linen texture. See `docs/VISUAL_DESIGN.md` for the implemented asset contract.
 
 All five core game mechanisms are implemented. The evidence supports the tested
 browser workflow; it does not certify final classroom readiness or the untested

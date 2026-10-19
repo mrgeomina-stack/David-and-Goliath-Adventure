@@ -99,6 +99,38 @@ try {
         requestAnimationFrame(sample);
       }),
   );
+  const missionFrames = { maze: frames };
+  for (const [index, mission] of [
+    "sheep",
+    "armor",
+    "brook",
+    "sling",
+  ].entries()) {
+    await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
+    await page.waitForSelector('#stage[data-ready="true"]');
+    await page.click("#practice-toggle");
+    await page.click(`[data-mission="${mission}"]`);
+    await page.waitForTimeout(2700);
+    missionFrames[mission] = await page.evaluate(
+      () =>
+        new Promise((resolve) => {
+          let first = 0,
+            n = 0;
+          function sample(t) {
+            if (!first) first = t;
+            if (++n < 60) requestAnimationFrame(sample);
+            else
+              resolve({
+                frames: n,
+                seconds: (t - first) / 1000,
+                estimatedFps: ((n - 1) * 1000) / (t - first),
+              });
+          }
+          requestAnimationFrame(sample);
+        }),
+    );
+    await page.screenshot({ path: `qa/${42 + index}-rich-${mission}.png` });
+  }
   if (errors.length) throw Error(errors.join("\n"));
   writeFileSync(
     "qa/visual-results.json",
@@ -107,6 +139,7 @@ try {
         checks:
           "Title layouts in EN/AR, 1920 and tablet; actual full maze route via brief scaled touchscreen taps; cinematic and replay",
         frames,
+        missionFrames,
         errors,
       },
       null,

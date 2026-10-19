@@ -1,3 +1,4 @@
+import { painted } from "./painted";
 import { clamp, lerp, rng, type Point, type Gear } from "./model";
 export type Ctx = CanvasRenderingContext2D;
 export type Paint = string | CanvasGradient | CanvasPattern;
@@ -323,6 +324,7 @@ export function tent(c: Ctx, x: number, y: number, s = 1, color = "#e6bd7b") {
   c.restore();
 }
 export type Pose = {
+  character?: "saul" | "brother";
   walk?: number;
   arm?: number;
   strain?: number;
@@ -342,6 +344,23 @@ export type Pose = {
   look?: number;
 };
 export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
+  if (painted && (p.mature || p.character)) {
+    c.save();
+    c.translate(x, y);
+    c.scale(s, s);
+    shadow(c, 0, 2, 35);
+    c.rotate((p.tilt || 0) + Math.sin(artTime * 2 + x) * 0.006);
+    painted.cast.draw(
+      c,
+      p.character === "saul" ? 5 : p.beard ? 3 : 4,
+      -63,
+      -183 - Math.abs(p.walk || 0) * 2,
+      126,
+      183,
+    );
+    c.restore();
+    return;
+  }
   c.save();
   c.translate(x, y);
   c.scale(s, s);
@@ -385,7 +404,7 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
         [l.knee - 2, -26 + sit * 15],
         [l.foot - 2, -10],
       ],
-      skin,
+      gradient(c, l.hip - 8, hipY, 18, 50, ["#aa714b", "#edba82", "#c48758"]),
       10,
     );
     ellipse(c, l.foot, -5, 14, 6, "#614632");
@@ -417,6 +436,12 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
   c.closePath();
   c.fillStyle = gradient(c, -30, -100, 60, 58, ["#fff4d4", cloth, "#bf9c6b"]);
   c.fill();
+  if (painted) {
+    c.save();
+    c.clip();
+    c.drawImage(painted.hero, 350, 820, 230, 180, -35, -108, 70, 76);
+    c.restore();
+  }
   c.strokeStyle = "#9c7d5544";
   c.lineWidth = 1.3;
   c.stroke();
@@ -503,11 +528,32 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     line(
       c,
       limb.map(([a, b]) => [a - 1.6, b - 1]),
-      skin,
+      gradient(c, limb[0][0] - 5, limb[0][1], 14, 40, [
+        "#edbd88",
+        "#dfaa76",
+        "#b57c51",
+      ]),
       9,
     );
     const hand = limb[2];
-    ellipse(c, hand[0], hand[1], 6.4, 7, skin);
+    ellipse(
+      c,
+      hand[0],
+      hand[1],
+      6.4,
+      7,
+      gradient(c, hand[0] - 5, hand[1] - 6, 10, 12, ["#f0c18d", "#cd9363"]),
+    );
+    for (let finger = 0; finger < 3; finger++)
+      line(
+        c,
+        [
+          [hand[0] - 2 + finger * 2, hand[1] + 1],
+          [hand[0] - 2 + finger * 2, hand[1] + 5],
+        ],
+        "#b87e5555",
+        0.7,
+      );
     line(
       c,
       [
@@ -584,33 +630,40 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     c.restore();
   }
   const gear = p.gear;
-  if (gear?.has("tunic")) round(c, -25, -99, 50, 53, 8, "#a64d3a", "#793e31");
-  if (gear?.has("mail")) {
-    poly(
-      c,
-      [
-        [-29, -99],
-        [29, -99],
-        [35, -51],
-        [-35, -51],
-      ],
-      "#8b9d99",
-      "#45595a",
-    );
-    for (let a = 0; a < 6; a++)
-      for (let b = 0; b < 6; b++)
-        line(
-          c,
-          [
-            [-25 + b * 10, -93 + a * 7],
-            [-21 + b * 10, -89 + a * 7],
-            [-17 + b * 10, -93 + a * 7],
-          ],
-          a % 2 ? "#b6c1ad" : "#617779",
-          1.7,
-        );
+  if (painted) {
+    if (gear?.has("tunic")) painted.props.draw(c, 0, -34, -103, 68, 66, false);
+    if (gear?.has("mail")) painted.props.draw(c, 1, -38, -104, 76, 70, false);
+  } else {
+    if (gear?.has("tunic")) round(c, -25, -99, 50, 53, 8, "#a64d3a", "#793e31");
+    if (gear?.has("mail")) {
+      poly(
+        c,
+        [
+          [-29, -99],
+          [29, -99],
+          [35, -51],
+          [-35, -51],
+        ],
+        "#8b9d99",
+        "#45595a",
+      );
+      for (let a = 0; a < 6; a++)
+        for (let b = 0; b < 6; b++)
+          line(
+            c,
+            [
+              [-25 + b * 10, -93 + a * 7],
+              [-21 + b * 10, -89 + a * 7],
+              [-17 + b * 10, -93 + a * 7],
+            ],
+            a % 2 ? "#b6c1ad" : "#617779",
+            1.7,
+          );
+    }
   }
-  if (gear?.has("sword")) {
+  if (gear?.has("sword") && painted) {
+    painted.props.draw(c, 3, -32, -68, 78, 66, false);
+  } else if (gear?.has("sword")) {
     line(
       c,
       [
@@ -645,174 +698,181 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     c.restore();
   }
 
-  round(c, -8, -111, 16, 16, 4, skin);
-  // Warm dimensional face and soft curls. The face remains in the tested helmet/head region.
-  ellipse(c, 0, -130, 31, 35, "#493526");
-  ellipse(c, -28, -124, 6, 9, "#b9784e");
-  ellipse(c, 28, -124, 6, 9, skin);
-  c.beginPath();
-  c.moveTo(-25, -139);
-  c.bezierCurveTo(-24, -162, 24, -163, 26, -138);
-  c.bezierCurveTo(31, -112, 18, -99, 1, -98);
-  c.bezierCurveTo(-17, -98, -30, -115, -25, -139);
-  c.closePath();
-  c.fillStyle = gradient(c, -24, -144, 54, 38, [
-    "#f0be86",
-    "#e2a46b",
-    "#bb784e",
-  ]);
-  c.fill();
-  ellipse(c, -17, -118, 7, 4, "#d88d5d44");
-  ellipse(c, 18, -118, 7, 4, "#d88d5d44");
-  const hc = p.headcloth || "#3c7f88";
-  // Hair curls and cloth retain the same silhouette at all sprite sizes.
-  for (let i = 0; i < 11; i++) {
-    const xx = -24 + i * 4.8,
-      yy = -148 - Math.sin(i * 0.38) * 9;
-    ellipse(
-      c,
-      xx,
-      yy,
-      7,
-      8,
-      gradient(c, xx - 5, yy - 7, 10, 14, ["#80543a", "#493125"]),
-    );
-    line(
-      c,
-      [
-        [xx - 2, yy - 3],
-        [xx + 1, yy - 5],
-      ],
-      "#ad7a4e66",
-      1,
-    );
-  }
-  c.save();
-  c.translate(24, -148);
-  c.rotate(Math.sin(artTime * 2 + x) * 0.03);
-  c.beginPath();
-  c.moveTo(0, 0);
-  c.bezierCurveTo(13, 7, 8, 25, 18, 40);
-  c.lineTo(6, 34);
-  c.bezierCurveTo(2, 23, 6, 13, -3, 7);
-  c.closePath();
-  c.fillStyle = gradient(c, 0, 0, 15, 40, [hc, "#28535b"]);
-  c.fill();
-  c.restore();
-  c.beginPath();
-  c.moveTo(-28, -150);
-  c.quadraticCurveTo(0, -165, 29, -149);
-  c.lineTo(28, -141);
-  c.quadraticCurveTo(0, -154, -28, -142);
-  c.closePath();
-  c.fillStyle = gradient(c, -28, -157, 56, 12, [hc, hc, "#305864"]);
-  c.fill();
-  line(
-    c,
-    [
-      [-25, -148],
-      [-7, -153],
-      [12, -151],
-      [25, -146],
-    ],
-    "#c4d2b267",
-    1.3,
-  );
-  for (let i = 0; i < 5; i++)
-    ellipse(c, -17 + i * 7, -144 + Math.sin(i) * 2, 4, 5, "#513628");
-  if (p.beard) {
+  if (painted) {
+    // Approved illustration supplies David's curls, expressive face and embroidered headcloth.
+    c.drawImage(painted.hero, 270, 12, 360, 345, -35, -172, 70, 79);
+  } else {
+    round(c, -8, -111, 16, 16, 4, skin);
+    // Warm dimensional face and soft curls. The face remains in the tested helmet/head region.
+    ellipse(c, 0, -130, 31, 35, "#493526");
+    ellipse(c, -28, -124, 6, 9, "#b9784e");
+    ellipse(c, 28, -124, 6, 9, skin);
     c.beginPath();
-    c.moveTo(-23, -119);
-    c.quadraticCurveTo(-15, -101, -2, -94);
-    c.quadraticCurveTo(14, -96, 24, -119);
-    c.quadraticCurveTo(13, -108, 0, -110);
-    c.quadraticCurveTo(-15, -107, -23, -119);
+    c.moveTo(-25, -139);
+    c.bezierCurveTo(-24, -162, 24, -163, 26, -138);
+    c.bezierCurveTo(31, -112, 18, -99, 1, -98);
+    c.bezierCurveTo(-17, -98, -30, -115, -25, -139);
     c.closePath();
-    c.fillStyle = gradient(c, -22, -119, 40, 25, ["#72513a", "#4b382b"]);
+    c.fillStyle = gradient(c, -24, -144, 54, 38, [
+      "#f0be86",
+      "#e2a46b",
+      "#bb784e",
+    ]);
     c.fill();
-  }
-  const blink = (artTime + x * 0.003) % 4.7 > 4.55;
-  for (const side of [-1, 1]) {
-    const ex = side * 10,
-      ey = -126 + strain * 2;
-    if (blink) {
+    ellipse(c, -17, -118, 7, 4, "#d88d5d44");
+    ellipse(c, 18, -118, 7, 4, "#d88d5d44");
+    const hc = p.headcloth || "#3c7f88";
+    // Hair curls and cloth retain the same silhouette at all sprite sizes.
+    for (let i = 0; i < 11; i++) {
+      const xx = -24 + i * 4.8,
+        yy = -148 - Math.sin(i * 0.38) * 9;
+      ellipse(
+        c,
+        xx,
+        yy,
+        7,
+        8,
+        gradient(c, xx - 5, yy - 7, 10, 14, ["#80543a", "#493125"]),
+      );
       line(
         c,
         [
-          [ex - 5, ey],
-          [ex, ey + 1],
-          [ex + 5, ey],
+          [xx - 2, yy - 3],
+          [xx + 1, yy - 5],
         ],
-        "#6e4934",
-        1.8,
+        "#ad7a4e66",
+        1,
       );
-    } else {
-      ellipse(c, ex, ey, p.mature ? 5 : 6.3, p.mature ? 5.3 : 6.6, "#ffefd4");
-      ellipse(c, ex + 0.5 + (p.look || 0) * 1.3, ey + 0.3, 3.8, 5, "#8a5932");
-      ellipse(c, ex + 0.7 + (p.look || 0) * 1.3, ey + 0.4, 2.5, 4, "#273537");
-      ellipse(c, ex - 1, ey - 2, 1.5, 1.7, "#fff6dd");
-      c.beginPath();
-      c.ellipse(
-        ex,
-        ey,
-        p.mature ? 5 : 6.3,
-        p.mature ? 5.3 : 6.6,
-        0,
-        Math.PI,
-        Math.PI * 2,
-      );
-      c.strokeStyle = "#654333";
-      c.lineWidth = 1.4;
-      c.stroke();
     }
-  }
-  line(
-    c,
-    [
-      [-16, -138 - strain * 2],
-      [-11, -140],
-      [-5, -138 + strain * 3],
-    ],
-    "#684531",
-    2.5,
-  );
-  line(
-    c,
-    [
-      [5, -138 + strain * 3],
-      [11, -140],
-      [16, -138 - strain * 2],
-    ],
-    "#684531",
-    2.5,
-  );
-  c.beginPath();
-  c.moveTo(0, -125);
-  c.quadraticCurveTo(-3, -117, 1, -117);
-  c.strokeStyle = "#ac6f48";
-  c.lineWidth = 1.1;
-  c.stroke();
-  ellipse(c, 2, -119, 2, 1, "#f2c08b");
-  if (strain > 0.4) {
-    ellipse(c, 0, -108, 5, 3.5, "#714436");
-  } else {
+    c.save();
+    c.translate(24, -148);
+    c.rotate(Math.sin(artTime * 2 + x) * 0.03);
     c.beginPath();
-    c.moveTo(-8, -111);
-    c.quadraticCurveTo(0, -104, 9, -112);
-    c.strokeStyle = "#8d5139";
-    c.lineWidth = 1.6;
-    c.stroke();
+    c.moveTo(0, 0);
+    c.bezierCurveTo(13, 7, 8, 25, 18, 40);
+    c.lineTo(6, 34);
+    c.bezierCurveTo(2, 23, 6, 13, -3, 7);
+    c.closePath();
+    c.fillStyle = gradient(c, 0, 0, 15, 40, [hc, "#28535b"]);
+    c.fill();
+    c.restore();
+    c.beginPath();
+    c.moveTo(-28, -150);
+    c.quadraticCurveTo(0, -165, 29, -149);
+    c.lineTo(28, -141);
+    c.quadraticCurveTo(0, -154, -28, -142);
+    c.closePath();
+    c.fillStyle = gradient(c, -28, -157, 56, 12, [hc, hc, "#305864"]);
+    c.fill();
     line(
       c,
       [
-        [-3, -108],
-        [4, -109],
+        [-25, -148],
+        [-7, -153],
+        [12, -151],
+        [25, -146],
       ],
-      "#e6aa79",
-      1,
+      "#c4d2b267",
+      1.3,
     );
+    for (let i = 0; i < 5; i++)
+      ellipse(c, -17 + i * 7, -144 + Math.sin(i) * 2, 4, 5, "#513628");
+    if (p.beard) {
+      c.beginPath();
+      c.moveTo(-23, -119);
+      c.quadraticCurveTo(-15, -101, -2, -94);
+      c.quadraticCurveTo(14, -96, 24, -119);
+      c.quadraticCurveTo(13, -108, 0, -110);
+      c.quadraticCurveTo(-15, -107, -23, -119);
+      c.closePath();
+      c.fillStyle = gradient(c, -22, -119, 40, 25, ["#72513a", "#4b382b"]);
+      c.fill();
+    }
+    const blink = (artTime + x * 0.003) % 4.7 > 4.55;
+    for (const side of [-1, 1]) {
+      const ex = side * 10,
+        ey = -126 + strain * 2;
+      if (blink) {
+        line(
+          c,
+          [
+            [ex - 5, ey],
+            [ex, ey + 1],
+            [ex + 5, ey],
+          ],
+          "#6e4934",
+          1.8,
+        );
+      } else {
+        ellipse(c, ex, ey, p.mature ? 5 : 6.3, p.mature ? 5.3 : 6.6, "#ffefd4");
+        ellipse(c, ex + 0.5 + (p.look || 0) * 1.3, ey + 0.3, 3.8, 5, "#8a5932");
+        ellipse(c, ex + 0.7 + (p.look || 0) * 1.3, ey + 0.4, 2.5, 4, "#273537");
+        ellipse(c, ex - 1, ey - 2, 1.5, 1.7, "#fff6dd");
+        c.beginPath();
+        c.ellipse(
+          ex,
+          ey,
+          p.mature ? 5 : 6.3,
+          p.mature ? 5.3 : 6.6,
+          0,
+          Math.PI,
+          Math.PI * 2,
+        );
+        c.strokeStyle = "#654333";
+        c.lineWidth = 1.4;
+        c.stroke();
+      }
+    }
+    line(
+      c,
+      [
+        [-16, -138 - strain * 2],
+        [-11, -140],
+        [-5, -138 + strain * 3],
+      ],
+      "#684531",
+      2.5,
+    );
+    line(
+      c,
+      [
+        [5, -138 + strain * 3],
+        [11, -140],
+        [16, -138 - strain * 2],
+      ],
+      "#684531",
+      2.5,
+    );
+    c.beginPath();
+    c.moveTo(0, -125);
+    c.quadraticCurveTo(-3, -117, 1, -117);
+    c.strokeStyle = "#ac6f48";
+    c.lineWidth = 1.1;
+    c.stroke();
+    ellipse(c, 2, -119, 2, 1, "#f2c08b");
+    if (strain > 0.4) {
+      ellipse(c, 0, -108, 5, 3.5, "#714436");
+    } else {
+      c.beginPath();
+      c.moveTo(-8, -111);
+      c.quadraticCurveTo(0, -104, 9, -112);
+      c.strokeStyle = "#8d5139";
+      c.lineWidth = 1.6;
+      c.stroke();
+      line(
+        c,
+        [
+          [-3, -108],
+          [4, -109],
+        ],
+        "#e6aa79",
+        1,
+      );
+    }
   }
-  if (gear?.has("helmet")) {
+  if (gear?.has("helmet") && painted) {
+    painted.props.draw(c, 2, -36, -182 + (p.helmetSlip || 0), 72, 65, false);
+  } else if (gear?.has("helmet")) {
     c.save();
     c.translate(0, p.helmetSlip || 0);
     poly(
@@ -864,7 +924,27 @@ export function bread(c: Ctx, x: number, y: number, s = 1) {
   c.translate(x, y);
   c.scale(s, s);
   ellipse(c, 0, 2, 22, 12, "#a56835");
-  ellipse(c, 0, -2, 22, 13, "#e8ac59", "#af713b");
+  ellipse(
+    c,
+    0,
+    -2,
+    22,
+    13,
+    gradient(c, -20, -13, 36, 25, ["#f8db91", "#d69643", "#a45e2d"]),
+    "#af713b",
+  );
+  for (let i = 0; i < 27; i++) {
+    const a = i * 2.4,
+      r = 3 + (i % 5) * 3;
+    ellipse(
+      c,
+      Math.cos(a) * r,
+      Math.sin(a) * r * 0.5 - 2,
+      0.6,
+      0.8,
+      i % 2 ? "#fff0ba" : "#ba7839",
+    );
+  }
   for (let i = 0; i < 3; i++)
     line(
       c,
@@ -885,6 +965,36 @@ export function sheep(
   hop = 0,
   following = false,
 ) {
+  if (painted) {
+    c.save();
+    c.translate(x, y);
+    c.scale(s, s);
+    shadow(c, 0, 0, 34);
+    c.translate(0, -Math.abs(hop) * 5);
+    for (const [lx, frame, phase] of [
+      [-23, 3, 1],
+      [14, 2, -1],
+      [-14, 3, -1],
+      [23, 2, 1],
+    ]) {
+      c.save();
+      c.translate(lx, -22);
+      c.rotate(hop * 0.22 * phase);
+      painted.animals.draw(c, frame, -6, 0, 13, 27, false);
+      c.restore();
+    }
+    painted.animals.draw(c, 0, -40, -59, 76, 48, false);
+    c.save();
+    c.translate(31, -45);
+    c.rotate(Math.sin(artTime * 2 + x) * 0.035);
+    painted.animals.draw(c, 1, -9, -21, 42, 40);
+    c.restore();
+    if (following) {
+      ellipse(c, 8, -36, 7, 3, "#3f8b86");
+    }
+    c.restore();
+    return;
+  }
   c.save();
   c.translate(x, y);
   c.scale(s, s);
@@ -920,6 +1030,38 @@ export function sheep(
   c.restore();
 }
 export function lion(c: Ctx, x: number, y: number, s = 1, time = 0) {
+  if (painted) {
+    c.save();
+    c.translate(x, y);
+    c.scale(s, s);
+    shadow(c, 0, 0, 57);
+    c.save();
+    c.translate(40, -40);
+    c.rotate(Math.sin(time) * 0.13);
+    painted.animals.draw(c, 8, 0, -40, 42, 50, false);
+    c.restore();
+    for (const [lx, frame, phase] of [
+      [-22, 6, 1],
+      [29, 7, -1],
+      [-32, 6, -1],
+      [41, 7, 1],
+    ]) {
+      c.save();
+      c.translate(lx, -37);
+      c.rotate(Math.sin(time * 2) * 0.13 * phase);
+      painted.animals.draw(c, frame, -10, 0, 20, 40, false);
+      c.restore();
+    }
+    painted.animals.draw(c, 4, -46, -72, 100, 47, false);
+    c.save();
+    c.translate(-35, -55);
+    c.rotate(Math.sin(time * 0.7) * 0.025);
+    painted.animals.draw(c, 5, -37, -49, 70, 82);
+    c.restore();
+    c.restore();
+    return;
+  }
+
   c.save();
   c.translate(x, y);
   c.scale(s, s);
@@ -953,6 +1095,23 @@ export function lion(c: Ctx, x: number, y: number, s = 1, time = 0) {
   c.restore();
 }
 export function gear(c: Ctx, item: Gear, x: number, y: number, s = 1) {
+  if (painted) {
+    c.save();
+    c.translate(x, y);
+    c.scale(s, s);
+    shadow(c, 0, 58, 38);
+    painted.props.draw(
+      c,
+      ["tunic", "mail", "helmet", "sword"].indexOf(item),
+      -64,
+      -69,
+      128,
+      132,
+    );
+    c.restore();
+    return;
+  }
+
   c.save();
   c.translate(x, y);
   c.scale(s, s);
@@ -1105,6 +1264,24 @@ export function burst(c: Ctx, time: number, x = 640, y = 350) {
   c.globalAlpha = 1;
 }
 export function giant(c: Ctx, x: number, y: number, time: number, fall = 0) {
+  if (painted) {
+    c.save();
+    c.translate(x, y);
+    shadow(c, 0, 0, 95);
+    // A separate broad adult warrior, anchored to the actual forehead target.
+    // In the standing frame, forehead lies 10% down the 370px character.
+    if (fall < 0.28) {
+      c.rotate(fall * 0.25);
+      painted.cast.draw(c, fall > 0.04 ? 1 : 0, -105, -370, 240, 370, false);
+    } else {
+      const f = clamp((fall - 0.28) / 0.72, 0, 1);
+      c.rotate((1 - f) * 0.12);
+      painted.cast.draw(c, 2, -110, -265 + f * 30, 325, 265, false);
+    }
+    c.restore();
+    return;
+  }
+
   c.save();
   c.translate(x, y);
   shadow(c, 0, 0, 93);

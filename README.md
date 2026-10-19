@@ -2,17 +2,22 @@
 
 An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
-teacher controls and fully bundled procedural artwork/audio.
+teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Storybook visual update · 1.1
+## Storybook visual update · 1.2
 
-The title screen, David's animated rig, food-delivery maze and handover cinematic
-now establish a richer illustrated style. All five missions remain playable;
-complete illustration passes for the other environments are the next milestones.
-See [visual design notes](docs/VISUAL_DESIGN.md).
+All five games now share richer illustrated settings: the olive meadow, food maze,
+royal armour tent, clear brook and wide battlefield. Sheep and lion have detailed
+animated components; David combines an illustrated face and linen texture with
+his poseable rig. Goliath, Saul, the brothers, armour and mineral stones have
+original artwork. See [visual design notes](docs/VISUAL_DESIGN.md).
 
 ![Storybook title screen](qa/01-title.png)
 ![Interactive food-delivery maze](qa/02-maze-start.png)
+![Sheep meadow](qa/21-sheep-start.png)
+![Royal armour tent](qa/07-armor-start.png)
+![Brook stones](qa/25-brook-start.png)
+![Goliath in the valley](qa/14-sling-start.png)
 
 ## Play
 

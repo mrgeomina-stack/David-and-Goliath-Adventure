@@ -22,6 +22,14 @@ import {
 import * as A from "./art";
 import landscapeUrl from "./assets/countryside.png";
 import heroUrl from "./assets/david-hero.png";
+import meadowUrl from "./assets/meadow.png";
+import tentUrl from "./assets/royal-tent.png";
+import brookUrl from "./assets/brook.png";
+import valleyUrl from "./assets/valley.png";
+import animalsUrl from "./assets/animals-atlas.png";
+import propsUrl from "./assets/props-atlas.png";
+import castUrl from "./assets/cast-atlas.png";
+import { configurePainted, pebble } from "./painted";
 import { MAZE, cover, motes, mazeBackdrop } from "./scenery";
 export { MAZE } from "./scenery";
 import { missionHints, type Language } from "./strings";
@@ -87,6 +95,16 @@ export class World extends Phaser.Scene {
   preload() {
     this.load.image("painted-landscape", landscapeUrl);
     this.load.image("painted-david", heroUrl);
+    for (const [key, url] of Object.entries({
+      meadow: meadowUrl,
+      tent: tentUrl,
+      brook: brookUrl,
+      valley: valleyUrl,
+      animals: animalsUrl,
+      props: propsUrl,
+      cast: castUrl,
+    }))
+      this.load.image(key, url);
   }
   create() {
     this.landscape = this.textures
@@ -95,6 +113,12 @@ export class World extends Phaser.Scene {
     this.hero = this.textures
       .get("painted-david")
       .getSourceImage() as HTMLImageElement;
+    configurePainted(
+      this.textures.get("animals").getSourceImage() as HTMLImageElement,
+      this.textures.get("props").getSourceImage() as HTMLImageElement,
+      this.textures.get("cast").getSourceImage() as HTMLImageElement,
+      this.hero,
+    );
     this.texture = this.textures.createCanvas("painted-world", 1280, 720)!;
     this.c = this.texture.context;
     this.add.image(0, 0, "painted-world").setOrigin(0);
@@ -415,12 +439,27 @@ export class World extends Phaser.Scene {
       (this.mission === "maze" &&
         this.phase !== "encounter" &&
         this.phase !== "victory");
-    if (!painted)
-      A.background(
+    if (!painted) {
+      const key =
+        this.phase === "encounter" || this.mission === "sling"
+          ? "valley"
+          : this.phase === "victory"
+            ? "meadow"
+            : this.mission === "armor"
+              ? "tent"
+              : this.mission === "brook"
+                ? "brook"
+                : "meadow";
+      cover(
         c,
-        this.clock,
-        this.mission === "sling" ? "valley" : "field",
+        this.textures.get(key).getSourceImage() as HTMLImageElement,
+        0,
+        0,
+        1280,
+        720,
       );
+      motes(c, this.clock, 12);
+    }
     if (this.phase === "title") this.drawTitle(c);
     else if (this.phase === "victory") this.drawVictory(c);
     else if (this.phase === "encounter") this.drawEncounter(c);
@@ -713,88 +752,9 @@ export class World extends Phaser.Scene {
   }
   drawArmor(c: A.Ctx) {
     const t = this.armor.fallTime;
-    // Layered royal field tent: no medieval setting or invented religious symbols.
-    const g = c.createLinearGradient(0, 88, 0, 630);
-    g.addColorStop(0, "#b77847");
-    g.addColorStop(1, "#e3b779");
-    c.fillStyle = g;
-    c.fillRect(0, 88, 1280, 542);
-    A.poly(
-      c,
-      [
-        [0, 88],
-        [472, 88],
-        [310, 510],
-        [0, 555],
-      ],
-      "#945a3b",
-    );
-    A.poly(
-      c,
-      [
-        [1280, 88],
-        [838, 88],
-        [974, 510],
-        [1280, 555],
-      ],
-      "#945a3b",
-    );
-    A.poly(
-      c,
-      [
-        [343, 88],
-        [415, 88],
-        [336, 510],
-        [268, 520],
-      ],
-      "#dba45f",
-    );
-    A.poly(
-      c,
-      [
-        [927, 88],
-        [869, 88],
-        [948, 510],
-        [1010, 520],
-      ],
-      "#dba45f",
-    );
-    A.poly(
-      c,
-      [
-        [500, 163],
-        [780, 163],
-        [893, 515],
-        [393, 515],
-      ],
-      "#edcd8b",
-    );
-    A.poly(
-      c,
-      [
-        [580, 175],
-        [700, 175],
-        [768, 514],
-        [512, 514],
-      ],
-      "#6d8d78",
-    );
-    A.line(
-      c,
-      [
-        [640, 155],
-        [640, 495],
-      ],
-      "#b99763",
-      5,
-    );
-    A.ellipse(c, 650, 583, 407, 52, "#ac6d43");
-    A.ellipse(c, 650, 583, 360, 37, "#c99057");
-    for (let i = 0; i < 12; i++)
-      A.star(c, 340 + i * 55, 583, 8, "#e7ba76", Math.PI / 2);
     for (const item of GEAR) {
       const p = trays[item];
-      A.round(c, p.x - 104, p.y - 82, 208, 173, 23, "#f6dfae", "#e9c58c");
+      A.round(c, p.x - 104, p.y - 82, 208, 173, 23, "#fff1d9dc", "#c6a86f");
       if (this.hintTime > 0 && !this.armor.equipped.has(item)) {
         A.ellipse(
           c,
@@ -917,31 +877,7 @@ export class World extends Phaser.Scene {
   }
 
   drawSheep(c: A.Ctx) {
-    A.tree(c, 119, 366, 0.9);
-    A.tree(c, 1105, 299, 0.7);
-    A.poly(
-      c,
-      [
-        [310, 720],
-        [536, 720],
-        [470, 539],
-        [725, 365],
-        [665, 355],
-        [381, 490],
-      ],
-      "#dcc58b80",
-    );
-    A.round(c, 128, 410, 200, 158, 15, "#a0b56b");
-    for (let i = 0; i < 7; i++)
-      A.line(
-        c,
-        [
-          [140 + i * 25, 431],
-          [140 + i * 25, 550],
-        ],
-        "#b7c47b",
-        2,
-      );
+    A.round(c, 128, 410, 200, 158, 15, "#a4ac6645");
     const fence = (ax: number, ay: number, bx: number, by: number) => {
       A.line(
         c,
@@ -958,7 +894,7 @@ export class World extends Phaser.Scene {
           [ax, ay - 10],
           [bx, by - 10],
         ],
-        "#e0bf81",
+        A.gradient(c, ax, ay - 13, 0, 9, ["#a67740", "#e0bf81", "#9c6d3c"]),
         8,
       );
       A.line(
@@ -967,14 +903,36 @@ export class World extends Phaser.Scene {
           [ax, ay - 26],
           [bx, by - 26],
         ],
-        "#f5d89a",
+        A.gradient(c, ax, ay - 30, 0, 9, ["#eacf98", "#bb8d52", "#906437"]),
         8,
       );
       const n = Math.ceil(Math.hypot(bx - ax, by - ay) / 45);
       for (let i = 0; i <= n; i++) {
         const x = lerp(ax, bx, i / n),
           y = lerp(ay, by, i / n);
-        A.round(c, x - 5, y - 37, 10, 47, 3, "#b99561");
+        A.round(
+          c,
+          x - 5,
+          y - 37,
+          10,
+          47,
+          3,
+          A.gradient(c, x - 5, y - 37, 10, 0, [
+            "#91683f",
+            "#d3ac73",
+            "#a77c48",
+          ]),
+        );
+        A.line(
+          c,
+          [
+            [x - 2, y - 25],
+            [x - 1, y + 6],
+          ],
+          "#77572d55",
+          0.8,
+        );
+        A.ellipse(c, x + 1, y - 12, 1.8, 3, "#7a552e88");
         A.round(c, x - 5, y - 37, 10, 8, 3, "#f4d49a");
       }
     };
@@ -1022,33 +980,17 @@ export class World extends Phaser.Scene {
     if (this.hintTime > 0) A.text(c, "←", 386, 500, 38, "#fff6bb");
     if (this.phase === "success") {
       if (this.successTime > 1)
-        A.person(c, 355, 409, 0.7, { tunic: "#a87c52", headcloth: "#857647" });
+        A.person(c, 355, 409, 0.7, {
+          mature: true,
+          beard: true,
+          tunic: "#a87c52",
+          headcloth: "#857647",
+        });
       A.burst(c, this.successTime, 350, 355);
     }
   }
 
   drawBrook(c: A.Ctx) {
-    A.tree(c, 1175, 400, 0.85);
-    A.bush(c, 101, 537, 1.4);
-    A.bush(c, 1144, 560, 1.4);
-    c.beginPath();
-    c.moveTo(45, 256);
-    c.bezierCurveTo(325, 200, 827, 225, 1180, 251);
-    c.bezierCurveTo(1250, 365, 1223, 485, 1157, 566);
-    c.bezierCurveTo(857, 612, 409, 592, 92, 570);
-    c.bezierCurveTo(147, 463, 11, 358, 45, 256);
-    c.closePath();
-    c.fillStyle = "#d7d5a5";
-    c.fill();
-    c.strokeStyle = "#ede0ad";
-    c.lineWidth = 22;
-    c.stroke();
-    const g = c.createLinearGradient(0, 250, 0, 580);
-    g.addColorStop(0, "#4eaaad");
-    g.addColorStop(0.5, "#65b9b8");
-    g.addColorStop(1, "#8fc9ba");
-    c.fillStyle = g;
-    c.fill();
     for (let i = 0; i < 25; i++) {
       const x = 70 + ((i * 109 + this.clock * 22) % 1120),
         y = 275 + ((i * 79) % 280);
@@ -1066,44 +1008,9 @@ export class World extends Phaser.Scene {
     for (const s of this.brook.stones) {
       if (s.collected) continue;
       A.shadow(c, s.x, s.y + 13, 38);
-      if (s.smooth) {
-        A.ellipse(c, s.x, s.y, 35, 25, "#abb7a2", "#78968d");
-        A.ellipse(c, s.x - 7, s.y - 8, 20, 10, "#d0d2b1");
-        A.line(
-          c,
-          [
-            [s.x - 13, s.y - 10],
-            [s.x + 2, s.y - 14],
-          ],
-          "#ece7bd",
-          3,
-        );
-      } else {
-        A.poly(
-          c,
-          [
-            [s.x - 36, s.y + 8],
-            [s.x - 24, s.y - 20],
-            [s.x - 7, s.y - 13],
-            [s.x + 3, s.y - 32],
-            [s.x + 23, s.y - 12],
-            [s.x + 38, s.y + 17],
-            [s.x + 10, s.y + 23],
-          ],
-          "#748f8b",
-          "#567b78",
-        );
-        A.line(
-          c,
-          [
-            [s.x - 8, s.y - 11],
-            [s.x + 2, s.y + 12],
-            [s.x + 22, s.y - 8],
-          ],
-          "#99aea0",
-          3,
-        );
-      }
+      const index = this.brook.stones.indexOf(s);
+      pebble(c, s.smooth ? index % 5 : 5 + (index % 3), s.x, s.y);
+      A.ellipse(c, s.x, s.y + 19, 42, 9, "#c1f8ec28");
     }
     const ringY = 335 + this.brook.row * 145;
     c.strokeStyle = this.brook.errorTime ? "#d17b51" : "#fff4be";
@@ -1131,14 +1038,8 @@ export class World extends Phaser.Scene {
     );
     for (let i = 0; i < 5; i++) {
       const x = 945 + i * 43;
-      A.ellipse(
-        c,
-        x,
-        200,
-        14,
-        11,
-        i < this.brook.count ? "#f4e6ae" : "#577e6b44",
-      );
+      if (i < this.brook.count) pebble(c, i, x, 200, 28, 23);
+      else A.ellipse(c, x, 200, 14, 11, "#315e6144");
     }
     A.person(c, 1112, 586, 0.8, { bag: true, sit: 0.8, arm: 0.6 });
     if (this.brook.last && this.brook.cooldown > 0) {
@@ -1146,35 +1047,19 @@ export class World extends Phaser.Scene {
         s = this.brook.last;
       const x = lerp(s.x, 1141, f),
         y = lerp(s.y, 550, f) - Math.sin(f * Math.PI) * 100;
-      A.ellipse(c, x, y, lerp(30, 12, f), lerp(23, 9, f), "#e3dfb7");
+      pebble(
+        c,
+        this.brook.stones.indexOf(s) % 5,
+        x,
+        y,
+        lerp(64, 24, f),
+        lerp(48, 18, f),
+      );
     }
     if (this.phase === "success") A.burst(c, this.successTime, 800, 350);
   }
 
   drawSling(c: A.Ctx) {
-    A.poly(
-      c,
-      [
-        [0, 598],
-        [240, 565],
-        [520, 596],
-        [750, 583],
-        [1020, 603],
-        [1280, 560],
-        [1280, 720],
-        [0, 720],
-      ],
-      "#be9d63",
-    );
-    for (let i = 0; i < 5; i++) {
-      A.tent(c, 488 + i * 115, 378 + (i % 2) * 10, 0.25);
-      A.person(c, 573 + i * 60, 416, 0.36, {
-        tunic: i % 2 ? "#bd8956" : "#718c78",
-        arm: this.phase === "success" ? 1 : 0,
-      });
-    }
-    A.bush(c, 735, 600, 1.3);
-    A.bush(c, 1190, 573, 1.4);
     A.person(c, 130, 597, 1.05, {
       bag: true,
       arm: this.sling.charging ? 0.7 : 0.2,
@@ -1246,7 +1131,7 @@ export class World extends Phaser.Scene {
       if (this.phase === "success" && t > 0.5)
         p.y = Math.min(594, p.y + 450 * (t - 0.5) ** 2);
       A.shadow(c, p.x, 600, 6);
-      A.ellipse(c, p.x, p.y, 7, 6, "#f0e4b8", "#8b8462");
+      pebble(c, 0, p.x, p.y, 16, 13);
     }
     A.round(c, 58, 216, 255, 82, 19, "#fff2d9e8");
     A.text(
@@ -1297,7 +1182,11 @@ export class World extends Phaser.Scene {
 
   drawEncounter(c: A.Ctx) {
     A.tent(c, 175, 493, 1.25, "#d7af67");
-    A.person(c, 145, 543, 1.15, { tunic: "#bf8149", headcloth: "#a07646" });
+    A.person(c, 145, 543, 1.15, {
+      character: "saul",
+      tunic: "#bf8149",
+      headcloth: "#a07646",
+    });
     A.text(c, this.say("SAUL’S TENT", "خيمة شاول"), 167, 573, 19, "#3b584a");
     A.giant(c, 1030, 588, this.clock);
     A.person(c, this.encounterX, 590, 1, {
@@ -1338,12 +1227,11 @@ export class World extends Phaser.Scene {
   }
 
   drawVictory(c: A.Ctx) {
-    A.tree(c, 90, 560, 0.9);
-    A.tent(c, 1105, 489, 1);
     A.person(c, 230, 560, 1.65, { bag: true, arm: 1 });
     for (let i = 0; i < 3; i++)
       A.person(c, 995 + i * 86, 550, 0.9, {
         arm: 1,
+        mature: true,
         tunic: ["#cc9b62", "#729786", "#dbbc7e"][i],
       });
     A.sheep(c, 110, 592, 0.9, Math.sin(this.clock * 4));

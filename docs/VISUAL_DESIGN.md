@@ -1,10 +1,6 @@
-# Storybook visual update — 1.1
+# Storybook visual update — 1.2
 
-This iteration establishes the new art direction in the **title screen, David's
-character, food-delivery maze and delivery cinematic**. The five playable missions
-and story order remain intact. The sheep, armour, brook and finale benefit from
-the shared character/UI updates; their complete environment illustration passes
-are future milestones, not claimed as completed here.
+All five missions now use locally bundled illustrated settings and detailed character or object textures. Gameplay models, maze geometry, forgiving input regions and story order are preserved.
 
 ## Art direction
 
@@ -17,11 +13,10 @@ with shaped RTL captions. No hosted fonts or runtime network dependencies.
   illustrations, locally bundled. Character artwork and scenery stay separate,
   with subtle breathing and natural light particles.
 - **Playable David:** editable articulated Canvas rig with curved linen, folds,
-  embroidery, dimensional skin, detailed eyes/curls, blinking, waving cloth,
+  embroidery, shaded limbs, illustrated eyes/curls, waving cloth,
   moving satchel and a visible bag opening. This matches the cover's costume,
   palette and identity while keeping the gameplay character poseable.
-- **Brothers:** taller adult proportions, distinct cloth palettes, mature eyes,
-  beards on two brothers, and welcoming arm poses.
+- **Brothers:** distinct full-body adult illustrations and welcoming arm poses.
 - **Maze:** textured sand, individual shaded sandstone blocks, cap highlights,
   moss, soft directional shadows, camp table/vessels, animated goal flag and
   footstep dust. Every wall follows the existing graph, without concealed paths
@@ -40,7 +35,7 @@ with shaped RTL captions. No hosted fonts or runtime network dependencies.
 specifically for this project with OpenAI image generation; they do not depend on
 an external image host. The original generated PNGs are retained in editable
 source. Vite embeds them into the classic script, keeping the delivered
-`index.html` self-contained. Phaser preloads both before enabling Start/practice.
+`index.html` self-contained. Phaser preloads all nine PNGs before enabling Start/practice.
 
 `src/scenery.ts` bakes static maze scenery once per maze seed. Characters, flag,
 hint, food and particles remain separate animated layers. Only one cached maze
@@ -51,14 +46,14 @@ mouse or touch press on a maze arrow registers a step immediately; holding still
 repeats at the original movement cadence. World scaling does not change collision.
 The diagnostic overlay remains development-only and disabled by default.
 
-## Next illustration passes
+## Completed mission illustration passes
 
-1. Sheep hillside: original illustrated sheep/lion, animated olive grove and pen.
-2. Armour tent: layered fabrics, richer bronze/mail materials and Saul's identity.
-3. Brook: water transparency/refraction, bank foliage and more dimensional stones.
-4. Valley: a bespoke Goliath rig, battlefield depth, banners and stronger impact
-   staging. Preserve the precise forehead collider and physically computed shots.
+- Sheep: painted olive meadow, cream fleece, expressive animal faces, independently moving legs, lion mane and swaying tail. Pen fences still match the collision model.
+- Armour: painted royal tent with embroidered fabrics, rugs and lamps; textured linen, chain links, bronze patina and leather sword/belt. The same item artwork appears in trays and on David. David retains his staged struggle, fall, removal and recovery.
+- Brook: painted clear stream and lush banks, animated water highlights, five distinct smooth stone surfaces and three angular rock surfaces. Pickup and collection icons use those textures.
+- Valley and encounter: detailed landscape and an original broad adult Goliath with bronze scale armour, shield, spear, startled and seated poses. Supporting brothers and Saul have separate adult illustrations.
+- David: the approved hero illustration supplies his curls and face and the tunic texture. His articulated limbs, clothing, satchel and equipment preserve movement, collapse and food delivery. Limbs use shaded Canvas drawing rather than a newly generated pose sheet.
 
-Future asset replacements should use transparent layered sprites at twice their
-logical display size, preserve the current body/drop anchors, and keep textures
-bundled. The product specification remains `docs/GAME_BLUEPRINT.md`.
+`src/painted.ts` trims cast cells by alpha once, uses explicit animal and prop component rectangles, then caches individual sprite surfaces. Original PNGs remain unmodified. The atlas frames are separate from gameplay hit regions. Goliath's forehead stays near the model's (1000,259) target; his spear is decoration.
+
+The source retains editable illustrations, typed rendering helpers, and procedural fallbacks. Final human art review and physical-device performance testing remain useful release acceptance steps. The product specification remains `docs/GAME_BLUEPRINT.md`.
