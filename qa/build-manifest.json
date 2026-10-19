@@ -1,0 +1,8 @@
+{
+  "html_sha256": "e0a563e415088b3a1b1f7518e51b8b8c8b8960cac18b6cbc478a79a5c8e30a6c",
+  "html_bytes": 1271120,
+  "unit_tests_passed": 15,
+  "screenshots": 39,
+  "direct_file_launch": "blocked by managed browser; unverified",
+  "offline_runtime": "passed with networking disabled; initial document supplied by routing"
+}

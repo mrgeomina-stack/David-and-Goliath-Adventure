@@ -1,0 +1,26 @@
+{
+  "name": "davids-big-adventure",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build && node scripts/offline.mjs",
+    "test": "vitest run",
+    "test:browser": "node scripts/browser-test.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "format": "prettier --write src tests scripts/*.mjs index.html vite.config.ts tsconfig.json",
+    "package": "python3 scripts/package.py",
+    "test:timeout": "node scripts/timeout-check.mjs"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.1",
+    "vitest": "4.0.18"
+  }
+}
