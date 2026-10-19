@@ -704,3 +704,46 @@ button:disabled {
   opacity: 0.65;
   filter: saturate(0.6);
 }
+
+#sheep-clock {
+  position: absolute;
+  top: 0;
+  left: 660px;
+  width: 307px;
+  min-height: 75px;
+  border: 2px solid #bda365;
+  border-radius: 18px;
+  background: #fff3dcef;
+  color: #294e49;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 9px 14px;
+  box-shadow: 0 5px 16px #273d3428;
+}
+#sheep-clock[hidden] {
+  display: none;
+}
+#sheep-time {
+  font:
+    700 31px Georgia,
+    serif;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#sheep-warning {
+  font-size: 15px;
+  line-height: 1.4;
+  max-width: 195px;
+  text-align: center;
+}
+#sheep-clock.warning {
+  background: #fff0bd;
+  border-color: #c88a24;
+}
+#sheep-clock.urgent {
+  background: #ffe2ce;
+  color: #843d29;
+  border-color: #b96542;
+}

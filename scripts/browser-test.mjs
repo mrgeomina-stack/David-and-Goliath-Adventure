@@ -18,6 +18,7 @@ try {
     "story-check",
     "ui-offline-check",
     "visual-check",
+    "timeout-check",
   ]) {
     const start = Date.now();
     const code = await new Promise((resolve) => {

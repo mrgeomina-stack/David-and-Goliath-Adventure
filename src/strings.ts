@@ -5,7 +5,10 @@ export const copy = {
     "يلا نساعد داود في مغامرته!",
     "A little shepherd. A very big adventure.",
   ],
-  sheep: ["رجّع الخراف للحظيرة!", "Bring two sheep safely into the pen."],
+  sheep: [
+    "شيل الأربعة وارجع للحظيرة قبل الأسد!",
+    "Carry four sheep into the pen before the lion!",
+  ],
   maze: ["وصّل الأكل لإخوات داود!", "Find your way to David’s brothers."],
   armor: ["اسحب كل قطعة لمكانها على داود.", "Drag each piece onto David."],
   brook: ["اختار خمس حجارة ملساء!", "Collect five smooth stones."],
@@ -42,7 +45,7 @@ export const copy = {
   fullscreen: ["ملء الشاشة", "Full screen"],
   restart: ["من الأول", "Restart"],
   help: ["مساعدة المعلم", "Teacher help"],
-  call: ["نادي", "Call"],
+  call: ["شيل الخروف", "Lift sheep"],
   scoop: ["التقط", "Scoop"],
   charge: ["دوس… وسيب", "Hold / release"],
   tunic: ["قميص شاول", "Saul’s tunic"],
@@ -61,8 +64,8 @@ export function label(key: CopyKey, lang: Language) {
 
 export const teacherHelp: [string, string][] = [
   [
-    "١ · الخراف: حرّك داود بالأسهم. SPACE ينادي الخروف القريب. دخّل الاتنين من فتحة الحظيرة.",
-    "1 · Sheep: Move with arrows / WASD. SPACE calls a nearby sheep. Lead both through the pen opening.",
+    "١ · الخراف: حرّك داود بالأسهم. SPACE يشيل خروف قريب. أنقذ الأربعة من فتحة الحظيرة قبل انتهاء الوقت.",
+    "1 · Sheep: Move with arrows / WASD. SPACE lifts one nearby sheep. Run through the right pen opening to set it down. Save all four before the countdown ends: Easy 2:00, Normal 1:30. Free Play has no deadline.",
   ],
   [
     "٢ · المتاهة: الأسهم أو الأزرار الكبيرة. المساعدة بتنوّر الخطوة الجاية بس.",
@@ -97,8 +100,8 @@ export const missionHints: Record<string, [string, string]> = {
     "Head → helmet · Chest → tunic & mail · Hip → sword",
   ],
   sheep: [
-    "قرّب ونادي، وامشي بالراحة لفتحة الحظيرة.",
-    "Get close, CALL, then walk slowly through the pen opening.",
+    "قرّب واضغط SPACE عشان تشيل خروف. اجري لفتحة الحظيرة على اليمين.",
+    "Get close and press SPACE to lift one sheep. Run through the opening on the right; David sets it down automatically.",
   ],
   brook: [
     "اختار حجر مدوّر وأملس. المسه أو اضغط SPACE لما الدايرة تعدّي.",

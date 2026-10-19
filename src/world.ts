@@ -171,7 +171,10 @@ export class World extends Phaser.Scene {
     this.run++;
     this.maze = new MazeModel(this.seed + this.run * 41);
     this.armor = new ArmorModel();
-    this.sheep = new SheepModel(this.run);
+    this.sheep = new SheepModel(
+      this.run,
+      this.free ? null : this.easy ? 120 : 90,
+    );
     this.brook = new BrookModel(this.run);
     this.sling = new SlingModel();
     this.paused = false;
@@ -221,7 +224,7 @@ export class World extends Phaser.Scene {
     }
     if (!down) return;
     if (this.mission === "sheep") {
-      this.hooks.sound.play(this.sheep.call() ? "call" : "wall");
+      this.hooks.sound.play(this.sheep.pickup() ? "call" : "wall");
     }
     if (this.mission === "brook") this.scoop();
   }
@@ -391,13 +394,22 @@ export class World extends Phaser.Scene {
         }
         if (this.mission === "sheep") {
           const count = this.sheep.count;
+          const beforeTime = this.sheep.remaining;
           this.sheep.update(dt, dir);
+          for (const threshold of [30, 15, 5])
+            if (
+              beforeTime !== null &&
+              beforeTime > threshold &&
+              this.sheep.remaining !== null &&
+              this.sheep.remaining <= threshold
+            )
+              this.hooks.sound.tone(330, 0.15, 0, "triangle");
           if (this.sheep.count > count) {
             this.hooks.sound.play("win");
             this.hooks.changed();
           }
           if (this.sheep.complete) this.finish();
-          else if (this.sheep.time > 100 && !this.free) {
+          else if (this.sheep.caughtIndex !== null) {
             this.failed = true;
             this.clearInput();
             this.hooks.changed();
@@ -951,6 +963,7 @@ export class World extends Phaser.Scene {
       "#56714d",
     );
     for (const s of this.sheep.sheep) {
+      if (s.carried || s.caught) continue;
       A.sheep(
         c,
         s.x,
@@ -958,10 +971,10 @@ export class World extends Phaser.Scene {
         1,
         this.phase === "success"
           ? Math.sin(this.clock * 6)
-          : s.following
+          : s.carried
             ? Math.sin(this.clock * 9)
             : Math.sin(this.clock * 2) * 0.1,
-        s.following,
+        s.carried,
       );
       if (this.hintTime > 0 && !s.saved) {
         c.strokeStyle = "#fff6b6";
@@ -975,8 +988,50 @@ export class World extends Phaser.Scene {
     A.lion(c, this.sheep.lion.x, this.sheep.lion.y, 1.1, this.clock * 3);
     A.person(c, this.sheep.david.x, this.sheep.david.y, 1, {
       walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
-      arm: this.phase === "success" ? 1 : this.held.has("Space") ? 0.7 : 0,
+      arm: this.phase === "success" ? 1 : 0,
+      carry: this.sheep.carried ? this.sheep.liftProgress : undefined,
     });
+    const heldSheep = this.sheep.carried;
+    if (heldSheep) {
+      const d = this.sheep.david,
+        f = this.sheep.liftProgress;
+      const eased = f * f * (3 - 2 * f),
+        drop = this.sheep.placing;
+      const target = { x: d.x, y: d.y - 66 };
+      const pen = this.sheep.penSpot(this.sheep.carriedIndex!);
+      const sx = drop
+        ? lerp(target.x, pen.x, drop)
+        : lerp(this.sheep.pickupFrom.x, target.x, eased);
+      const sy = drop
+        ? lerp(target.y, pen.y, drop)
+        : lerp(this.sheep.pickupFrom.y, target.y, eased) -
+          Math.sin(f * Math.PI) * 12;
+      A.sheep(c, sx, sy, 0.83, 0, true);
+      // Hands sit in front of the fleece: David visibly supports the sheep.
+      for (const side of [-1, 1])
+        A.ellipse(
+          c,
+          d.x + side * 30,
+          d.y - lerp(44, 74, f),
+          7,
+          6,
+          A.gradient(c, d.x + side * 30 - 5, d.y - 80, 11, 12, [
+            "#f0c18d",
+            "#cd9363",
+          ]),
+        );
+    }
+    if (this.sheep.caughtIndex !== null) {
+      A.sheep(c, this.sheep.lion.x - 35, this.sheep.lion.y + 6, 0.85, 0);
+      A.text(
+        c,
+        this.say("The lion reached a sheep!", "الأسد وصل لخروف!"),
+        this.sheep.lion.x - 40,
+        this.sheep.lion.y - 128,
+        19,
+        "#fff5dd",
+      );
+    }
     if (this.hintTime > 0) A.text(c, "←", 386, 500, 38, "#fff6bb");
     if (this.phase === "success") {
       if (this.successTime > 1)

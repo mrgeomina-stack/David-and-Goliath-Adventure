@@ -1,7 +1,7 @@
 {
-  "html_sha256": "0bec61b7b4063108e2561436ed1e1f0ed0d7134e7732c982a42de30ade7b5571",
+  "html_sha256": "8b71ce86c64824cd4a0ba9fecb7891b10d8b542be929086090098a5f7952aa39",
   "checks": {
-    "remaining-check": "passed: herding, adult keeper, distinct stones and pickups",
-    "ui-offline-check": "passed: network-disabled final HTML, emulated touch, EN/AR, audio state, focus cancellation"
+    "remaining-check": "passed: four individual carries, animated lift, tablet touch pickup, pen deliveries, brook pickups",
+    "ui-offline-check": "passed: final self-contained HTML with networking disabled, touch, EN/AR, audio, focus"
   }
 }

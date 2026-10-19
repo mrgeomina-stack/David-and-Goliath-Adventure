@@ -1,12 +1,21 @@
 {
-  "version": "1.2.0",
-  "html_sha256": "0bec61b7b4063108e2561436ed1e1f0ed0d7134e7732c982a42de30ade7b5571",
-  "html_bytes": 32603688,
-  "unit_tests_passed": 15,
-  "browser_checks_passed": 7,
-  "screenshots": 49,
+  "version": "1.3.0",
+  "html_sha256": "8b71ce86c64824cd4a0ba9fecb7891b10d8b542be929086090098a5f7952aa39",
+  "html_bytes": 32608327,
+  "unit_tests_passed": 17,
+  "browser_checks_passed": 8,
+  "screenshots": 55,
   "direct_file_launch": "blocked by managed browser; unverified",
   "offline_runtime": "network disabled, initial document supplied by routing",
   "visual_milestone": "all five painted settings; animated sheep and lion components; illustrated David face and linen on articulated rig; original adult Goliath and cast; textured armour and stones",
-  "final_targeted_checks": "sheep/brook gameplay rerun after adult keeper art adjustment"
+  "final_targeted_checks": "four-sheep carrying, emulated tablet pickup and bilingual footer on final build",
+  "sheep_rescue": {
+    "flock": 4,
+    "easy_seconds": 120,
+    "normal_seconds": 90,
+    "free_play": "untimed",
+    "pickup": "one nearby sheep; 0.55 second lift",
+    "delivery": "0.4 second set-down inside pen",
+    "lion": "physical pursuit and catch only after countdown reaches zero"
+  }
 }

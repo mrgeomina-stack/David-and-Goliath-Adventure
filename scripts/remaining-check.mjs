@@ -3,7 +3,10 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
 });
-const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+const page = await browser.newPage({
+  viewport: { width: 1280, height: 720 },
+  hasTouch: true,
+});
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
@@ -13,11 +16,12 @@ await page.click("#start");
 await page.waitForTimeout(2700);
 await page.screenshot({ path: "qa/21-sheep-start.png" });
 await page.keyboard.press("Space");
-if ((await state()).sheep.some((s) => s.following))
-  throw Error("Distant call falsely worked");
+if ((await state()).sheep.some((s) => s.carried))
+  throw Error("Distant pickup falsely worked");
 await page.screenshot({ path: "qa/22-sheep-distant-call.png" });
 async function moveTo(x, y) {
   for (let i = 0; i < 80; i++) {
+    if ((await state()).phase === "success") return;
     const d = (await state()).david,
       dx = x - d.x,
       dy = y - d.y;
@@ -41,20 +45,33 @@ async function moveTo(x, y) {
   }
   throw Error("Cannot move to " + [x, y] + JSON.stringify(await state()));
 }
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 4; i++) {
   let s = (await state()).sheep[i];
   await moveTo(s.x - 30, s.y);
-  await page.keyboard.press("Space");
+  if (i === 1) {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.waitForTimeout(150);
+    const box = await page.locator("#action").boundingBox();
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+  } else await page.keyboard.press("Space");
   await page.waitForTimeout(200);
-  if (!(await state()).sheep[i].following)
-    throw Error("Nearby sheep not called");
+  if ((await state()).liftProgress <= 0 || (await state()).liftProgress >= 1)
+    throw Error("Missing animated lift");
+  if (!(await state()).sheep[i].carried) throw Error("Nearby sheep not lifted");
   await page.screenshot({ path: `qa/23-sheep-follow-${i}.png` });
+  if (i === 0) {
+    await page.screenshot({ path: "qa/48-sheep-lift.png" });
+    await page.waitForTimeout(420);
+    if ((await state()).liftProgress !== 1) throw Error("Lift did not finish");
+    await page.screenshot({ path: "qa/49-sheep-carried.png" });
+  }
   await moveTo(450, 498);
   await page.waitForTimeout(650);
   await moveTo(225, 498);
   await page.waitForTimeout(1400);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
-  if (i === 0) {
+  if (i === 1) await page.setViewportSize({ width: 1280, height: 720 });
+  if (i < 3) {
     await moveTo(450, 498);
   }
 }
@@ -89,6 +106,6 @@ if ((await state()).stoneCount !== 5 || (await state()).phase !== "success")
   throw Error("Brook incomplete");
 if (errors.length) throw Error(errors.join("\n"));
 console.log(
-  "SHEEP + BROOK PASS: real herding, pen scoring, distant call rejection, jagged rejection, five unique pickups.",
+  "SHEEP + BROOK PASS: four individual carries, keyboard/touch lifts, pen scoring, distant pickup rejection, jagged rejection, five unique pickups.",
 );
 await browser.close();

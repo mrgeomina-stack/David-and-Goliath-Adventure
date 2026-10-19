@@ -199,7 +199,8 @@ export function walk(
   if (!blocked(y)) p.y = y.y;
 }
 export type Sheep = Point & {
-  following: boolean;
+  carried: boolean;
+  caught: boolean;
   saved: boolean;
   phase: number;
   startled: number;
@@ -207,78 +208,138 @@ export type Sheep = Point & {
 export class SheepModel {
   david: Point = { x: 480, y: 470 };
   sheep: Sheep[];
-  lion: Point = { x: 1090, y: 340 };
+  lion: Point = { x: 1090, y: 300 };
   time = 0;
-  called = 0;
-  constructor(seed = 1) {
+  carriedIndex: number | null = null;
+  liftProgress = 0;
+  placing = 0;
+  pickupFrom: Point = { x: 0, y: 0 };
+  caughtIndex: number | null = null;
+  constructor(
+    seed = 1,
+    public timeLimit: number | null = 120,
+  ) {
     const random = rng(seed);
     this.sheep = [
-      { x: 650 + random() * 100, y: 340 + random() * 70 },
-      { x: 830 + random() * 130, y: 490 + random() * 40 },
+      { x: 650 + random() * 65, y: 325 + random() * 35 },
+      { x: 875 + random() * 65, y: 325 + random() * 35 },
+      { x: 650 + random() * 65, y: 510 + random() * 25 },
+      { x: 915 + random() * 65, y: 510 + random() * 25 },
     ].map((p, i) => ({
       ...p,
-      following: false,
+      carried: false,
+      caught: false,
       saved: false,
       phase: i * 3,
       startled: 0,
     }));
   }
-  call() {
-    let result = false;
-    for (const s of this.sheep)
-      if (!s.saved && distance(s, this.david) < 85) {
-        s.following = true;
-        result = true;
+  get remaining() {
+    return this.timeLimit === null
+      ? null
+      : Math.max(0, this.timeLimit - this.time);
+  }
+  get hunting() {
+    return this.remaining === 0 && !this.complete;
+  }
+  get carried() {
+    return this.carriedIndex === null ? null : this.sheep[this.carriedIndex];
+  }
+  pickup() {
+    if (this.carried || this.caughtIndex !== null || this.complete)
+      return false;
+    let index = -1,
+      best = 90;
+    this.sheep.forEach((s, i) => {
+      const d = distance(s, this.david);
+      if (!s.saved && !s.caught && d < best) {
+        best = d;
+        index = i;
       }
-    if (result) this.called++;
-    return result;
+    });
+    if (index < 0) return false;
+    this.carriedIndex = index;
+    this.sheep[index].carried = true;
+    this.pickupFrom = { x: this.sheep[index].x, y: this.sheep[index].y };
+    this.liftProgress = 0;
+    this.placing = 0;
+    return true;
+  }
+  penSpot(index: number): Point {
+    return { x: 185 + (index % 2) * 73, y: 465 + Math.floor(index / 2) * 64 };
   }
   update(dt: number, dir: Point) {
+    if (this.caughtIndex !== null || this.complete) return;
     this.time += dt;
-    walk(this.david, dir.x * 190 * dt, dir.y * 190 * dt, fieldBlocked);
-    const threat = distance(this.lion, this.david) < 185;
-    const target = threat
-      ? { x: 1130, y: 280 }
-      : this.sheep.find((s) => !s.saved) || { x: 1110, y: 330 };
-    const l = distance(target, this.lion);
-    if (l > 4) {
-      this.lion.x += ((target.x - this.lion.x) / l) * (threat ? 80 : 13) * dt;
-      this.lion.y += ((target.y - this.lion.y) / l) * (threat ? 80 : 13) * dt;
+    const carrying = this.carried;
+    if (!carrying || (this.liftProgress >= 1 && this.placing === 0)) {
+      const speed = carrying ? 220 : 190;
+      walk(this.david, dir.x * speed * dt, dir.y * speed * dt, fieldBlocked);
+    }
+    if (carrying) {
+      this.liftProgress = Math.min(1, this.liftProgress + dt / 0.55);
+      carrying.x = this.david.x;
+      carrying.y = this.david.y;
+      if (this.liftProgress >= 1 && penInside(this.david)) {
+        this.placing = Math.min(1, this.placing + dt / 0.4);
+        if (this.placing >= 1) {
+          Object.assign(carrying, this.penSpot(this.carriedIndex!), {
+            saved: true,
+            carried: false,
+          });
+          this.carriedIndex = null;
+          this.placing = 0;
+        }
+      }
     }
     for (const s of this.sheep) {
-      if (s.saved) continue;
-      s.startled = Math.max(0, s.startled - dt);
-      const d = distance(s, this.david);
-      if (distance(s, this.lion) < 72) {
-        s.startled = 1.5;
-        s.following = false;
-        walk(s, -80 * dt, 30 * dt, fieldBlocked);
-      } else if (s.following && d > 43) {
-        walk(
-          s,
-          ((this.david.x - s.x) / d) * 150 * dt,
-          ((this.david.y - s.y) / d) * 150 * dt,
-          fieldBlocked,
-        );
-      } else if (!s.following) {
-        walk(
-          s,
-          Math.cos(this.time * 0.7 + s.phase) * 9 * dt,
-          Math.sin(this.time + s.phase) * 7 * dt,
-          fieldBlocked,
-        );
-      }
-      if (penInside(s)) {
-        s.saved = true;
-        s.following = false;
-      }
+      if (s.saved || s.carried) continue;
+      // Gentle grazing stays local so pickups remain predictable for young players.
+      walk(
+        s,
+        Math.cos(this.time * 0.7 + s.phase) * 2 * dt,
+        Math.sin(this.time + s.phase) * 2 * dt,
+        fieldBlocked,
+      );
+    }
+    if (this.complete) return;
+    const vulnerable = this.sheep.filter(
+      (s) => !s.saved && !(s.carried && penInside(this.david)),
+    );
+    const prey = vulnerable.reduce<Sheep | null>(
+      (best, s) =>
+        !best || distance(s, this.lion) < distance(best, this.lion) ? s : best,
+      null,
+    );
+    const retreat = distance(this.lion, this.david) < 185;
+    const stalking = this.remaining !== null && this.remaining <= 30;
+    const target =
+      this.hunting && prey
+        ? prey
+        : retreat
+          ? { x: 1140, y: 250 }
+          : stalking && prey
+            ? prey
+            : { x: 1075 + Math.sin(this.time * 0.3) * 45, y: 285 };
+    const d = distance(target, this.lion),
+      speed = this.hunting ? 300 : retreat ? 80 : stalking ? 18 : 16;
+    if (d > 1) {
+      const step = Math.min(d, speed * dt);
+      this.lion.x += ((target.x - this.lion.x) / d) * step;
+      this.lion.y += ((target.y - this.lion.y) / d) * step;
+    }
+    if (this.hunting && prey && distance(prey, this.lion) < 44) {
+      this.caughtIndex = this.sheep.indexOf(prey);
+      prey.caught = true;
+      prey.carried = false;
+      if (this.carriedIndex === this.caughtIndex) this.carriedIndex = null;
     }
   }
   get count() {
     return this.sheep.filter((s) => s.saved).length;
   }
   get complete() {
-    return this.count >= 2;
+    return this.count === 4;
   }
 }
 export type Stone = Point & { smooth: boolean; collected: boolean; id: number };

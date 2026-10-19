@@ -4,7 +4,17 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Storybook visual update · 1.2
+## Four-sheep rescue · 1.3
+
+Press Space or **Lift sheep** near a sheep to raise it into David’s hands. Run to
+the pen’s right opening; David sets it down automatically. Rescue all four before
+the visible countdown ends: Easy 2:00, Normal 1:30, or untimed Free Play.
+Warnings appear at 30 and 15 seconds. At zero the lion chases an unprotected sheep;
+a non-graphic catch triggers retry. Pause freezes time.
+
+![David carries a sheep to safety](qa/49-sheep-carried.png)
+
+## Storybook artwork
 
 All five games now share richer illustrated settings: the olive meadow, food maze,
 royal armour tent, clear brook and wide battlefield. Sheep and lion have detailed

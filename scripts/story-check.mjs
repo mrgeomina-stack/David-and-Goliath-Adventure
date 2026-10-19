@@ -17,6 +17,7 @@ async function key(code, ms) {
 }
 async function moveTo(x, y) {
   for (let i = 0; i < 90; i++) {
+    if ((await state()).phase === "success") return;
     const d = (await state()).david,
       dx = x - d.x,
       dy = y - d.y;
@@ -47,7 +48,7 @@ async function complete() {
 const started = Date.now();
 await page.click("#start");
 await page.waitForTimeout(2600);
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 4; i++) {
   const s = (await state()).sheep[i];
   await moveTo(s.x - 30, s.y);
   await page.keyboard.press("Space");
@@ -56,7 +57,7 @@ for (let i = 0; i < 2; i++) {
   await moveTo(225, 498);
   await page.waitForTimeout(1400);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
-  if (i === 0) await moveTo(450, 498);
+  if (i < 3) await moveTo(450, 498);
 }
 await complete();
 if ((await state()).mission !== "maze") throw Error("Expected maze");

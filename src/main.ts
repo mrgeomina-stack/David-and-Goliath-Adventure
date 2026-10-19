@@ -44,9 +44,9 @@ window.addEventListener("resize", resize);
 resize();
 const instructions: Record<Mission, [string, string, string]> = {
   sheep: [
-    "↑ ↓ ← →  +  CALL",
-    "قرّب من الخروف، نادي، وامشي للحظيرة.",
-    "Move close • SPACE to call • Lead them home",
+    "↑ ↓ ← →  +  SPACE",
+    "SPACE يشيل خروف • اجري للحظيرة",
+    "SPACE to lift • Run to the pen",
   ],
   maze: [
     "↑ ↓ ← →",
@@ -129,12 +129,37 @@ function sync() {
   $("mission-badge").textContent = String(ORDER.indexOf(world.mission) + 1);
   $("progress").textContent =
     world.mission === "sheep"
-      ? `${world.sheep.count} / 2 🐑`
+      ? `${world.sheep.count} / 4 🐑`
       : world.mission === "armor"
         ? `${world.armor.equipped.size} / 4`
         : world.mission === "brook"
           ? `${world.brook.count} / 5`
           : `${lang === "ar" ? "المهمة" : "MISSION"} ${ORDER.indexOf(world.mission) + 1} / 5`;
+  const clock = $("sheep-clock");
+  clock.hidden = world.mission !== "sheep" || world.phase !== "play";
+  const remaining = world.sheep.remaining;
+  const seconds = remaining === null ? null : Math.ceil(remaining);
+  const stamp =
+    seconds === null
+      ? "∞"
+      : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  $("sheep-time").textContent = stamp;
+  clock.classList.toggle("warning", remaining !== null && remaining <= 30);
+  clock.classList.toggle("urgent", remaining !== null && remaining <= 15);
+  $("sheep-warning").textContent =
+    remaining === null
+      ? bilingual("Free play", "لعب حر")
+      : world.failed
+        ? bilingual("Try again", "جرّب تاني")
+        : remaining === 0
+          ? bilingual("Lion is chasing! Run!", "الأسد بيجري! اجري!")
+          : remaining <= 30
+            ? bilingual("Hurry—save the sheep!", "بسرعة، أنقذ الخراف!")
+            : bilingual(
+                "Save all four before the lion!",
+                "أنقذ الأربعة قبل الأسد!",
+              );
+  clock.setAttribute("aria-label", `Rescue time remaining: ${stamp}`);
   $("directions").hidden =
     !encounter && !["maze", "sheep"].includes(world.mission);
   $("action").hidden =
@@ -144,7 +169,7 @@ function sync() {
   const legend =
     lang === "ar"
       ? {
-          sheep: "الأسهم + نادي",
+          sheep: "الأسهم + شيل",
           maze: "↑ ↓ ← →",
           armor: "اسحب → حط",
           brook: "SPACE / المس",
@@ -167,7 +192,10 @@ function sync() {
       : world.mission === "brook"
         ? "scoop"
         : "charge";
-  $("action").textContent = label(action, lang);
+  $("action").textContent =
+    world.mission === "sheep" && world.sheep.carried
+      ? bilingual("To pen →", "للحظيرة ←")
+      : label(action, lang);
   $("hint").textContent = "✧ " + label("hint", lang);
   $("hint").hidden = success || encounter;
   const miss =
@@ -180,9 +208,10 @@ function sync() {
         : (`${world.mission}Success` as CopyKey);
     textPair("message-ar", "message-en", k);
     if (world.failed) {
-      $("message-ar").textContent = "الخراف محتاجة مساعدة. نجرّب تاني؟";
+      $("message-ar").textContent =
+        "الأسد وصل لخروف. يلا ننقذ الأربعة ونجرّب تاني!";
       $("message-en").textContent =
-        "The sheep need a little help. Shall we try again?";
+        "The lion reached a sheep. Let’s rescue all four—try again!";
     }
     $("message-tag").textContent = miss
       ? "A NEW TRY. A LITTLE MORE COURAGE."
@@ -412,6 +441,13 @@ if (new URL(location.href).searchParams.has("qa"))
         equipped: [...world.armor.equipped],
         fallTime: world.armor.fallTime,
         sheep: world.sheep.sheep,
+        carriedIndex: world.sheep.carriedIndex,
+        liftProgress: world.sheep.liftProgress,
+        sheepRemaining: world.sheep.remaining,
+        sheepTimeLimit: world.sheep.timeLimit,
+        lion: world.sheep.lion,
+        hunting: world.sheep.hunting,
+        caughtIndex: world.sheep.caughtIndex,
         david: world.sheep.david,
         stones: world.brook.stones,
         stoneCount: world.brook.count,

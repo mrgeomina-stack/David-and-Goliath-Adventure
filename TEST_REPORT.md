@@ -1,6 +1,6 @@
-# David’s Big Adventure — validation report · 1.2
+# David’s Big Adventure — validation report · 1.3
 
-Date: 19 October 2026. Version 1.2 extends the illustrated environments across all five missions and adds detailed animals, adult characters, armour and stones. David retains an articulated rig with illustrated face and linen texture. Human classroom acceptance testing is not claimed.
+Date: 19 October 2026. Version 1.3 adds four-sheep carrying, a visible countdown and physical lion pursuit/catch. Version 1.2 extended the illustrated environments across all five missions and adds detailed animals, adult characters, armour and stones. David retains an articulated rig with illustrated face and linen texture. Human classroom acceptance testing is not claimed.
 
 ## Environment and commands
 
@@ -13,24 +13,23 @@ Date: 19 October 2026. Version 1.2 extends the illustrated environments across a
 
 | Check | Observed result |
 | --- | --- |
-| `npm test` | **15 passed**, 0 failed, 0 skipped. |
+| `npm test` | **17 passed**, 0 failed, 0 skipped. |
 | `npm run build` | Typecheck and Vite production build passed; single-file offline HTML produced. |
-| `npm run test:browser` | All seven browser scripts passed against the production distribution. Results: `qa/browser-results.json`. |
+| `npm run test:browser` | All eight browser scripts passed against the production distribution. Results: `qa/browser-results.json`. |
 | Visual/touch check | EN/AR title layouts, widescreen/tablet bounds, full maze solved by brief touchscreen taps, cinematic and replay. |
 | Sheep/brook browser check | Included in the complete production browser suite. |
 | Final `node scripts/ui-offline-check.mjs` | Passed on the final self-contained HTML with networking disabled. |
-| Prior 1.0 timeout validation | 101 seconds of simulated browser time yielded a gentle retry, no auto-win, and a clean reset. Timer behavior is unchanged; this long test was not rerun for the visual-only refinement. |
+| Countdown/catch | Current Normal-mode countdown, pause, 30s/15s warnings, lion catch, clean retry and untimed label exercised with the actual browser clock. `qa/sheep-countdown-results.json`. |
 | ZIP packaging | CRC and extracted-entry comparisons checked by the packaging script and final verification. |
 
 The browser suite starts an HTTP server on port 4174 and closes it afterwards.
 Targeted HTTP checks use a running `npm run preview -- --port 4173` instance.
-`CHROMIUM_PATH` can select another installed Chromium executable. The optional
-timeout test advances the browser clock while exercising the actual game loop;
+`CHROMIUM_PATH` can select another installed Chromium executable. The countdown
+test advances the browser clock while exercising the actual game loop;
 it does not inject a win, move characters or alter the model.
 
-The complete seven-script production run covers the visual upgrade and short
-touch-press handling. A final sheep/brook run also checks the adult keeper illustration adjustment. No failing check remains in that run. The unchanged long
-timeout test is retained as prior-build evidence. Direct-file/platform/human checks
+The complete eight-script production run covers the visual upgrade and short
+touch-press handling. No failing check remains in that run. The countdown/catch test now validates the current rescue rules. Direct-file/platform/human checks
 below remain unverified.
 
 ## What was exercised
@@ -49,9 +48,8 @@ below remain unverified.
   agree at equal times at 30/60/120 fps. The tested hit window is 0.3–0.5 seconds.
   Pause during flight preserves launch power; loss of focus cancels windup.
   Pointer capture supports release outside the hold button. No midair correction.
-- **Sheep:** Distant calls fail, nearby calls initiate following, David guides
-  both through the physical gate, and only actual pen entry scores. Unit checks
-  cover fences, harmless lion startle/retreat and no premature victory.
+- **Sheep:** Four separate lifts and physical carries to the pen via keyboard and emulated tablet touch; lift animation progresses before walking, one sheep at a time, no distant pickup, no following shortcut. Thirty seeded model routes rescue all four within Normal’s limit. Actual countdown warnings, pause, lion pursuit after zero, catch and retry are exercised by the timeout browser check.
+
 - **Brook:** Both direct tapping and moving-ring + SPACE collection tested.
   Jagged stones and misses do not score, pickups are unique, and exactly five
   unlock completion. The full-story run used timed SPACE pickups for all five.
@@ -73,7 +71,7 @@ play time or evidence of a typical five-minute classroom session.
 
 ## Offline evidence and its limits
 
-`dist/index.html` embeds the classic JavaScript bundle, CSS and both generated PNG
+`dist/index.html` embeds the classic JavaScript bundle, CSS and all nine generated PNG
 illustrations. Artwork renders locally and sound is synthesized locally. It has no runtime module imports, CDNs,
 fetch dependencies, accounts, service workers or external font requirements.
 
@@ -101,11 +99,12 @@ start, interaction and payoff images were inspected visually, including:
 | Dragging and armour mistakes | `07-armor-start.png`, `07b-armor-dragging.png`, `08-armor-wrong.png`, `09-armor-three.png` |
 | Fully dressed, falling, removal and recovery | `10-armor-dressed.png`, `11-armor-fall.png`, `12-armor-removal.png`, `13-armor-recovered.png` |
 | Physics misses, flight, hit and victory | `14-sling-start.png` through `20-victory.png` |
-| Sheep following and pen completion | `21-sheep-start.png` through `24-sheep-success.png` |
+| Four sheep, carrying and pen completion | `21-sheep-start.png` through `24-sheep-success.png` |
 | Brook error, airborne pickup and completion | `25-brook-start.png`, `26-brook-jagged.png`, `26b-brook-pickup.png`, `27-brook-success.png` |
 | Interactive giant encounter / full story | `28-encounter-start.png` through `31-story-victory.png` |
 | Scaled touch and languages | `32-touch-1920.png`, `32-touch-1024.png`, `33-english.png`, `34-arabic.png` |
-| Genuine timeout/retry (prior 1.0 build) | `35-sheep-gentle-retry.png` |
+| Countdown warnings and lift/carry | `46-sheep-countdown-warning.png`, `47-sheep-countdown-urgent.png`, `48-sheep-lift.png`, `49-sheep-carried.png` |
+| Current lion catch/retry | `35-sheep-gentle-retry.png` |
 | New storybook title/layouts | `36-title-english.png`, `37-title-arabic.png`, `38-title-1920.png`, `39-title-tablet.png` |
 | All-mission art and short frame samples | `42-rich-sheep.png` through `45-rich-sling.png`; per-mission samples in `visual-results.json`. |
 | New maze and delivery at tablet size | `40-maze-tablet.png`, `41-delivery-tablet.png` |

@@ -73,22 +73,86 @@ describe("brook", () => {
     expect(new BrookModel().count).toBe(0);
   });
 });
-describe("sheep", () => {
-  it("requires proximity to call and actual pen entry, fences block", () => {
+describe("sheep rescue", () => {
+  it("lifts only one nearby sheep, blocks movement during lifting, and requires pen delivery", () => {
     const s = new SheepModel();
-    expect(s.call()).toBe(false);
-    s.david = { x: s.sheep[0].x + 60, y: s.sheep[0].y };
-    expect(s.call()).toBe(true);
-    const before = s.sheep[0].x;
-    s.update(0.1, { x: 0, y: 0 });
-    expect(s.sheep[0].x).toBeGreaterThan(before);
-    expect(s.complete).toBe(false);
+    expect(s.sheep).toHaveLength(4);
+    expect(s.pickup()).toBe(false);
+    s.david = { x: s.sheep[0].x - 30, y: s.sheep[0].y };
+    expect(s.pickup()).toBe(true);
+    expect(s.pickup()).toBe(false);
+    expect(s.sheep.filter((a) => a.carried)).toHaveLength(1);
+    const x = s.david.x;
+    s.update(0.1, { x: 1, y: 0 });
+    expect(s.david.x).toBe(x);
+    expect(s.count).toBe(0);
+    for (let i = 0; i < 40; i++) s.update(1 / 60, { x: 0, y: 0 });
+    expect(s.liftProgress).toBe(1);
+    expect(s.count).toBe(0);
     expect(fieldBlocked({ x: 328, y: 440 })).toBe(true);
     expect(fieldBlocked({ x: 328, y: 497 })).toBe(false);
-    expect(penInside({ x: 200, y: 480 })).toBe(true);
-    s.sheep.forEach((a) => Object.assign(a, { x: 200, y: 480 }));
-    s.update(0.01, { x: 0, y: 0 });
-    expect(s.count).toBe(2);
+    s.david = { x: 225, y: 498 };
+    for (let i = 0; i < 30; i++) s.update(1 / 60, { x: 0, y: 0 });
+    expect(s.count).toBe(1);
+    expect(s.carried).toBe(null);
+    expect(s.complete).toBe(false);
+  });
+  it("allows four real round trips across varied starts within Normal's deadline", () => {
+    for (let seed = 1; seed <= 30; seed++) {
+      const s = new SheepModel(seed, 90);
+      const moveTo = (target: { x: number; y: number }) => {
+        for (let frame = 0; frame < 900; frame++) {
+          const dx = target.x - s.david.x,
+            dy = target.y - s.david.y,
+            d = Math.hypot(dx, dy);
+          if (d < 4 || s.complete) return;
+          s.update(1 / 60, { x: dx / d, y: dy / d });
+          expect(s.caughtIndex).toBe(null);
+        }
+        throw Error("Route blocked");
+      };
+      for (let index = 0; index < 4; index++) {
+        if (index) moveTo({ x: 430, y: 498 });
+        const sheep = s.sheep[index];
+        moveTo({ x: sheep.x - 25, y: sheep.y });
+        expect(s.pickup()).toBe(true);
+        for (let i = 0; i < 35; i++) s.update(1 / 60, { x: 0, y: 0 });
+        moveTo({ x: 430, y: 498 });
+        moveTo({ x: 225, y: 498 });
+        for (let i = 0; i < 30; i++) s.update(1 / 60, { x: 0, y: 0 });
+        expect(s.count).toBe(index + 1);
+      }
+      expect(s.complete).toBe(true);
+      expect(s.time).toBeLessThan(50);
+    }
+  });
+  it("starts a real lion pursuit at zero and catches an unprotected sheep", () => {
+    const s = new SheepModel(1, 2);
+    s.lion = { x: s.sheep[0].x + 10, y: s.sheep[0].y };
+    s.update(0.1, { x: 0, y: 0 });
+    expect(s.caughtIndex).toBe(null);
+    for (let i = 0; i < 600 && s.caughtIndex === null; i++)
+      s.update(1 / 60, { x: 0, y: 0 });
+    expect(s.remaining).toBe(0);
+    expect(s.hunting).toBe(true);
+    expect(s.caughtIndex).not.toBe(null);
+    expect(s.sheep.filter((a) => a.caught)).toHaveLength(1);
+    expect(s.count).toBe(0);
+    const time = s.time;
+    s.update(1, { x: 1, y: 0 });
+    expect(s.time).toBe(time);
+  });
+  it("keeps delivered sheep safe, and free play never starts a chase", () => {
+    const s = new SheepModel(1, 1);
+    s.sheep[0].saved = true;
+    s.lion = { ...s.sheep[0] };
+    for (let i = 0; i < 100; i++) s.update(1 / 60, { x: 0, y: 0 });
+    expect(s.sheep[0].caught).toBe(false);
+    const free = new SheepModel(1, null);
+    for (let i = 0; i < 20000; i++) free.update(1 / 60, { x: 0, y: 0 });
+    expect(free.remaining).toBe(null);
+    expect(free.hunting).toBe(false);
+    expect(free.caughtIndex).toBe(null);
   });
 });
 describe("sling", () => {
@@ -144,18 +208,6 @@ describe("pause and timed pickups", () => {
     b.row = 0;
     expect(b.scoop()).toBe(true);
     expect(b.count).toBe(1);
-  });
-  it("lion proximity causes a harmless startle and David drives it back", () => {
-    const s = new SheepModel();
-    const sheep = s.sheep[0];
-    s.lion = { x: sheep.x + 1, y: sheep.y };
-    s.update(0.1, { x: 0, y: 0 });
-    expect(sheep.startled).toBeGreaterThan(0);
-    s.david = { x: s.lion.x - 10, y: s.lion.y };
-    const before = s.lion.x;
-    s.update(0.1, { x: 0, y: 0 });
-    expect(s.lion.x).toBeGreaterThan(before);
-    expect(s.count).toBe(0);
   });
 });
 

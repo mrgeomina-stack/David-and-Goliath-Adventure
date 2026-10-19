@@ -1,0 +1,14 @@
+{
+  "normalSeconds": 90,
+  "easySeconds": 120,
+  "checks": [
+    "four sheep",
+    "countdown pause",
+    "30s warning",
+    "15s urgent warning",
+    "actual pursuit/catch after zero",
+    "clean retry",
+    "explicit untimed mode"
+  ],
+  "errors": []
+}

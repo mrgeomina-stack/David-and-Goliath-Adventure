@@ -19,7 +19,7 @@ User-selected stack: TypeScript, Phaser 3, Vite. No runtime network dependencies
    correct layers; 6.5s staged step/wobble/sit/remove/walk sequence.
 3. Sling: two-cord sling, hold/release, analytic gravity, swept forehead collision,
    genuine misses and retry. Check low/ideal/high charges at multiple frame rates.
-4. Sheep then brook: actual following/fences/lion and five unique smooth pickups.
+4. Sheep then brook: four individual pickups/carries, protected pen delivery, timed lion pursuit and five unique smooth stone pickups.
 5. Story flow, original art/sound, Arabic/English, touch, pause/focus, packaging,
    offline automated browser checks and screenshots. Report unverified human QA honestly.
 
@@ -39,3 +39,6 @@ Future replacement assets: layered transparent 2x sprites (David 180x280; brothe
 walk/call/carry/handover/kneel/sling/fall/recover poses. Backgrounds 2560x1440,
 keep targets unobstructed; overhead maze tiles 132x132, walls align to graph edges.
 No Y-shaped slingshot, medieval armor/castles, gore, divine personification or beams.
+
+## Sheep rescue update — 1.3
+The user’s four-sheep carry-and-countdown request supersedes the original two-sheep following mechanic in GAME_BLUEPRINT.md. `SheepModel` owns one-at-a-time pickup, 0.55s lift, 220px/s carrying run, 0.4s pen set-down, four protected pen slots, countdown and physical lion pursuit/catch. Walking remains 190px/s. Pickup radius is 90px. Easy starts at 120s, Normal at 90s; Free Play uses a null deadline. A catch can only happen after zero, and saved sheep cannot be prey. David can finish a rescue while the lion approaches after zero. Game pause stops all model updates and the timer. The timer is a DOM element that scales with the stage and changes text and colour at 30s/15s. No model mutation or forced victory is used by browser tests.

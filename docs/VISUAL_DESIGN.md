@@ -57,3 +57,6 @@ The diagnostic overlay remains development-only and disabled by default.
 `src/painted.ts` trims cast cells by alpha once, uses explicit animal and prop component rectangles, then caches individual sprite surfaces. Original PNGs remain unmodified. The atlas frames are separate from gameplay hit regions. Goliath's forehead stays near the model's (1000,259) target; his spear is decoration.
 
 The source retains editable illustrations, typed rendering helpers, and procedural fallbacks. Final human art review and physical-device performance testing remain useful release acceptance steps. The product specification remains `docs/GAME_BLUEPRINT.md`.
+
+## Carry animation and countdown — 1.3
+The sheep mission now has four sheep and replaces following with actual carrying. David bends both arms as the nearby sheep rises over 0.55s, his hands render in front of the fleece, and the sheep moves with him while running. Inside the pen, the sheep lowers over 0.4s to one of four visible slots. A separate timer card keeps the playfield clear and uses amber at 30s, terracotta at 15s, and explicit warning text. Catch staging is non-graphic. These mechanics follow the user’s later request; see IMPLEMENTATION.md for model rules.

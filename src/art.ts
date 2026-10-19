@@ -324,6 +324,7 @@ export function tent(c: Ctx, x: number, y: number, s = 1, color = "#e6bd7b") {
   c.restore();
 }
 export type Pose = {
+  carry?: number;
   character?: "saul" | "brother";
   walk?: number;
   arm?: number;
@@ -513,16 +514,30 @@ export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
     gradient(c, -25, -64, 0, 9, ["#cb8959", "#965b3a"]),
   );
   round(c, 2, -64, 11, 8, 2, "#d4b575", "#835a38");
-  const left = [
-    [-25, -88],
-    [-36 - strain * 8 - walk * 3, -72 - arm * 18],
-    [-37 - strain * 11 - walk * 5, -51 - arm * 40],
-  ];
-  const right = [
-    [25, -88],
-    [36 + strain * 10 + walk * 3, -75 - arm * 10],
-    [37 + arm * 16 + strain * 10 + walk * 5, -55 - arm * 41],
-  ];
+  const left =
+    p.carry !== undefined
+      ? [
+          [-25, -88],
+          [-39, lerp(-72, -68, p.carry || 0)],
+          [lerp(-37, -30, p.carry || 0), lerp(-44, -74, p.carry || 0)],
+        ]
+      : [
+          [-25, -88],
+          [-36 - strain * 8 - walk * 3, -72 - arm * 18],
+          [-37 - strain * 11 - walk * 5, -51 - arm * 40],
+        ];
+  const right =
+    p.carry !== undefined
+      ? [
+          [25, -88],
+          [39, lerp(-72, -68, p.carry || 0)],
+          [lerp(37, 30, p.carry || 0), lerp(-44, -74, p.carry || 0)],
+        ]
+      : [
+          [25, -88],
+          [36 + strain * 10 + walk * 3, -75 - arm * 10],
+          [37 + arm * 16 + strain * 10 + walk * 5, -55 - arm * 41],
+        ];
   for (const limb of [left, right]) {
     line(c, limb, "#ac6f46", 12);
     line(
