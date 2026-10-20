@@ -1,0 +1,80 @@
+{
+  "units": "canonical PNG pixels; scale uniformly in renderer",
+  "gameCoordinates": "Existing code remains authoritative. Values below are art references, not new game logic.",
+  "david": {
+    "canvas": [
+      512,
+      512
+    ],
+    "feetPivot": [
+      256,
+      475
+    ],
+    "nominalStandingPixelHeight": 400
+  },
+  "goliath": {
+    "canvas": [
+      896,
+      768
+    ],
+    "feetPivot": [
+      448,
+      700
+    ],
+    "foreheadIdle": [
+      433,
+      184
+    ],
+    "nominalStandingPixelHeight": 568
+  },
+  "armorForRig": {
+    "baseImage": "source/david_rig_source.png",
+    "sourceSpace": [
+      160,
+      390
+    ],
+    "poseTransform": "See source/david_rig.js; root (80,280) maps to (256,366), scale 1.05 in standing frame.",
+    "tunic": {
+      "rect": [
+        17,
+        126,
+        115,
+        162
+      ],
+      "layer": 10,
+      "snapRegion": "torso"
+    },
+    "mail": {
+      "rect": [
+        26,
+        130,
+        104,
+        129
+      ],
+      "layer": 20,
+      "snapRegion": "torso"
+    },
+    "helmet": {
+      "rect": [
+        16,
+        -22,
+        126,
+        145
+      ],
+      "layer": 30,
+      "snapRegion": "head",
+      "note": "Face is composited into opening by provisional rig; helmet interior is not a cutout"
+    },
+    "sword": {
+      "rect": [
+        43,
+        208,
+        106,
+        144
+      ],
+      "layer": 40,
+      "snapRegion": "waist"
+    }
+  },
+  "warning": "Armor attachment rectangles are provisional. Do not assume universal fit for generated walking poses. Use existing dress anchors and verify each overlay."
+}

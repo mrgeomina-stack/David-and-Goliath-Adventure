@@ -1,5 +1,6 @@
 import type { Ctx, Pose } from "./art";
 import { painted } from "./painted";
+import { foodBasket } from "./food";
 import { lerp } from "./model";
 const oval = (
   c: Ctx,
@@ -66,7 +67,7 @@ export function drawHero(
   c.rotate((p.tilt || 0) + (p.strain || 0) * Math.sin(time * 12) * 0.007);
   const stride = p.walk || 0,
     sit = p.sit || 0,
-    carry = p.carry;
+    carry = p.carry ?? (p.food ? 1 : undefined);
   c.translate(0, -Math.abs(stride) * 2);
   const bob = Math.sin(time * 2 + x * 0.02) * 0.6;
   // Bent knees and alternating feet, with padded soles, toes and crossing sandal straps.
@@ -165,16 +166,19 @@ export function drawHero(
   const arm = p.arm || 0,
     wave = p.wave || arm > 0.8 ? Math.sin(time * 7) * 0.13 : 0;
   for (const side of [-1, 1]) {
+    const hand = side < 0 ? p.hands?.left : p.hands?.right;
     const handX =
-      carry !== undefined
+      hand?.x ??
+      (carry !== undefined
         ? side * lerp(37, 30, carry)
-        : side * (36 + (p.strain || 0) * 9) + side * stride * 4;
+        : side * (36 + (p.strain || 0) * 9) + side * stride * 4);
     const handY =
-      carry !== undefined
+      hand?.y ??
+      (carry !== undefined
         ? lerp(-43, -74, carry)
         : -53 -
           (p.action === "throw" && side < 0 ? 0 : arm) * 40 +
-          side * stride * 4;
+          side * stride * 4);
     c.save();
     c.translate(side * 26, -89);
     c.rotate(side * wave);
@@ -205,6 +209,10 @@ export function drawHero(
       c.stroke();
     }
     c.restore();
+  }
+  if (p.food) {
+    foodBasket(c, 0, -62, 1);
+    for (const side of [-1, 1]) oval(c, side * 30, -74, 5, 5, "#dfad7c");
   }
   if (p.bag) {
     c.strokeStyle = "#a78050";

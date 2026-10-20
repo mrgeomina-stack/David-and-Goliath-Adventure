@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "real generated maze route",
+    "visible carried-food locomotion",
+    "shared support during transfer",
+    "brother owns basket after David release",
+    "four-second success gate and return to title"
+  ],
+  "pageErrors": [],
+  "directFile": {
+    "status": "blocked",
+    "message": "page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///workspace/David-and-Goliath-Adventure/dist/index.html?qa"
+  }
+}

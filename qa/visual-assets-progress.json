@@ -1,0 +1,129 @@
+{
+  "status": "PARTIAL: metadata and working Canvas improvements only; supplied PNGs missing",
+  "current_html_sha256": "26d43c48aaab6b5c76b505b1809283113a94547ac05477c457ee9a41998a26ba",
+  "supplied_candidate_pngs_available": 0,
+  "supplied_candidate_pngs_required": 89,
+  "unit_tests_passed": 32,
+  "regression_suite_before_final_basket_position_refinement": [
+    {
+      "script": "maze-check",
+      "code": 0,
+      "seconds": 17.311
+    },
+    {
+      "script": "armor-check",
+      "code": 0,
+      "seconds": 18.652
+    },
+    {
+      "script": "sling-check",
+      "code": 0,
+      "seconds": 21.898
+    },
+    {
+      "script": "remaining-check",
+      "code": 0,
+      "seconds": 49.811
+    },
+    {
+      "script": "story-check",
+      "code": 0,
+      "seconds": 82.411
+    },
+    {
+      "script": "ui-offline-check",
+      "code": 0,
+      "seconds": 18.413
+    },
+    {
+      "script": "visual-check",
+      "code": 0,
+      "seconds": 50.71
+    },
+    {
+      "script": "timeout-check",
+      "code": 0,
+      "seconds": 55.091
+    },
+    {
+      "script": "premium-check",
+      "code": 0,
+      "seconds": 24.457
+    },
+    {
+      "script": "mobile-check",
+      "code": 0,
+      "seconds": 94.246
+    },
+    {
+      "script": "pwa-check",
+      "code": 0,
+      "seconds": 82.718
+    }
+  ],
+  "final_food_check": {
+    "checks": [
+      "real generated maze route",
+      "visible carried-food locomotion",
+      "shared support during transfer",
+      "brother owns basket after David release",
+      "four-second success gate and return to title"
+    ],
+    "pageErrors": [],
+    "directFile": {
+      "status": "blocked",
+      "message": "page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///workspace/David-and-Goliath-Adventure/dist/index.html?qa"
+    }
+  },
+  "final_mobile_check": {
+    "engine": "Chromium with native emulated touch events; not physical Safari",
+    "viewports": [
+      {
+        "width": 568,
+        "height": 320
+      },
+      {
+        "width": 667,
+        "height": 375
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 915,
+        "height": 412
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 1180,
+        "height": 820
+      },
+      {
+        "width": 1366,
+        "height": 1024
+      }
+    ],
+    "checks": [
+      "44px finger controls",
+      "chapter navigation",
+      "swipe and touch-arrow maze",
+      "phone celebration",
+      "actual armour finger drags",
+      "wrong zone and cancellation",
+      "armour collapse",
+      "two-finger movement and pickup",
+      "carried sheep delivery",
+      "portrait pause and landscape resume",
+      "finger sling charge/release and real hit",
+      "finger brook taps reject jagged rocks and collect five unique stones"
+    ],
+    "errors": []
+  },
+  "mechanics_model_changed": false,
+  "provisional_animation_promoted": false,
+  "new_art_alignment_verified": false
+}

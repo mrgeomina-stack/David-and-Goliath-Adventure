@@ -21,6 +21,8 @@ import {
   type Gear,
 } from "./model";
 import * as A from "./art";
+import { foodBasket, deliveryAt } from "./food";
+import { visualLibrary, visualRoles } from "./visual-assets";
 import { bindCanvasGestures } from "./touch";
 import { Effects, depth, cinematicFrame } from "./effects";
 import landscapeUrl from "./assets/countryside.png";
@@ -99,6 +101,7 @@ export class World extends Phaser.Scene {
     super("Adventure");
   }
   preload() {
+    visualLibrary.preload(this.load);
     this.load.image("painted-landscape", landscapeUrl);
     this.load.image("painted-david", heroUrl);
     for (const [key, url] of Object.entries({
@@ -113,6 +116,7 @@ export class World extends Phaser.Scene {
       this.load.image(key, url);
   }
   create() {
+    visualLibrary.configure(this.textures);
     this.landscape = this.textures
       .get("painted-landscape")
       .getSourceImage() as HTMLImageElement;
@@ -565,7 +569,11 @@ export class World extends Phaser.Scene {
                 : "meadow";
       cover(
         c,
-        this.textures.get(key).getSourceImage() as HTMLImageElement,
+        visualLibrary.image(
+          visualRoles.levels[
+            key === "valley" ? 4 : key === "tent" ? 2 : key === "brook" ? 3 : 0
+          ].background,
+        ) || (this.textures.get(key).getSourceImage() as HTMLImageElement),
         -5 + Math.sin(this.clock * 0.17) * 2,
         -3,
         1290,
@@ -638,7 +646,10 @@ export class World extends Phaser.Scene {
   drawMaze(c: A.Ctx) {
     const { x, y, size: s } = MAZE;
     if (this.mazePaintingSeed !== this.maze.maze.seed) {
-      this.mazePainting = mazeBackdrop(this.maze.maze, this.landscape);
+      this.mazePainting = mazeBackdrop(
+        this.maze.maze,
+        visualLibrary.image(visualRoles.levels[1].background) || this.landscape,
+      );
       this.mazePaintingSeed = this.maze.maze.seed;
     }
     if (this.mazePainting) c.drawImage(this.mazePainting, 0, 0);
@@ -705,7 +716,7 @@ export class World extends Phaser.Scene {
           Math.sin(this.bumpTime * 20) * 4 * this.bumpDir.y,
         0.35,
         {
-          bag: true,
+          food: true,
           walk: this.maze.moveTime < 0.16 ? Math.sin(this.clock * 25) : 0,
         },
       );
@@ -785,7 +796,14 @@ export class World extends Phaser.Scene {
     c.beginPath();
     c.roundRect(px, py, pw, ph, 26);
     c.clip();
-    cover(c, this.landscape, px, py, pw, ph);
+    cover(
+      c,
+      visualLibrary.image(visualRoles.levels[1].background) || this.landscape,
+      px,
+      py,
+      pw,
+      ph,
+    );
     const haze = c.createLinearGradient(0, py, 0, py + ph);
     haze.addColorStop(0, "#fff0c68a");
     haze.addColorStop(0.7, "#ffe7b733");
@@ -798,11 +816,27 @@ export class World extends Phaser.Scene {
     c.scale(zoom, zoom);
     c.translate(-640, -475);
     A.ellipse(c, 666, 535, 350, 47, "#d3b07580");
-    A.person(c, lerp(387, 485, t / 0.8), 542, 1.2, {
-      bag: true,
-      bagOpen: t > 0.8 && t < 2.6 ? 1 : 0,
-      walk: t < 0.8 ? Math.sin(t * 20) : 0,
-      arm: t > 0.8 ? clamp((t - 0.8) * 2, 0, 1) : 0,
+    const delivery = deliveryAt(t),
+      basket = delivery.basket;
+    const gripY = basket.y - 14;
+    A.person(c, delivery.davidX, 542, 1.2, {
+      walk: delivery.walk,
+      arm: 0,
+      hands: delivery.davidHolding
+        ? {
+            left: {
+              x: (basket.x - 34 - delivery.davidX) / 1.2,
+              y: (gripY - 542) / 1.2,
+            },
+            right: {
+              x: (basket.x + 34 - delivery.davidX) / 1.2,
+              y: (gripY - 542) / 1.2,
+            },
+          }
+        : {
+            left: { x: -32, y: -115 + Math.sin(t * 6) * 3 },
+            right: { x: 30, y: -43 },
+          },
     });
     for (let i = 0; i < 3; i++)
       A.person(c, 649 + i * 108, 542, 1.35, {
@@ -813,26 +847,12 @@ export class World extends Phaser.Scene {
         headcloth: ["#927451", "#b67551", "#5a7d77"][i],
         arm: t > 1 ? 1 : 0.2,
       });
-    if (t > 0.8) {
-      // First lift the loaf out of the bag, then pass it into the brother's hand.
-      const lift = clamp((t - 0.8) / 0.5, 0, 1),
-        pass = clamp((t - 1.3) / 1, 0, 1);
-      const fx = lift < 1 ? lerp(527, 549, lift) : lerp(549, 599, pass);
-      const fy =
-        lift < 1
-          ? lerp(485, 427, lift) - Math.sin(lift * Math.PI) * 12
-          : lerp(427, 412, pass) - Math.sin(pass * Math.PI) * 26;
-      A.bread(c, fx, fy, 1.15);
-    }
-    if (t > 2.3) {
-      const f = clamp((t - 2.3) / 0.45, 0, 1);
-      for (let i = 1; i < 3; i++)
-        A.bread(
-          c,
-          lerp(599, 599 + i * 108, f),
-          412 - Math.sin(f * Math.PI) * 22,
-          0.9,
-        );
+    // The existing receiver's left hand is at (575,398). Align the basket's
+    // handle to it; adding arms over the old welcome sprite would duplicate limbs.
+    foodBasket(c, basket.x, basket.y, 1.2);
+    if (delivery.davidHolding) {
+      for (const side of [-1, 1])
+        A.ellipse(c, basket.x + side * 34, gripY, 5, 6, "#dfad7c");
     }
     if (t > 2.6) A.burst(c, t - 2.5, 650, 351);
     motes(c, this.clock, 12);

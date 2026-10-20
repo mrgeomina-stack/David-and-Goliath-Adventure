@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { visualLibrary } from "./visual-assets";
+import { deliveryAt } from "./food";
 import { AdventurePwa } from "./pwa";
 import { bindPress } from "./touch";
 import { fittedScale, compactLayout, ensureCanvasSupport } from "./mobile";
@@ -757,6 +759,12 @@ if (new URL(location.href).searchParams.has("qa"))
     value: {
       snapshot: () => ({
         pwaState: pwa.state,
+        visualAssetsLoaded: visualLibrary.loadedCount,
+        visualAssetIssues: [...visualLibrary.issues],
+        foodDelivery:
+          world.mission === "maze" && world.phase === "success"
+            ? deliveryAt(world.successTime)
+            : null,
         keepsakes: [...journal.completed],
         narration: narrator.enabled,
         music: sound.music,

@@ -4,6 +4,14 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
+## Visual assets v1 integration — in progress
+
+All seven metadata/integration documents are saved under `visual-assets-v1/`.
+The manifest-based offline loader and a single-basket walking/handover animation
+are implemented. **The supplied PNGs are still missing (0/89 candidates available).**
+Existing illustrations remain as fallback; the new visual library is not yet fully
+integrated. See [current status](docs/VISUAL_ASSETS_V1_PROGRESS.md).
+
 ## Mobile and installable edition · 1.5
 
 Responsive landscape play, native finger gestures, safe-area support and installable

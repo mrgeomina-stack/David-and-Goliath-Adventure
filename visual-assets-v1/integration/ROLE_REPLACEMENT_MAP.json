@@ -1,0 +1,95 @@
+{
+  "status": "ROLE_BASED_ONLY_CURRENT_GAME_NOT_PROVIDED",
+  "preserve": [
+    "mechanics",
+    "colliders",
+    "scoring",
+    "gravity",
+    "launch speed model",
+    "input bindings",
+    "state machine",
+    "difficulty",
+    "retry conditions",
+    "language strings"
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "background": "background_01_shepherd_hills",
+      "actorRoles": {
+        "david": "david_idle",
+        "davidMove": "david_walk",
+        "call": "david_shepherd_call",
+        "sheep": [
+          "animals_sheep_idle_01",
+          "animals_sheep_idle_02",
+          "animals_sheep_idle_03"
+        ],
+        "lion": "animals_lion_idle",
+        "fence": "props_fence",
+        "gate": "props_pen_gate"
+      }
+    },
+    {
+      "level": 2,
+      "background": "background_02_maze_ground",
+      "actorRoles": {
+        "davidCarry": "david_food_carry",
+        "handover": "david_food_offer",
+        "brothers": [
+          "npcs_brother_01_welcome",
+          "npcs_brother_02_idle",
+          "npcs_brother_03_idle"
+        ],
+        "receive": "npcs_brother_01_receive",
+        "basket": "props_food_basket",
+        "walls": [
+          "props_maze_wall_stone",
+          "props_maze_wall_shrub"
+        ]
+      }
+    },
+    {
+      "level": 3,
+      "background": "background_03_saul_tent",
+      "actorRoles": {
+        "david": "david_idle",
+        "saul": "npcs_saul",
+        "tunic": "props_armor_tunic",
+        "mail": "props_armor_mail",
+        "helmet": "props_armor_helmet",
+        "sword": "props_armor_sword"
+      },
+      "animation": "david_armor_payoff",
+      "animationStatus": "provisional"
+    },
+    {
+      "level": 4,
+      "background": "background_04_brook",
+      "actorRoles": {
+        "smoothStones": [
+          "props_stone_01",
+          "props_stone_02",
+          "props_stone_03"
+        ],
+        "jaggedStone": "props_stone_jagged",
+        "pouch": "props_pouch"
+      },
+      "animation": "david_collect",
+      "animationStatus": "provisional"
+    },
+    {
+      "level": 5,
+      "background": "background_05_battlefield",
+      "actorRoles": {
+        "david": "david_idle",
+        "goliath": "goliath_idle",
+        "projectile": "props_stone_01",
+        "slingReference": "props_sling",
+        "soldier": "npcs_soldier"
+      },
+      "animation": "goliath_defeat",
+      "slingAnimationStatus": "provisional"
+    }
+  ]
+}

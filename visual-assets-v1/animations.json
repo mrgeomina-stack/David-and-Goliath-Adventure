@@ -1,0 +1,213 @@
+{
+  "david_walk": {
+    "frames": [
+      "david_walk_00",
+      "david_walk_01",
+      "david_walk_02",
+      "david_walk_03"
+    ],
+    "fps": 8,
+    "loop": true,
+    "status": "candidate",
+    "note": "Four generated stride poses; evaluate gait at actual display scale."
+  },
+  "david_run": {
+    "frames": [
+      "david_run_00",
+      "david_run_01",
+      "david_run_02",
+      "david_run_03"
+    ],
+    "fps": 10,
+    "loop": true,
+    "status": "candidate"
+  },
+  "sheep_walk": {
+    "frames": [
+      "animals_sheep_walk_00",
+      "animals_sheep_walk_01",
+      "animals_sheep_walk_02"
+    ],
+    "fps": 8,
+    "loop": true,
+    "status": "candidate"
+  },
+  "sheep_hop": {
+    "frames": [
+      "animals_sheep_hop_00",
+      "animals_sheep_hop_01",
+      "animals_sheep_hop_00",
+      "animals_sheep_idle_01"
+    ],
+    "fps": 6,
+    "loop": false,
+    "status": "candidate"
+  },
+  "lion_walk": {
+    "frames": [
+      "animals_lion_walk_00",
+      "animals_lion_walk_01"
+    ],
+    "fps": 5,
+    "loop": true,
+    "status": "candidate"
+  },
+  "goliath_defeat": {
+    "frames": [
+      "goliath_hit",
+      "goliath_stumble",
+      "goliath_fall_00",
+      "goliath_fall_01",
+      "goliath_fall_02",
+      "goliath_fall_03"
+    ],
+    "durationsMs": [
+      160,
+      220,
+      180,
+      200,
+      180,
+      1100
+    ],
+    "loop": false,
+    "status": "candidate",
+    "trigger": "Only after existing projectile collider confirms a hit"
+  },
+  "david_collect": {
+    "frames": [
+      "david_kneel_collect_00",
+      "david_kneel_collect_01",
+      "david_kneel_collect_02",
+      "david_pouch_store"
+    ],
+    "durationsMs": [
+      160,
+      180,
+      160,
+      240
+    ],
+    "loop": false,
+    "status": "provisional"
+  },
+  "david_armor_payoff": {
+    "frames": [
+      "david_armor_idle",
+      "david_armor_step",
+      "david_armor_wobble_00",
+      "david_armor_wobble_01",
+      "david_armor_wobble_00",
+      "david_armor_fall_00",
+      "david_armor_fall_01",
+      "david_armor_seated",
+      "david_armor_remove_00",
+      "david_armor_remove_01",
+      "david_armor_remove_02",
+      "david_armor_recover",
+      "david_rig_idle"
+    ],
+    "durationsMs": [
+      450,
+      350,
+      400,
+      400,
+      400,
+      450,
+      500,
+      700,
+      450,
+      450,
+      450,
+      500,
+      500
+    ],
+    "loop": false,
+    "status": "provisional",
+    "trigger": "Only after all FOUR correct item drops",
+    "note": "6 seconds; actual character articulation, but visual polish is incomplete."
+  },
+  "david_sling_charge": {
+    "frames": [
+      "david_sling_charge_00",
+      "david_sling_charge_01",
+      "david_sling_charge_02",
+      "david_sling_charge_03"
+    ],
+    "fps": 8,
+    "loop": true,
+    "status": "provisional",
+    "note": "Cords must be drawn separately from slingHand; use hold time to set rotation speed."
+  },
+  "david_sling_release": {
+    "frames": [
+      "david_sling_release",
+      "david_sling_followthrough"
+    ],
+    "durationsMs": [
+      100,
+      220
+    ],
+    "loop": false,
+    "status": "provisional"
+  },
+  "david_celebrate": {
+    "frames": [
+      "david_win_00",
+      "david_win_01",
+      "david_win_00",
+      "david_thankful"
+    ],
+    "durationsMs": [
+      200,
+      160,
+      200,
+      800
+    ],
+    "loop": false,
+    "status": "provisional"
+  },
+  "effect_dust": {
+    "frames": [
+      "fx_dust_00",
+      "fx_dust_01",
+      "fx_dust_02",
+      "fx_dust_03",
+      "fx_dust_04",
+      "fx_dust_05",
+      "fx_dust_06",
+      "fx_dust_07"
+    ],
+    "fps": 16,
+    "loop": false,
+    "status": "candidate"
+  },
+  "effect_splash": {
+    "frames": [
+      "fx_splash_00",
+      "fx_splash_01",
+      "fx_splash_02",
+      "fx_splash_03",
+      "fx_splash_04",
+      "fx_splash_05",
+      "fx_splash_06",
+      "fx_splash_07"
+    ],
+    "fps": 16,
+    "loop": false,
+    "status": "candidate"
+  },
+  "effect_sparkle": {
+    "frames": [
+      "fx_sparkle_00",
+      "fx_sparkle_01",
+      "fx_sparkle_02",
+      "fx_sparkle_03",
+      "fx_sparkle_04",
+      "fx_sparkle_05",
+      "fx_sparkle_06",
+      "fx_sparkle_07"
+    ],
+    "fps": 16,
+    "loop": false,
+    "status": "candidate"
+  }
+}

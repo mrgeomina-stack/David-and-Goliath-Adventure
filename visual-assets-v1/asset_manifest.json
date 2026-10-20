@@ -1,0 +1,3827 @@
+{
+  "version": "1.0",
+  "logicalGameSize": [
+    1280,
+    720
+  ],
+  "backgroundSize": [
+    1920,
+    1080
+  ],
+  "assets": [
+    {
+      "id": "background_01_shepherd_hills",
+      "path": "backgrounds/level01_shepherd_hills_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Opaque environment plate; draw before actors and gameplay objects",
+      "nativeResolution": [
+        1672,
+        940
+      ],
+      "resampled": true,
+      "status": "integration_candidate",
+      "alphaRequired": false
+    },
+    {
+      "id": "background_02_maze_ground",
+      "path": "backgrounds/level02_maze_ground_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Opaque environment plate; draw before actors and gameplay objects",
+      "nativeResolution": [
+        1672,
+        941
+      ],
+      "resampled": true,
+      "status": "integration_candidate",
+      "alphaRequired": false
+    },
+    {
+      "id": "background_03_saul_tent",
+      "path": "backgrounds/level03_saul_tent_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Opaque environment plate; draw before actors and gameplay objects",
+      "nativeResolution": [
+        1672,
+        941
+      ],
+      "resampled": true,
+      "status": "integration_candidate",
+      "alphaRequired": false
+    },
+    {
+      "id": "background_04_brook",
+      "path": "backgrounds/level04_brook_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Opaque environment plate; draw before actors and gameplay objects",
+      "nativeResolution": [
+        1672,
+        941
+      ],
+      "resampled": true,
+      "status": "integration_candidate",
+      "alphaRequired": false
+    },
+    {
+      "id": "background_05_battlefield",
+      "path": "backgrounds/level05_battlefield_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Opaque environment plate; draw before actors and gameplay objects",
+      "nativeResolution": [
+        1672,
+        941
+      ],
+      "resampled": true,
+      "status": "integration_candidate",
+      "alphaRequired": false
+    },
+    {
+      "id": "david_walk_00",
+      "path": "sprites/david/walk_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: walk 00",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          121,
+          10,
+          330,
+          374
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_walk_01",
+      "path": "sprites/david/walk_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: walk 01",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          463,
+          10,
+          655,
+          374
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_walk_02",
+      "path": "sprites/david/walk_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: walk 02",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          786,
+          10,
+          1007,
+          373
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_walk_03",
+      "path": "sprites/david/walk_03.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: walk 03",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          1120,
+          8,
+          1348,
+          372
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_run_00",
+      "path": "sprites/david/run_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: run 00",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          66,
+          381,
+          354,
+          702
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_run_01",
+      "path": "sprites/david/run_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: run 01",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          425,
+          379,
+          663,
+          688
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_run_02",
+      "path": "sprites/david/run_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: run 02",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          751,
+          377,
+          1041,
+          702
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_run_03",
+      "path": "sprites/david/run_03.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: run 03",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          1113,
+          377,
+          1369,
+          688
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_idle",
+      "path": "sprites/david/idle.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: idle",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          127,
+          695,
+          268,
+          1070
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true,
+      "anchors": {
+        "neck": {
+          "x": 263,
+          "y": 191
+        },
+        "torso": {
+          "x": 262,
+          "y": 268
+        },
+        "waist": {
+          "x": 266,
+          "y": 307
+        },
+        "leftHand": {
+          "x": 204,
+          "y": 341
+        },
+        "rightHand": {
+          "x": 312,
+          "y": 338
+        },
+        "feet": {
+          "x": 256,
+          "y": 475,
+          "units": "pixels"
+        }
+      }
+    },
+    {
+      "id": "david_shepherd_call",
+      "path": "sprites/david/shepherd_call.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: shepherd call",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          374,
+          695,
+          637,
+          1070
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_food_carry",
+      "path": "sprites/david/food_carry.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: food carry",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          818,
+          696,
+          985,
+          1068
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_food_offer",
+      "path": "sprites/david/food_offer.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: food offer",
+      "source": {
+        "path": "source/david_motion_sheet.png",
+        "rectangle": [
+          1132,
+          695,
+          1423,
+          1065
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_idle",
+      "path": "sprites/goliath/idle.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: idle",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          74,
+          11,
+          360,
+          523
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true,
+      "anchors": {
+        "forehead": {
+          "x": 433,
+          "y": 184
+        },
+        "feet": {
+          "x": 448,
+          "y": 700,
+          "units": "pixels"
+        }
+      },
+      "collisionReference": {
+        "type": "ellipse",
+        "cx": 433,
+        "cy": 184,
+        "rx": 19,
+        "ry": 9,
+        "note": "Visible forehead reference only. Do not overwrite existing physics or collider definitions."
+      }
+    },
+    {
+      "id": "goliath_taunt",
+      "path": "sprites/goliath/taunt.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: taunt",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          374,
+          15,
+          774,
+          521
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_hit",
+      "path": "sprites/goliath/hit.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: hit",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          836,
+          29,
+          1217,
+          521
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_stumble",
+      "path": "sprites/goliath/stumble.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: stumble",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          1213,
+          81,
+          1527,
+          518
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_fall_00",
+      "path": "sprites/goliath/fall_00.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: fall 00",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          14,
+          561,
+          470,
+          988
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_fall_01",
+      "path": "sprites/goliath/fall_01.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: fall 01",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          398,
+          616,
+          787,
+          942
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_fall_02",
+      "path": "sprites/goliath/fall_02.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: fall 02",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          776,
+          687,
+          1171,
+          978
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "goliath_fall_03",
+      "path": "sprites/goliath/fall_03.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 448,
+        "y": 700,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: fall 03",
+      "source": {
+        "path": "source/goliath_sheet.png",
+        "rectangle": [
+          1178,
+          790,
+          1535,
+          965
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_idle_01",
+      "path": "sprites/animals/sheep_idle_01.png",
+      "width": 310,
+      "height": 304,
+      "pivot": {
+        "x": 155,
+        "y": 293,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep idle 01",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          59,
+          70,
+          353,
+          358
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_walk_00",
+      "path": "sprites/animals/sheep_walk_00.png",
+      "width": 312,
+      "height": 305,
+      "pivot": {
+        "x": 156,
+        "y": 294,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep walk 00",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          410,
+          71,
+          706,
+          360
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_walk_01",
+      "path": "sprites/animals/sheep_walk_01.png",
+      "width": 305,
+      "height": 299,
+      "pivot": {
+        "x": 152,
+        "y": 288,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep walk 01",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          778,
+          71,
+          1067,
+          354
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_walk_02",
+      "path": "sprites/animals/sheep_walk_02.png",
+      "width": 306,
+      "height": 309,
+      "pivot": {
+        "x": 153,
+        "y": 298,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep walk 02",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          1126,
+          71,
+          1416,
+          364
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_idle_02",
+      "path": "sprites/animals/sheep_idle_02.png",
+      "width": 316,
+      "height": 308,
+      "pivot": {
+        "x": 158,
+        "y": 297,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep idle 02",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          59,
+          398,
+          359,
+          690
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_idle_03",
+      "path": "sprites/animals/sheep_idle_03.png",
+      "width": 244,
+      "height": 246,
+      "pivot": {
+        "x": 122,
+        "y": 235,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep idle 03",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          454,
+          457,
+          682,
+          687
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_hop_00",
+      "path": "sprites/animals/sheep_hop_00.png",
+      "width": 300,
+      "height": 250,
+      "pivot": {
+        "x": 150,
+        "y": 239,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep hop 00",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          783,
+          450,
+          1067,
+          684
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_sheep_hop_01",
+      "path": "sprites/animals/sheep_hop_01.png",
+      "width": 290,
+      "height": 259,
+      "pivot": {
+        "x": 145,
+        "y": 248,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sheep hop 01",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          1134,
+          402,
+          1408,
+          645
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_lion_idle",
+      "path": "sprites/animals/lion_idle.png",
+      "width": 357,
+      "height": 322,
+      "pivot": {
+        "x": 178,
+        "y": 311,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: lion idle",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          18,
+          704,
+          359,
+          1010
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_lion_walk_00",
+      "path": "sprites/animals/lion_walk_00.png",
+      "width": 394,
+      "height": 315,
+      "pivot": {
+        "x": 197,
+        "y": 304,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: lion walk 00",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          363,
+          708,
+          741,
+          1007
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_lion_walk_01",
+      "path": "sprites/animals/lion_walk_01.png",
+      "width": 364,
+      "height": 310,
+      "pivot": {
+        "x": 182,
+        "y": 299,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: lion walk 01",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          737,
+          706,
+          1085,
+          1000
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "animals_lion_retreat",
+      "path": "sprites/animals/lion_retreat.png",
+      "width": 369,
+      "height": 324,
+      "pivot": {
+        "x": 184,
+        "y": 313,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: lion retreat",
+      "source": {
+        "path": "source/animals_sheet.png",
+        "rectangle": [
+          1080,
+          700,
+          1433,
+          1008
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_01_welcome",
+      "path": "sprites/npcs/brother_01_welcome.png",
+      "width": 405,
+      "height": 457,
+      "pivot": {
+        "x": 202,
+        "y": 446,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 01 welcome",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          91,
+          7,
+          480,
+          448
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_01_receive",
+      "path": "sprites/npcs/brother_01_receive.png",
+      "width": 268,
+      "height": 451,
+      "pivot": {
+        "x": 134,
+        "y": 440,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 01 receive",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          570,
+          15,
+          822,
+          450
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_02_idle",
+      "path": "sprites/npcs/brother_02_idle.png",
+      "width": 250,
+      "height": 465,
+      "pivot": {
+        "x": 125,
+        "y": 454,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 02 idle",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          1019,
+          2,
+          1253,
+          451
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_02_cheer",
+      "path": "sprites/npcs/brother_02_cheer.png",
+      "width": 277,
+      "height": 461,
+      "pivot": {
+        "x": 138,
+        "y": 450,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 02 cheer",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          1407,
+          5,
+          1668,
+          450
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_03_idle",
+      "path": "sprites/npcs/brother_03_idle.png",
+      "width": 264,
+      "height": 454,
+      "pivot": {
+        "x": 132,
+        "y": 443,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 03 idle",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          137,
+          446,
+          385,
+          884
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_brother_03_clap",
+      "path": "sprites/npcs/brother_03_clap.png",
+      "width": 274,
+      "height": 453,
+      "pivot": {
+        "x": 137,
+        "y": 442,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: brother 03 clap",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          560,
+          447,
+          818,
+          884
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_saul",
+      "path": "sprites/npcs/saul.png",
+      "width": 268,
+      "height": 453,
+      "pivot": {
+        "x": 134,
+        "y": 442,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: saul",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          1008,
+          445,
+          1260,
+          882
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "npcs_soldier",
+      "path": "sprites/npcs/soldier.png",
+      "width": 330,
+      "height": 450,
+      "pivot": {
+        "x": 165,
+        "y": 439,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: soldier",
+      "source": {
+        "path": "source/npcs_sheet.png",
+        "rectangle": [
+          1404,
+          447,
+          1718,
+          881
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "left",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_food_basket",
+      "path": "sprites/props/food_basket.png",
+      "width": 358,
+      "height": 260,
+      "pivot": {
+        "x": 179,
+        "y": 249,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: food basket",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          42,
+          221,
+          384,
+          465
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_pouch",
+      "path": "sprites/props/pouch.png",
+      "width": 292,
+      "height": 276,
+      "pivot": {
+        "x": 146,
+        "y": 265,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: pouch",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          434,
+          204,
+          710,
+          464
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_sling",
+      "path": "sprites/props/sling.png",
+      "width": 479,
+      "height": 365,
+      "pivot": {
+        "x": 239,
+        "y": 354,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: sling",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          743,
+          113,
+          1206,
+          462
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_staff",
+      "path": "sprites/props/staff.png",
+      "width": 137,
+      "height": 496,
+      "pivot": {
+        "x": 68,
+        "y": 485,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: staff",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          1263,
+          9,
+          1384,
+          489
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_stone_01",
+      "path": "sprites/props/stone_01.png",
+      "width": 324,
+      "height": 190,
+      "pivot": {
+        "x": 162,
+        "y": 179,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: stone 01",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          44,
+          575,
+          352,
+          749
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_stone_02",
+      "path": "sprites/props/stone_02.png",
+      "width": 252,
+      "height": 226,
+      "pivot": {
+        "x": 126,
+        "y": 215,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: stone 02",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          448,
+          547,
+          684,
+          757
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_stone_03",
+      "path": "sprites/props/stone_03.png",
+      "width": 288,
+      "height": 200,
+      "pivot": {
+        "x": 144,
+        "y": 189,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: stone 03",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          770,
+          562,
+          1042,
+          746
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_stone_jagged",
+      "path": "sprites/props/stone_jagged.png",
+      "width": 287,
+      "height": 262,
+      "pivot": {
+        "x": 143,
+        "y": 251,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: stone jagged",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          1134,
+          523,
+          1405,
+          769
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_fence",
+      "path": "sprites/props/fence.png",
+      "width": 385,
+      "height": 262,
+      "pivot": {
+        "x": 192,
+        "y": 251,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: fence",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          13,
+          794,
+          382,
+          1040
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_pen_gate",
+      "path": "sprites/props/pen_gate.png",
+      "width": 308,
+      "height": 255,
+      "pivot": {
+        "x": 154,
+        "y": 244,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: pen gate",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          421,
+          791,
+          713,
+          1030
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_maze_wall_stone",
+      "path": "sprites/props/maze_wall_stone.png",
+      "width": 330,
+      "height": 194,
+      "pivot": {
+        "x": 165,
+        "y": 183,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: maze wall stone",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          753,
+          850,
+          1067,
+          1028
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_maze_wall_shrub",
+      "path": "sprites/props/maze_wall_shrub.png",
+      "width": 364,
+      "height": 281,
+      "pivot": {
+        "x": 182,
+        "y": 270,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: maze wall shrub",
+      "source": {
+        "path": "source/props_sheet.png",
+        "rectangle": [
+          1089,
+          789,
+          1437,
+          1054
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_armor_tunic",
+      "path": "sprites/props/armor_tunic.png",
+      "width": 416,
+      "height": 577,
+      "pivot": {
+        "x": 208,
+        "y": 566,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: armor tunic",
+      "source": {
+        "path": "source/armor_sheet.png",
+        "rectangle": [
+          240,
+          9,
+          640,
+          570
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_armor_mail",
+      "path": "sprites/props/armor_mail.png",
+      "width": 408,
+      "height": 488,
+      "pivot": {
+        "x": 204,
+        "y": 477,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: armor mail",
+      "source": {
+        "path": "source/armor_sheet.png",
+        "rectangle": [
+          840,
+          56,
+          1232,
+          528
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_armor_helmet",
+      "path": "sprites/props/armor_helmet.png",
+      "width": 340,
+      "height": 388,
+      "pivot": {
+        "x": 170,
+        "y": 377,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: armor helmet",
+      "source": {
+        "path": "source/armor_sheet.png",
+        "rectangle": [
+          282,
+          623,
+          606,
+          995
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "props_armor_sword",
+      "path": "sprites/props/armor_sword.png",
+      "width": 362,
+      "height": 485,
+      "pivot": {
+        "x": 181,
+        "y": 474,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Separate alpha sprite: armor sword",
+      "source": {
+        "path": "source/armor_sheet.png",
+        "rectangle": [
+          867,
+          601,
+          1213,
+          1070
+        ],
+        "isolatedComponent": true
+      },
+      "facing": "right",
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "david_rig_idle",
+      "path": "sprites/david/rig_idle.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: rig_idle",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {}
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 207.7,
+          "y": 339.75
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_dress_00",
+      "path": "sprites/david/dress_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: dress_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 1
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 207.7,
+          "y": 339.75
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_dress_01",
+      "path": "sprites/david/dress_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: dress_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 2
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 207.7,
+          "y": 339.75
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_dress_02",
+      "path": "sprites/david/dress_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: dress_02",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 3
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 207.7,
+          "y": 339.75
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_idle",
+      "path": "sprites/david/armor_idle.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_idle",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 207.7,
+          "y": 339.75
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_step",
+      "path": "sprites/david/armor_step.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_step",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "thighL": 20,
+          "kneeL": -18,
+          "thighR": -12,
+          "armL": -12,
+          "armR": 12,
+          "torso": 4
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 233.35,
+          "y": 335.84
+        },
+        "torso": {
+          "x": 263.32,
+          "y": 261.26
+        },
+        "waist": {
+          "x": 259.81,
+          "y": 311.53
+        },
+        "neck": {
+          "x": 267.79,
+          "y": 197.36
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_wobble_00",
+      "path": "sprites/david/armor_wobble_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_wobble_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "torso": -9,
+          "head": 8,
+          "armL": 22,
+          "armR": -18,
+          "thighL": 12,
+          "kneeL": -12,
+          "y": 374
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 160.95,
+          "y": 353.72
+        },
+        "torso": {
+          "x": 239.57,
+          "y": 270.29
+        },
+        "waist": {
+          "x": 247.46,
+          "y": 320.07
+        },
+        "neck": {
+          "x": 229.55,
+          "y": 207.03
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_wobble_01",
+      "path": "sprites/david/armor_wobble_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_wobble_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "torso": 11,
+          "head": -10,
+          "armL": -26,
+          "armR": 20,
+          "thighR": -12,
+          "kneeR": 12,
+          "y": 376
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 264.6,
+          "y": 339.71
+        },
+        "torso": {
+          "x": 276.03,
+          "y": 272.93
+        },
+        "waist": {
+          "x": 266.42,
+          "y": 322.4
+        },
+        "neck": {
+          "x": 288.26,
+          "y": 210.06
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_fall_00",
+      "path": "sprites/david/armor_fall_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_fall_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "torso": -18,
+          "head": 10,
+          "thighL": -43,
+          "kneeL": 55,
+          "thighR": -25,
+          "kneeR": 40,
+          "armL": -50,
+          "elbowL": -30,
+          "armR": -35,
+          "y": 398
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 270.84,
+          "y": 293.45
+        },
+        "torso": {
+          "x": 223.55,
+          "y": 298.14
+        },
+        "waist": {
+          "x": 239.13,
+          "y": 346.07
+        },
+        "neck": {
+          "x": 203.76,
+          "y": 237.22
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_fall_01",
+      "path": "sprites/david/armor_fall_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_fall_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "torso": -25,
+          "head": 12,
+          "thighL": -80,
+          "kneeL": 70,
+          "thighR": -62,
+          "kneeR": 65,
+          "armL": -70,
+          "elbowL": -30,
+          "armR": -60,
+          "y": 427
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 252.07,
+          "y": 285.84
+        },
+        "torso": {
+          "x": 211.63,
+          "y": 331.84
+        },
+        "waist": {
+          "x": 232.93,
+          "y": 377.52
+        },
+        "neck": {
+          "x": 184.56,
+          "y": 273.79
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_seated",
+      "path": "sprites/david/armor_seated.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_seated",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 4,
+          "torso": -10,
+          "head": 7,
+          "thighL": -90,
+          "kneeL": 58,
+          "thighR": -82,
+          "kneeR": 65,
+          "armL": -30,
+          "armR": -45,
+          "y": 432,
+          "helmetDrop": 5
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 257.31,
+          "y": 390.22
+        },
+        "torso": {
+          "x": 237.77,
+          "y": 328.6
+        },
+        "waist": {
+          "x": 246.52,
+          "y": 378.23
+        },
+        "neck": {
+          "x": 226.64,
+          "y": 265.52
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_remove_00",
+      "path": "sprites/david/armor_remove_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_remove_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 3,
+          "torso": -8,
+          "thighL": -86,
+          "kneeL": 60,
+          "thighR": -80,
+          "kneeR": 60,
+          "armL": -125,
+          "elbowL": -25,
+          "armR": -80,
+          "y": 432
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 250.62,
+          "y": 213.56
+        },
+        "torso": {
+          "x": 241.39,
+          "y": 328.02
+        },
+        "waist": {
+          "x": 248.4,
+          "y": 377.93
+        },
+        "neck": {
+          "x": 232.47,
+          "y": 264.6
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_remove_01",
+      "path": "sprites/david/armor_remove_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_remove_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 2,
+          "torso": 2,
+          "thighL": -86,
+          "kneeL": 60,
+          "thighR": -80,
+          "kneeR": 60,
+          "armL": -75,
+          "elbowL": -30,
+          "y": 432
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 317.38,
+          "y": 295.42
+        },
+        "torso": {
+          "x": 259.66,
+          "y": 327.06
+        },
+        "waist": {
+          "x": 257.91,
+          "y": 377.43
+        },
+        "neck": {
+          "x": 261.9,
+          "y": 263.05
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_remove_02",
+      "path": "sprites/david/armor_remove_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_remove_02",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 1,
+          "torso": 4,
+          "thighL": -70,
+          "kneeL": 65,
+          "thighR": -60,
+          "kneeR": 60,
+          "armL": -40,
+          "armR": -40,
+          "y": 414
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 284.41,
+          "y": 363.75
+        },
+        "torso": {
+          "x": 263.32,
+          "y": 309.26
+        },
+        "waist": {
+          "x": 259.81,
+          "y": 359.53
+        },
+        "neck": {
+          "x": 267.79,
+          "y": 245.36
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_armor_recover",
+      "path": "sprites/david/armor_recover.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: armor_recover",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "gear": 0,
+          "torso": 10,
+          "thighL": -28,
+          "kneeL": 40,
+          "thighR": -35,
+          "kneeR": 40,
+          "armL": -15,
+          "armR": -25,
+          "y": 390
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 242.56,
+          "y": 357.33
+        },
+        "torso": {
+          "x": 274.23,
+          "y": 286.6
+        },
+        "waist": {
+          "x": 265.48,
+          "y": 336.23
+        },
+        "neck": {
+          "x": 285.36,
+          "y": 223.52
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_kneel_collect_00",
+      "path": "sprites/david/kneel_collect_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: kneel_collect_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 14,
+          "thighL": -45,
+          "kneeL": 75,
+          "thighR": -70,
+          "kneeR": 85,
+          "armL": -15,
+          "armR": -40,
+          "y": 406
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 244.87,
+          "y": 372.47
+        },
+        "torso": {
+          "x": 281.4,
+          "y": 304.12
+        },
+        "waist": {
+          "x": 269.21,
+          "y": 353.02
+        },
+        "neck": {
+          "x": 296.9,
+          "y": 241.97
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_kneel_collect_01",
+      "path": "sprites/david/kneel_collect_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: kneel_collect_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 23,
+          "thighL": -50,
+          "kneeL": 80,
+          "thighR": -75,
+          "kneeR": 90,
+          "armL": -25,
+          "armR": -30,
+          "y": 416
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 269.98,
+          "y": 382.36
+        },
+        "torso": {
+          "x": 297.03,
+          "y": 319.35
+        },
+        "waist": {
+          "x": 277.33,
+          "y": 365.74
+        },
+        "neck": {
+          "x": 322.05,
+          "y": 260.39
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_kneel_collect_02",
+      "path": "sprites/david/kneel_collect_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: kneel_collect_02",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 12,
+          "thighL": -45,
+          "kneeL": 75,
+          "thighR": -70,
+          "kneeR": 85,
+          "armL": -60,
+          "elbowL": -50,
+          "armR": -50,
+          "y": 406
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 327.91,
+          "y": 287.81
+        },
+        "torso": {
+          "x": 277.83,
+          "y": 303.29
+        },
+        "waist": {
+          "x": 267.35,
+          "y": 352.59
+        },
+        "neck": {
+          "x": 291.15,
+          "y": 240.64
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_pouch_store",
+      "path": "sprites/david/pouch_store.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: pouch_store",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 3,
+          "armL": -18,
+          "elbowL": -45,
+          "armR": 15,
+          "elbowR": 35,
+          "pouch": true
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 274.0,
+          "y": 301.08
+        },
+        "torso": {
+          "x": 261.5,
+          "y": 261.14
+        },
+        "waist": {
+          "x": 258.86,
+          "y": 311.47
+        },
+        "neck": {
+          "x": 264.85,
+          "y": 197.18
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_charge_00",
+      "path": "sprites/david/sling_charge_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_charge_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": -6,
+          "armL": -120,
+          "elbowL": -25,
+          "armR": -22,
+          "thighL": 12,
+          "thighR": -12
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 265.38,
+          "y": 153.39
+        },
+        "torso": {
+          "x": 245.02,
+          "y": 261.58
+        },
+        "waist": {
+          "x": 250.29,
+          "y": 311.7
+        },
+        "neck": {
+          "x": 238.33,
+          "y": 197.88
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_charge_01",
+      "path": "sprites/david/sling_charge_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_charge_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": -9,
+          "armL": -145,
+          "elbowL": 15,
+          "armR": -25,
+          "thighL": 12,
+          "thighR": -12
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 252.0,
+          "y": 139.88
+        },
+        "torso": {
+          "x": 239.57,
+          "y": 262.29
+        },
+        "waist": {
+          "x": 247.46,
+          "y": 312.07
+        },
+        "neck": {
+          "x": 229.55,
+          "y": 199.03
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_charge_02",
+      "path": "sprites/david/sling_charge_02.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_charge_02",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": -7,
+          "armL": -165,
+          "elbowL": 25,
+          "armR": -28,
+          "thighL": 12,
+          "thighR": -12
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 233.49,
+          "y": 125.34
+        },
+        "torso": {
+          "x": 243.2,
+          "y": 261.78
+        },
+        "waist": {
+          "x": 249.35,
+          "y": 311.81
+        },
+        "neck": {
+          "x": 235.4,
+          "y": 198.21
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_charge_03",
+      "path": "sprites/david/sling_charge_03.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_charge_03",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": -5,
+          "armL": -140,
+          "elbowL": -15,
+          "armR": -25,
+          "thighL": 12,
+          "thighR": -12
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 248.27,
+          "y": 134.31
+        },
+        "torso": {
+          "x": 246.85,
+          "y": 261.4
+        },
+        "waist": {
+          "x": 251.24,
+          "y": 311.61
+        },
+        "neck": {
+          "x": 241.27,
+          "y": 197.59
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_release",
+      "path": "sprites/david/sling_release.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_release",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 12,
+          "armL": -125,
+          "elbowL": -20,
+          "armR": -55,
+          "thighL": -10,
+          "thighR": 10
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 329.83,
+          "y": 161.71
+        },
+        "torso": {
+          "x": 277.83,
+          "y": 263.29
+        },
+        "waist": {
+          "x": 267.35,
+          "y": 312.59
+        },
+        "neck": {
+          "x": 291.15,
+          "y": 200.64
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_sling_followthrough",
+      "path": "sprites/david/sling_followthrough.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: sling_followthrough",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "torso": 17,
+          "armL": -92,
+          "elbowL": -2,
+          "armR": -30,
+          "thighL": -12,
+          "thighR": 8
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 361.03,
+          "y": 246.99
+        },
+        "torso": {
+          "x": 286.7,
+          "y": 265.59
+        },
+        "waist": {
+          "x": 271.96,
+          "y": 313.79
+        },
+        "neck": {
+          "x": 305.43,
+          "y": 204.34
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_win_00",
+      "path": "sprites/david/win_00.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: win_00",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "armL": -155,
+          "elbowL": 5,
+          "armR": 155,
+          "elbowR": -5
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 262.44,
+          "y": 125.49
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_win_01",
+      "path": "sprites/david/win_01.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: win_01",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "armL": -165,
+          "elbowL": 5,
+          "armR": 165,
+          "elbowR": -5,
+          "y": 353,
+          "thighL": 8,
+          "kneeL": -8,
+          "thighR": -8,
+          "kneeR": 8
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 244.11,
+          "y": 104.7
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 248.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 298.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 183.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "david_thankful",
+      "path": "sprites/david/thankful.png",
+      "width": 512,
+      "height": 512,
+      "pivot": {
+        "x": 256,
+        "y": 475,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Articulated David animation pose: thankful",
+      "facing": "right",
+      "source": {
+        "path": "source/david_rig.js",
+        "method": "articulated cutout",
+        "pose": {
+          "armL": -28,
+          "elbowL": -90,
+          "armR": 25,
+          "elbowR": 90,
+          "head": -7
+        }
+      },
+      "status": "provisional",
+      "alphaRequired": true,
+      "anchors": {
+        "slingHand": {
+          "x": 270.3,
+          "y": 245.95
+        },
+        "torso": {
+          "x": 256.0,
+          "y": 261.0
+        },
+        "waist": {
+          "x": 256.0,
+          "y": 311.4
+        },
+        "neck": {
+          "x": 256.0,
+          "y": 196.95
+        }
+      },
+      "attachmentConfidence": "Computed from provisional rig; verify visible fingers and gear fit before integration"
+    },
+    {
+      "id": "panel_blank",
+      "path": "ui/panel_blank.png",
+      "width": 1200,
+      "height": 250,
+      "pivot": {
+        "x": 600,
+        "y": 125,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Blank bilingual caption panel; all text remains DOM/Canvas",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "button_blank",
+      "path": "ui/button_blank.png",
+      "width": 440,
+      "height": 140,
+      "pivot": {
+        "x": 220,
+        "y": 70,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Blank button, code renders its label",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "medal",
+      "path": "ui/medal.png",
+      "width": 160,
+      "height": 200,
+      "pivot": {
+        "x": 80,
+        "y": 100,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Classroom success medal without text or religious symbols",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "success_star",
+      "path": "ui/success_star.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Individual success star, no typography",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_00",
+      "path": "effects/fx_dust_00.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_00",
+      "path": "effects/fx_splash_00.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_00",
+      "path": "effects/fx_sparkle_00.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_01",
+      "path": "effects/fx_dust_01.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_01",
+      "path": "effects/fx_splash_01.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_01",
+      "path": "effects/fx_sparkle_01.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_02",
+      "path": "effects/fx_dust_02.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_02",
+      "path": "effects/fx_splash_02.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_02",
+      "path": "effects/fx_sparkle_02.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_03",
+      "path": "effects/fx_dust_03.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_03",
+      "path": "effects/fx_splash_03.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_03",
+      "path": "effects/fx_sparkle_03.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_04",
+      "path": "effects/fx_dust_04.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_04",
+      "path": "effects/fx_splash_04.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_04",
+      "path": "effects/fx_sparkle_04.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_05",
+      "path": "effects/fx_dust_05.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_05",
+      "path": "effects/fx_splash_05.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_05",
+      "path": "effects/fx_sparkle_05.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_06",
+      "path": "effects/fx_dust_06.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_06",
+      "path": "effects/fx_splash_06.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_06",
+      "path": "effects/fx_sparkle_06.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_dust_07",
+      "path": "effects/fx_dust_07.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame dust puff, post-collision/footfall visual only",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_splash_07",
+      "path": "effects/fx_splash_07.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame water scoop splash; trigger only after actual pickup",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "fx_sparkle_07",
+      "path": "effects/fx_sparkle_07.png",
+      "width": 128,
+      "height": 128,
+      "pivot": {
+        "x": 64,
+        "y": 64,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Eight-frame friendly success/verified impact effect",
+      "source": {
+        "method": "deterministic vector rasterization",
+        "path": "source/ui_effects.cjs"
+      },
+      "status": "integration_candidate",
+      "alphaRequired": true
+    },
+    {
+      "id": "reference_animals_sheet",
+      "path": "source/animals_sheet.png",
+      "width": 1448,
+      "height": 1086,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_armor_sheet",
+      "path": "source/armor_sheet.png",
+      "width": 1448,
+      "height": 1086,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_motion_sheet",
+      "path": "source/david_motion_sheet.png",
+      "width": 1448,
+      "height": 1086,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_rig_source",
+      "path": "source/david_rig_source.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_goliath_sheet",
+      "path": "source/goliath_sheet.png",
+      "width": 1536,
+      "height": 1024,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level01_shepherd_hills_native",
+      "path": "source/level01_shepherd_hills_native.png",
+      "width": 1672,
+      "height": 940,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level02_maze_ground_native",
+      "path": "source/level02_maze_ground_native.png",
+      "width": 1672,
+      "height": 941,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level03_saul_tent_native",
+      "path": "source/level03_saul_tent_native.png",
+      "width": 1672,
+      "height": 941,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level04_brook_native",
+      "path": "source/level04_brook_native.png",
+      "width": 1672,
+      "height": 941,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level05_battlefield_native",
+      "path": "source/level05_battlefield_native.png",
+      "width": 1672,
+      "height": 941,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_npcs_sheet",
+      "path": "source/npcs_sheet.png",
+      "width": 1774,
+      "height": 887,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_props_sheet",
+      "path": "source/props_sheet.png",
+      "width": 1448,
+      "height": 1086,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_calfL",
+      "path": "source/rig_parts/calfL.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_calfR",
+      "path": "source/rig_parts/calfR.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_head",
+      "path": "source/rig_parts/head.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_lowerL",
+      "path": "source/rig_parts/lowerL.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_lowerR",
+      "path": "source/rig_parts/lowerR.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_thighL",
+      "path": "source/rig_parts/thighL.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_thighR",
+      "path": "source/rig_parts/thighR.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_torso",
+      "path": "source/rig_parts/torso.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_upperL",
+      "path": "source/rig_parts/upperL.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_upperR",
+      "path": "source/rig_parts/upperR.png",
+      "width": 160,
+      "height": 390,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Source/reference only; not a runtime frame",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_reference",
+      "path": "character_reference/david_reference.png",
+      "width": 1024,
+      "height": 1536,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Design reference only",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_goliath_reference",
+      "path": "character_reference/goliath_reference.png",
+      "width": 896,
+      "height": 768,
+      "pivot": {
+        "x": 0,
+        "y": 0,
+        "units": "pixels"
+      },
+      "scale": 1,
+      "usage": "Design reference only",
+      "status": "reference_only"
+    }
+  ],
+  "packStatus": "PARTIAL_VISUAL_LIBRARY_NOT_PRODUCTION_COMPLETE",
+  "integrationStatus": "Not integrated; current Codex game source unavailable",
+  "created": "2026-10-20",
+  "backgroundResolutionNote": "Delivery PNGs are 1920x1080, resampled from generated 1672x941 originals. Native files are retained in source/.",
+  "pivotConvention": "PNG pixel origin top-left; draw at worldPosition - pivot * scale. Sprite canvas includes transparent margins. Mirror about pivot, not cropped-image center.",
+  "rigStatus": "28 provisional cutout pose frames; animation and anatomy polish do not meet final production acceptance.",
+  "counts": {
+    "backgrounds": 5,
+    "generatedSeparateSprites": 56,
+    "provisionalDavidFrames": 28,
+    "blankUI": 4,
+    "effectFrames": 24
+  },
+  "animationsFile": "animations.json",
+  "roleMap": "integration/ROLE_REPLACEMENT_MAP.json"
+}

@@ -1,0 +1,574 @@
+{
+  "available": [],
+  "copied": [],
+  "missing": [
+    {
+      "id": "background_01_shepherd_hills",
+      "path": "backgrounds/level01_shepherd_hills_1920x1080.png"
+    },
+    {
+      "id": "background_02_maze_ground",
+      "path": "backgrounds/level02_maze_ground_1920x1080.png"
+    },
+    {
+      "id": "background_03_saul_tent",
+      "path": "backgrounds/level03_saul_tent_1920x1080.png"
+    },
+    {
+      "id": "background_04_brook",
+      "path": "backgrounds/level04_brook_1920x1080.png"
+    },
+    {
+      "id": "background_05_battlefield",
+      "path": "backgrounds/level05_battlefield_1920x1080.png"
+    },
+    {
+      "id": "david_walk_00",
+      "path": "sprites/david/walk_00.png"
+    },
+    {
+      "id": "david_walk_01",
+      "path": "sprites/david/walk_01.png"
+    },
+    {
+      "id": "david_walk_02",
+      "path": "sprites/david/walk_02.png"
+    },
+    {
+      "id": "david_walk_03",
+      "path": "sprites/david/walk_03.png"
+    },
+    {
+      "id": "david_run_00",
+      "path": "sprites/david/run_00.png"
+    },
+    {
+      "id": "david_run_01",
+      "path": "sprites/david/run_01.png"
+    },
+    {
+      "id": "david_run_02",
+      "path": "sprites/david/run_02.png"
+    },
+    {
+      "id": "david_run_03",
+      "path": "sprites/david/run_03.png"
+    },
+    {
+      "id": "david_idle",
+      "path": "sprites/david/idle.png"
+    },
+    {
+      "id": "david_shepherd_call",
+      "path": "sprites/david/shepherd_call.png"
+    },
+    {
+      "id": "david_food_carry",
+      "path": "sprites/david/food_carry.png"
+    },
+    {
+      "id": "david_food_offer",
+      "path": "sprites/david/food_offer.png"
+    },
+    {
+      "id": "goliath_idle",
+      "path": "sprites/goliath/idle.png"
+    },
+    {
+      "id": "goliath_taunt",
+      "path": "sprites/goliath/taunt.png"
+    },
+    {
+      "id": "goliath_hit",
+      "path": "sprites/goliath/hit.png"
+    },
+    {
+      "id": "goliath_stumble",
+      "path": "sprites/goliath/stumble.png"
+    },
+    {
+      "id": "goliath_fall_00",
+      "path": "sprites/goliath/fall_00.png"
+    },
+    {
+      "id": "goliath_fall_01",
+      "path": "sprites/goliath/fall_01.png"
+    },
+    {
+      "id": "goliath_fall_02",
+      "path": "sprites/goliath/fall_02.png"
+    },
+    {
+      "id": "goliath_fall_03",
+      "path": "sprites/goliath/fall_03.png"
+    },
+    {
+      "id": "animals_sheep_idle_01",
+      "path": "sprites/animals/sheep_idle_01.png"
+    },
+    {
+      "id": "animals_sheep_walk_00",
+      "path": "sprites/animals/sheep_walk_00.png"
+    },
+    {
+      "id": "animals_sheep_walk_01",
+      "path": "sprites/animals/sheep_walk_01.png"
+    },
+    {
+      "id": "animals_sheep_walk_02",
+      "path": "sprites/animals/sheep_walk_02.png"
+    },
+    {
+      "id": "animals_sheep_idle_02",
+      "path": "sprites/animals/sheep_idle_02.png"
+    },
+    {
+      "id": "animals_sheep_idle_03",
+      "path": "sprites/animals/sheep_idle_03.png"
+    },
+    {
+      "id": "animals_sheep_hop_00",
+      "path": "sprites/animals/sheep_hop_00.png"
+    },
+    {
+      "id": "animals_sheep_hop_01",
+      "path": "sprites/animals/sheep_hop_01.png"
+    },
+    {
+      "id": "animals_lion_idle",
+      "path": "sprites/animals/lion_idle.png"
+    },
+    {
+      "id": "animals_lion_walk_00",
+      "path": "sprites/animals/lion_walk_00.png"
+    },
+    {
+      "id": "animals_lion_walk_01",
+      "path": "sprites/animals/lion_walk_01.png"
+    },
+    {
+      "id": "animals_lion_retreat",
+      "path": "sprites/animals/lion_retreat.png"
+    },
+    {
+      "id": "npcs_brother_01_welcome",
+      "path": "sprites/npcs/brother_01_welcome.png"
+    },
+    {
+      "id": "npcs_brother_01_receive",
+      "path": "sprites/npcs/brother_01_receive.png"
+    },
+    {
+      "id": "npcs_brother_02_idle",
+      "path": "sprites/npcs/brother_02_idle.png"
+    },
+    {
+      "id": "npcs_brother_02_cheer",
+      "path": "sprites/npcs/brother_02_cheer.png"
+    },
+    {
+      "id": "npcs_brother_03_idle",
+      "path": "sprites/npcs/brother_03_idle.png"
+    },
+    {
+      "id": "npcs_brother_03_clap",
+      "path": "sprites/npcs/brother_03_clap.png"
+    },
+    {
+      "id": "npcs_saul",
+      "path": "sprites/npcs/saul.png"
+    },
+    {
+      "id": "npcs_soldier",
+      "path": "sprites/npcs/soldier.png"
+    },
+    {
+      "id": "props_food_basket",
+      "path": "sprites/props/food_basket.png"
+    },
+    {
+      "id": "props_pouch",
+      "path": "sprites/props/pouch.png"
+    },
+    {
+      "id": "props_sling",
+      "path": "sprites/props/sling.png"
+    },
+    {
+      "id": "props_staff",
+      "path": "sprites/props/staff.png"
+    },
+    {
+      "id": "props_stone_01",
+      "path": "sprites/props/stone_01.png"
+    },
+    {
+      "id": "props_stone_02",
+      "path": "sprites/props/stone_02.png"
+    },
+    {
+      "id": "props_stone_03",
+      "path": "sprites/props/stone_03.png"
+    },
+    {
+      "id": "props_stone_jagged",
+      "path": "sprites/props/stone_jagged.png"
+    },
+    {
+      "id": "props_fence",
+      "path": "sprites/props/fence.png"
+    },
+    {
+      "id": "props_pen_gate",
+      "path": "sprites/props/pen_gate.png"
+    },
+    {
+      "id": "props_maze_wall_stone",
+      "path": "sprites/props/maze_wall_stone.png"
+    },
+    {
+      "id": "props_maze_wall_shrub",
+      "path": "sprites/props/maze_wall_shrub.png"
+    },
+    {
+      "id": "props_armor_tunic",
+      "path": "sprites/props/armor_tunic.png"
+    },
+    {
+      "id": "props_armor_mail",
+      "path": "sprites/props/armor_mail.png"
+    },
+    {
+      "id": "props_armor_helmet",
+      "path": "sprites/props/armor_helmet.png"
+    },
+    {
+      "id": "props_armor_sword",
+      "path": "sprites/props/armor_sword.png"
+    },
+    {
+      "id": "panel_blank",
+      "path": "ui/panel_blank.png"
+    },
+    {
+      "id": "button_blank",
+      "path": "ui/button_blank.png"
+    },
+    {
+      "id": "medal",
+      "path": "ui/medal.png"
+    },
+    {
+      "id": "success_star",
+      "path": "ui/success_star.png"
+    },
+    {
+      "id": "fx_dust_00",
+      "path": "effects/fx_dust_00.png"
+    },
+    {
+      "id": "fx_splash_00",
+      "path": "effects/fx_splash_00.png"
+    },
+    {
+      "id": "fx_sparkle_00",
+      "path": "effects/fx_sparkle_00.png"
+    },
+    {
+      "id": "fx_dust_01",
+      "path": "effects/fx_dust_01.png"
+    },
+    {
+      "id": "fx_splash_01",
+      "path": "effects/fx_splash_01.png"
+    },
+    {
+      "id": "fx_sparkle_01",
+      "path": "effects/fx_sparkle_01.png"
+    },
+    {
+      "id": "fx_dust_02",
+      "path": "effects/fx_dust_02.png"
+    },
+    {
+      "id": "fx_splash_02",
+      "path": "effects/fx_splash_02.png"
+    },
+    {
+      "id": "fx_sparkle_02",
+      "path": "effects/fx_sparkle_02.png"
+    },
+    {
+      "id": "fx_dust_03",
+      "path": "effects/fx_dust_03.png"
+    },
+    {
+      "id": "fx_splash_03",
+      "path": "effects/fx_splash_03.png"
+    },
+    {
+      "id": "fx_sparkle_03",
+      "path": "effects/fx_sparkle_03.png"
+    },
+    {
+      "id": "fx_dust_04",
+      "path": "effects/fx_dust_04.png"
+    },
+    {
+      "id": "fx_splash_04",
+      "path": "effects/fx_splash_04.png"
+    },
+    {
+      "id": "fx_sparkle_04",
+      "path": "effects/fx_sparkle_04.png"
+    },
+    {
+      "id": "fx_dust_05",
+      "path": "effects/fx_dust_05.png"
+    },
+    {
+      "id": "fx_splash_05",
+      "path": "effects/fx_splash_05.png"
+    },
+    {
+      "id": "fx_sparkle_05",
+      "path": "effects/fx_sparkle_05.png"
+    },
+    {
+      "id": "fx_dust_06",
+      "path": "effects/fx_dust_06.png"
+    },
+    {
+      "id": "fx_splash_06",
+      "path": "effects/fx_splash_06.png"
+    },
+    {
+      "id": "fx_sparkle_06",
+      "path": "effects/fx_sparkle_06.png"
+    },
+    {
+      "id": "fx_dust_07",
+      "path": "effects/fx_dust_07.png"
+    },
+    {
+      "id": "fx_splash_07",
+      "path": "effects/fx_splash_07.png"
+    },
+    {
+      "id": "fx_sparkle_07",
+      "path": "effects/fx_sparkle_07.png"
+    }
+  ],
+  "ambiguous": [],
+  "invalid": [],
+  "excluded": [
+    {
+      "id": "david_rig_idle",
+      "status": "provisional"
+    },
+    {
+      "id": "david_dress_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_dress_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_dress_02",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_idle",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_step",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_wobble_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_wobble_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_fall_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_fall_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_seated",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_remove_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_remove_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_remove_02",
+      "status": "provisional"
+    },
+    {
+      "id": "david_armor_recover",
+      "status": "provisional"
+    },
+    {
+      "id": "david_kneel_collect_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_kneel_collect_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_kneel_collect_02",
+      "status": "provisional"
+    },
+    {
+      "id": "david_pouch_store",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_charge_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_charge_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_charge_02",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_charge_03",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_release",
+      "status": "provisional"
+    },
+    {
+      "id": "david_sling_followthrough",
+      "status": "provisional"
+    },
+    {
+      "id": "david_win_00",
+      "status": "provisional"
+    },
+    {
+      "id": "david_win_01",
+      "status": "provisional"
+    },
+    {
+      "id": "david_thankful",
+      "status": "provisional"
+    },
+    {
+      "id": "reference_animals_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_armor_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_motion_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_rig_source",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_goliath_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level01_shepherd_hills_native",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level02_maze_ground_native",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level03_saul_tent_native",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level04_brook_native",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_level05_battlefield_native",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_npcs_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_props_sheet",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_calfL",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_calfR",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_head",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_lowerL",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_lowerR",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_thighL",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_thighR",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_torso",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_upperL",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_upperR",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_david_reference",
+      "status": "reference_only"
+    },
+    {
+      "id": "reference_goliath_reference",
+      "status": "reference_only"
+    }
+  ]
+}

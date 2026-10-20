@@ -29,7 +29,7 @@ with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive
         if file.is_file():
             archive.write(file, str(file.relative_to(root)))
 with ZipFile(root / 'Davids_Big_Adventure_Source.zip', 'w', ZIP_DEFLATED) as archive:
-    for name in ['src', 'tests', 'scripts', 'docs', 'public']:
+    for name in ['src', 'tests', 'scripts', 'docs', 'public', 'visual-assets-v1']:
         for file in sorted((root / name).rglob('*')):
             if file.is_file() and '__pycache__' not in str(file):
                 archive.write(file, str(file.relative_to(root)))

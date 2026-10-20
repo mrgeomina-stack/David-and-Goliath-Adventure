@@ -327,6 +327,8 @@ export function tent(c: Ctx, x: number, y: number, s = 1, color = "#e6bd7b") {
 export type Pose = {
   action?: "throw" | "kneel";
   carry?: number;
+  food?: boolean;
+  hands?: { left?: Point; right?: Point };
   character?: "saul" | "brother";
   walk?: number;
   arm?: number;
