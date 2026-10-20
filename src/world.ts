@@ -21,6 +21,7 @@ import {
   type Gear,
 } from "./model";
 import * as A from "./art";
+import { bindCanvasGestures } from "./touch";
 import { Effects, depth, cinematicFrame } from "./effects";
 import landscapeUrl from "./assets/countryside.png";
 import heroUrl from "./assets/david-hero.png";
@@ -44,6 +45,7 @@ export interface Hooks {
 }
 export class World extends Phaser.Scene {
   ready = false;
+  private fingerGesture = false;
   private effects = new Effects();
   private lastDust = 0;
   phase: Phase = "title";
@@ -167,15 +169,27 @@ export class World extends Phaser.Scene {
       this.held.delete(e.code);
       if (e.code === "Space") this.action(false);
     });
-    this.input.on("pointerdown", (p: Phaser.Input.Pointer) =>
-      this.pointerDown({ x: p.x, y: p.y }),
-    );
-    this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
-      if (this.drag) this.drag.p = { x: p.x, y: p.y };
+    bindCanvasGestures(this.game.canvas, {
+      down: (p, touch) => {
+        this.fingerGesture = touch;
+        this.pointerDown(p);
+      },
+      move: (p) => {
+        if (this.drag) this.drag.p = p;
+      },
+      up: (p) => this.pointerUp(p),
+      cancel: () => {
+        this.drag = null;
+        this.selected = null;
+      },
+      swipe: (dir) => {
+        if (this.mission !== "maze" || this.phase !== "play" || this.paused)
+          return false;
+        this.pressDirection(dir);
+        this.stepDir = { x: 0, y: 0 };
+        return true;
+      },
     });
-    this.input.on("pointerup", (p: Phaser.Input.Pointer) =>
-      this.pointerUp({ x: p.x, y: p.y }),
-    );
     this.ready = true;
     this.hooks.changed();
   }
@@ -259,7 +273,20 @@ export class World extends Phaser.Scene {
   pointerDown(p: Point) {
     if (this.paused || this.phase !== "play") return;
     this.tutorialTime = 0;
-    if (this.mission === "brook") this.scoop(p);
+    if (this.mission === "brook") {
+      let target = p;
+      if (this.fingerGesture) {
+        const radius = Math.max(
+          50,
+          22 / (this.game.canvas.getBoundingClientRect().width / 1280),
+        );
+        const nearest = this.brook.stones
+          .filter((s) => !s.collected)
+          .sort((a, b) => distance(a, p) - distance(b, p))[0];
+        if (nearest && distance(nearest, p) < radius) target = nearest;
+      }
+      this.scoop(target);
+    }
     if (this.mission === "armor") {
       if (this.selected) {
         this.drop(this.selected, p);
@@ -285,7 +312,23 @@ export class World extends Phaser.Scene {
     this.drag = null;
   }
   drop(item: Gear, p: Point) {
-    const success = this.armor.drop(item, p);
+    let target = p;
+    if (this.fingerGesture) {
+      const zone = gearZones[item],
+        scale = this.game.canvas.getBoundingClientRect().width / 1280;
+      const margin = Math.max(0, (44 / scale - Math.min(zone.w, zone.h)) / 2);
+      if (
+        p.x >= zone.x - margin &&
+        p.x <= zone.x + zone.w + margin &&
+        p.y >= zone.y - margin &&
+        p.y <= zone.y + zone.h + margin
+      )
+        target = {
+          x: clamp(p.x, zone.x, zone.x + zone.w),
+          y: clamp(p.y, zone.y, zone.y + zone.h),
+        };
+    }
+    const success = this.armor.drop(item, target);
     this.gearTween = {
       item,
       from: { ...p },

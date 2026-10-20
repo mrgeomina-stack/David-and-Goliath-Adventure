@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 const js = readFileSync("dist/game.js", "utf8").replace(
   /<\/script/gi,
@@ -22,3 +23,12 @@ if (
   );
 }
 writeFileSync("dist/index.html", template);
+
+const version = createHash("sha256")
+  .update(template)
+  .digest("hex")
+  .slice(0, 16);
+writeFileSync(
+  "dist/sw.js",
+  readFileSync("public/sw.js", "utf8").replace("__BUILD_VERSION__", version),
+);

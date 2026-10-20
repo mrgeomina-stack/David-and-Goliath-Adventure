@@ -54,3 +54,19 @@ The user’s four-sheep carry-and-countdown request supersedes the original two-
 - `docs/CHILD_PLAYTEST.md`: supervised observation guide. Automated usability checks are implemented; human child sessions remain outstanding.
 
 The explicit later user request replaces the previous two-minute/90-second limits with 40 seconds. The timer waits while the opening instruction is shown. Thirty seeded input-driven model rescues complete within 35 seconds. This does not establish a typical child completion time.
+
+
+## Mobile / PWA milestone · 1.5
+
+The logical world and deterministic mission models remain unchanged. Native Pointer
+Events now normalize actual canvas bounds, capture armour drags and independent
+held buttons, cancel interrupted gestures and add single-step maze swipes. Compact
+HTML controls remain finger-sized independently of world scaling; landscape fit,
+visualViewport changes and safe areas protect the complete scene. Portrait phones
+pause with an optional rotation reminder. Existing mouse/keyboard paths remain.
+
+The static production build adds scope-relative install metadata, original branded
+icons and a content-versioned service worker. All embedded artwork/game code and
+install assets must cache successfully before readiness is advertised. An explicit
+update flow protects active play and preserves keepsakes. Build/package/preview
+steps are in docs/MOBILE_PWA.md; exact browser evidence is in TEST_REPORT.md.

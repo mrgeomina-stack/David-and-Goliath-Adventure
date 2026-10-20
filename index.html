@@ -6,6 +6,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="David’s Adventure" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <meta name="theme-color" content="#173e41" />
     <link
       rel="icon"
@@ -32,7 +40,8 @@
             ><button id="language">ع / EN</button
             ><button id="fullscreen" title="Full screen">⛶</button
             ><button id="restart" title="Restart">↺</button
-            ><button id="help" title="Teacher help">?</button>
+            ><button id="help" title="Teacher help">?</button
+            ><button id="install" title="Install adventure">＋</button>
           </nav>
         </header>
         <div id="mission" hidden>
@@ -110,6 +119,11 @@
           <p id="map-note">
             Complete a chapter to add a keepsake to your adventure book.
           </p>
+          <div id="pwa-settings" hidden>
+            <span id="pwa-status" role="status">Saving adventure…</span
+            ><button id="offline-retry" hidden>Try saving again</button
+            ><button id="pwa-update" hidden>Update adventure</button>
+          </div>
         </section>
         <div id="bottom" hidden>
           <div id="input-controls">
@@ -147,6 +161,24 @@
         <div id="tutorial" hidden></div>
         <div id="toast" role="status" hidden></div>
       </main>
+    </div>
+    <div
+      id="rotate-notice"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rotate-title"
+    >
+      <span aria-hidden="true">↻</span>
+      <h2 id="rotate-title">A bigger adventure, sideways</h2>
+      <p>
+        Turn your phone to landscape for the best view.<br /><span
+          lang="ar"
+          dir="rtl"
+          >لف الموبايل بالعرض عشان تشوف المغامرة أحسن.</span
+        >
+      </p>
+      <button id="portrait-continue">Continue in portrait · كمّل بالطول</button>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -13,23 +13,23 @@
     },
     "sheep": {
       "frames": 60,
-      "seconds": 0.9831999999999999,
-      "estimatedFps": 60.00813669650123
+      "seconds": 0.9832999999999993,
+      "estimatedFps": 60.00203396725317
     },
     "armor": {
-      "frames": 60,
-      "seconds": 0.9834000000000005,
-      "estimatedFps": 59.99593247915392
-    },
-    "brook": {
       "frames": 60,
       "seconds": 0.9833000000000002,
       "estimatedFps": 60.00203396725312
     },
+    "brook": {
+      "frames": 60,
+      "seconds": 1,
+      "estimatedFps": 59
+    },
     "sling": {
       "frames": 60,
-      "seconds": 0.9832000000000007,
-      "estimatedFps": 60.008136696501175
+      "seconds": 0.9833000000000002,
+      "estimatedFps": 60.00203396725312
     }
   },
   "errors": []

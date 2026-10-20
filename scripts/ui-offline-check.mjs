@@ -12,13 +12,32 @@ const context = await browser.newContext({
   offline: true,
 });
 const html = readFileSync("dist/index.html", "utf8");
-await context.route("http://offline-game.test/**", (route) =>
-  route.fulfill({ status: 200, contentType: "text/html", body: html }),
-);
+await context.route("http://offline-game.test/**", (route) => {
+  const path = new URL(route.request().url()).pathname;
+  if (path === "/manifest.webmanifest")
+    return route.fulfill({
+      status: 200,
+      contentType: "application/manifest+json",
+      body: readFileSync("dist/manifest.webmanifest"),
+    });
+  if (/^\/icons\/[a-z0-9-]+\.png$/.test(path))
+    return route.fulfill({
+      status: 200,
+      contentType: "image/png",
+      body: readFileSync("dist" + path),
+    });
+  return route.fulfill({ status: 200, contentType: "text/html", body: html });
+});
 const page = await context.newPage();
 page.on("pageerror", (e) => errors.push(e.message));
 page.on("request", (r) => {
-  if (r.resourceType() !== "document") requests.push(r.url());
+  if (
+    r.resourceType() !== "document" &&
+    !/\/(manifest\.webmanifest|icons\/[a-z0-9-]+\.png)$/.test(
+      new URL(r.url()).pathname,
+    )
+  )
+    requests.push(r.url());
 });
 await page.goto("http://offline-game.test/?qa");
 await page.waitForSelector('#stage[data-ready="true"]');
@@ -91,6 +110,6 @@ if ((await state()).shot !== "hit")
 if (errors.length || requests.length)
   throw Error(JSON.stringify({ errors, requests }));
 console.log(
-  "UI + OFFLINE PASS: production HTML runs with networking disabled and no asset requests; 1920/1024 scaled touch, EN/AR, sound unlock/mute, focus cancel, pointer release outside.",
+  "UI + OFFLINE PASS: production HTML runs with networking disabled and no external gameplay-asset requests; 1920/1024 scaled touch, EN/AR, sound unlock/mute, focus cancel, pointer release outside.",
 );
 await browser.close();

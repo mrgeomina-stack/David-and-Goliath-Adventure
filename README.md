@@ -4,7 +4,14 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Storybook edition · 1.4
+## Mobile and installable edition · 1.5
+
+Responsive landscape play, native finger gestures, safe-area support and installable
+offline gameplay are included. Use `Davids_Big_Adventure_Web.zip` on an HTTPS static
+host for iPhone/iPad Safari and Android Chrome. See [mobile and PWA instructions](docs/MOBILE_PWA.md)
+for installation, offline readiness, hosting and touch controls.
+
+## Storybook presentation
 
 The five chapters now share an illustrated adventure map, earned keepsakes,
 colourful instruction cards, a poseable illustration-based David, layered scenery,
@@ -80,8 +87,10 @@ that server. It also checks the self-contained HTML with networking disabled.
 The runner uses two independent browser workers. Set `BROWSER_WORKERS=1` on smaller machines. Do not run two copies of the browser suite concurrently.
 
 `dist/index.html` contains all CSS, original art, audio code and the Phaser bundle
-in a classic script. It uses no runtime imports, fetches, CDN assets or service
-worker. `npm run build` regenerates it; no server is part of the final package.
+in a classic script. Gameplay needs no runtime imports or CDN assets. Hosted over
+HTTPS, the included service worker saves the entire game and install icons for
+offline play. File-mode play skips PWA registration. `npm run build` regenerates
+the static web distribution; no application backend is needed.
 
 ## Source map
 
@@ -91,7 +100,9 @@ worker. `npm run build` regenerates it; no server is part of the final package.
 - `src/art.ts`: editable original Canvas illustrations and character rigs.
 - `src/scenery.ts`, `src/assets/`: cached maze painting and locally embedded cover illustrations.
 - `src/strings.ts`: narrative strings and localization.
-- `src/main.ts`, `src/style.css`: scaled accessible HTML UI and teacher controls.
+- `src/main.ts`, `src/style.css`: responsive accessible HTML UI and teacher controls.
+- `src/touch.ts`, `src/mobile.ts`: captured finger gestures, coordinate mapping and screen fit.
+- `src/pwa.ts`, `public/`: install manifest, icons, complete offline caching and explicit updates.
 - `src/audio.ts`: gesture-initialized Web Audio effects and stingers.
 - `tests/`: automated gameplay model tests.
 - `scripts/`: self-contained build, browser gameplay tests and delivery packaging.

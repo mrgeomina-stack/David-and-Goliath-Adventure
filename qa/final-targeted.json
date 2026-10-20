@@ -1,50 +1,60 @@
 {
-  "html_sha256": "fcde6cd3cd2f8086b11bc112be33b5d4f5eb875604e0531bcb34e336022e93f8",
+  "html_sha256": "6584d65c2406054746f642576d23efe78cbb8de16eff8547d7adfcd036402a1e",
   "browser_scripts": [
     {
       "script": "maze-check",
       "code": 0,
-      "seconds": 17.256
+      "seconds": 16.471
     },
     {
       "script": "armor-check",
       "code": 0,
-      "seconds": 19.078
+      "seconds": 17.296
     },
     {
       "script": "sling-check",
       "code": 0,
-      "seconds": 20.823
+      "seconds": 20.502
     },
     {
       "script": "remaining-check",
       "code": 0,
-      "seconds": 48.214
+      "seconds": 46.749
     },
     {
       "script": "story-check",
       "code": 0,
-      "seconds": 80.723
+      "seconds": 79.205
     },
     {
       "script": "ui-offline-check",
       "code": 0,
-      "seconds": 15.955
+      "seconds": 13.784
     },
     {
       "script": "visual-check",
       "code": 0,
-      "seconds": 48.827
+      "seconds": 47.119
     },
     {
       "script": "timeout-check",
       "code": 0,
-      "seconds": 51.817
+      "seconds": 48.767
     },
     {
       "script": "premium-check",
       "code": 0,
-      "seconds": 24.492
+      "seconds": 22.279
+    },
+    {
+      "script": "mobile-check",
+      "code": 0,
+      "seconds": 66.682
+    },
+    {
+      "script": "pwa-check",
+      "code": 0,
+      "seconds": 80.824
     }
   ],
   "premium_checks": {
@@ -58,6 +68,73 @@
       "40-second timer",
       "book pauses and resumes countdown",
       "honest child-playtest guide"
+    ],
+    "errors": []
+  },
+  "mobile_checks": {
+    "engine": "Chromium with native emulated touch events; not physical Safari",
+    "viewports": [
+      {
+        "width": 568,
+        "height": 320
+      },
+      {
+        "width": 667,
+        "height": 375
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 915,
+        "height": 412
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 1180,
+        "height": 820
+      },
+      {
+        "width": 1366,
+        "height": 1024
+      }
+    ],
+    "checks": [
+      "44px finger controls",
+      "chapter navigation",
+      "swipe and touch-arrow maze",
+      "phone celebration",
+      "actual armour finger drags",
+      "wrong zone and cancellation",
+      "armour collapse",
+      "two-finger movement and pickup",
+      "carried sheep delivery",
+      "portrait pause and landscape resume",
+      "finger sling charge/release and real hit",
+      "finger brook taps reject jagged rocks and collect five unique stones"
+    ],
+    "errors": []
+  },
+  "pwa_checks": {
+    "scope": "/adventure/",
+    "cachedAssets": 6,
+    "checks": [
+      "secure-context registration",
+      "failed required asset does not claim readiness",
+      "manual retry completes cache",
+      "manifest and maskable install icons",
+      "subdirectory deployment",
+      "reload offline from actual service worker",
+      "real offline maze completion",
+      "new tab offline launch",
+      "offline keepsake persistence",
+      "update waits without interrupting play",
+      "explicit update reload and old-cache cleanup",
+      "keepsake survives app update"
     ],
     "errors": []
   },

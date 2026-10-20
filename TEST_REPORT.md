@@ -1,6 +1,6 @@
-# David’s Big Adventure — validation report · 1.4
+# David’s Big Adventure — validation report · 1.5
 
-Packaged: 20 October 2026. Version 1.4 adds an illustrated chapter map, earned keepsakes, colourful instruction/celebration cards, a shared animated David rig, scenic depth, action particles, instrumental music, environmental sound and optional installed-local-voice narration. Timed sheep rescues use exactly 40 seconds, with an untimed Free Play option. Human child/classroom acceptance testing has not been conducted.
+Packaged: 20 October 2026. Version 1.5 adds responsive landscape phone/tablet layouts, safe-area and dynamic viewport handling, captured finger gestures, independent multi-touch controls, maze swipes and an installable offline PWA. The five original missions, artwork, staged animations, progression, keepsakes, Arabic/English captions and 40-second timed sheep rescue remain. Human child/classroom acceptance testing has not been conducted.
 
 ## Environment and commands
 
@@ -8,19 +8,24 @@ Packaged: 20 October 2026. Version 1.4 adds an illustrated chapter map, earned k
   Vite 7.3.1, Vitest 4.0.18, Playwright 1.58.2.
 - System Chromium 154.0.8037.57, headless, software Canvas rendering.
 - Keyboard, mouse dragging and emulated touchscreen inputs; logical 1280×720.
-- Physical viewports: 1280×720, 1920×1080, and letterboxed 1024×768.
+- Viewports: 568×320, 667×375, 844×390, 915×412, 1024×768, 1180×820,
+  1366×1024, 1280×720 and 1920×1080; phone portrait rotation at 390×844.
+- Phone tests use native emulated touch events, mobile context and device scale 2;
+  these are browser emulation, not physical devices.
 - No cloud services, accounts, tokens or external game assets are required.
 
 | Check | Observed result |
 | --- | --- |
-| `npm test` | **21 passed**, 0 failed, 0 skipped. |
+| `npm test` | **27 passed**, 0 failed, 0 skipped. |
 | `npm run build` | Typecheck and Vite production build passed; single-file offline HTML produced. |
-| `npm run test:browser` | All nine browser scripts passed against the production distribution. Results: `qa/browser-results.json`. |
+| `npm run test:browser` | All eleven browser scripts passed against the production distribution. Results: `qa/browser-results.json`. |
 | Visual/touch check | EN/AR title layouts, widescreen/tablet bounds, full maze solved by brief touchscreen taps, cinematic and replay. |
 | Sheep/brook browser check | Included in the complete production browser suite. |
 | Final `node scripts/ui-offline-check.mjs` | Passed on the final self-contained HTML with networking disabled. |
 | Countdown/catch | Current Normal-mode countdown, pause, 30s/15s warnings, lion catch, clean retry and untimed label exercised with the actual browser clock. `qa/sheep-countdown-results.json`. |
 | Premium presentation | Illustrated map at three viewports, colourful card bounds, real completion earns a keepsake, persistence after reload, music/voice controls, book pause/resume and the playtest guide. `qa/premium-results.json`. |
+| Mobile touch | Seven phone/tablet sizes, 44px primary controls, native swipe/touch-arrow maze, visible food celebration, real armour finger drags, wrong-zone rejection, cancelled drag, full collapse, two-finger movement/lift, sheep delivery, rotation pause/resume, charged real sling hit, jagged rejection and five brook pickups. `qa/mobile-results.json`. |
+| PWA | Actual service worker at `/adventure/`: failed required asset never claims readiness; retry saves all six assets; offline reload and new-tab launch; real maze completed offline; keepsake persists; update waits during play, reloads only after confirmation, preserves keepsake and removes the obsolete game cache. `qa/pwa-results.json`. |
 | ZIP packaging | CRC and extracted-entry comparisons checked by the packaging script and final verification. |
 
 The browser suite starts an HTTP server on port 4174, runs two independent browser workers, and closes it afterwards. `BROWSER_WORKERS=1` selects sequential execution.
@@ -29,8 +34,7 @@ Targeted HTTP checks use a running `npm run preview -- --port 4173` instance.
 test advances the browser clock while exercising the actual game loop;
 it does not inject a win, move characters or alter the model.
 
-The complete nine-script production run covers the visual upgrade and short
-touch-press handling. No failing check remains in that run. The countdown/catch test now validates the current rescue rules. Direct-file/platform/human checks
+The complete eleven-script production run covers existing gameplay, mobile input, presentation and real PWA caching/update behavior. No failing check remains in that run. The countdown/catch test now validates the current rescue rules. Direct-file/platform/human checks
 below remain unverified.
 
 ## What was exercised
@@ -74,11 +78,16 @@ play time or evidence of a typical five-minute classroom session.
 
 `dist/index.html` embeds the classic JavaScript bundle, CSS and all ten generated PNG
 illustrations. Artwork renders locally and sound is synthesized locally. It has no runtime module imports, CDNs,
-fetch dependencies, accounts, service workers or external font requirements.
+external gameplay-asset fetch dependencies, accounts or external font requirements.
+The HTTPS build additionally registers its local service worker, caches the complete
+HTML and install metadata/icons, and reports readiness only after verifying all
+six required cache entries. File-mode play skips service-worker registration.
 
 The final HTML was supplied as the initial document using Playwright routing with
 browser networking disabled. It started, accepted inputs, rendered and played a
-successful sling attempt without any external asset requests or page errors.
+successful sling attempt without any external gameplay-asset requests or page errors. Install metadata is
+served locally by the harness. Separately, the real service-worker test loads the
+game online, disconnects networking, reloads and completes a real maze offline.
 This demonstrates a self-contained runtime, **not** a direct `file://` launch.
 
 The installed browser is managed: its URL policy blocks `file://`, returning
@@ -89,11 +98,12 @@ browser; use the target laptop to verify the fullscreen button or F11.
 
 ## Visual evidence
 
-45 actual PNG screenshots are in `qa/` and in the separate `Davids_Big_Adventure_QA.zip`. The playable ZIP omits screenshot evidence to keep the download small. They cover
+68 actual PNG screenshots are in `qa/` and in the separate `Davids_Big_Adventure_QA.zip`. The playable ZIP omits screenshot evidence to keep the download small. They cover
 starts, gameplay, mistakes and completion across all five missions. Representative
 start, interaction and payoff images were inspected visually, including:
 
 | Evidence | Files |
+| Phone touch and cached offline play | `55-phone-maze-celebration.png` through `62-phone-brook.png` |
 | --- | --- |
 | Title and maze navigation | `01-title.png`, `02-maze-start.png`, `03-maze-wall.png`, `04-maze-middle.png` |
 | Food delivery | `05-maze-handover.png`, `06-maze-success.png` |
@@ -117,7 +127,9 @@ headless gameplay, not claimed as human hands-on classroom play.
 
 ## Remaining acceptance work
 
-- Direct Windows `file://`, Chrome/Edge compatibility and actual tablets.
+- Physical iPhone/iPad Safari and Android Chrome, Home Screen installation, notch/safe-area behavior, speakers and sustained hardware performance require device testing. The WebKit browser installer was blocked by HTTP 403 “Domain forbidden” on the official download mirrors; WebKit/Safari execution was **not performed**. Chromium emulation does not certify Safari compatibility.
+- Direct Windows `file://` and Windows Chrome/Edge launch remain unverified.
+- iOS may ignore a web app's landscape orientation preference. The in-game reminder and safe pause/resume provide the fallback. Check Offline ready inside the installed app, since Safari can isolate its storage from the browser tab.
 - Speaker sound quality, native-speaker copy review and back-of-class readability.
 - Human difficulty/play-time calibration, operator rotation and touch comfort.
 - Sustained frame-rate measurements on the intended classroom laptop.
@@ -137,3 +149,13 @@ platforms above.
 6. The illustrated map and keepsake book save genuinely earned chapter rewards locally. Storage failure does not prevent play.
 7. Shared original icons, per-chapter colours, colourful cards, focus outlines and local Arabic/English typography support the interface. Short keyboard taps now register immediately in the maze. Human Arabic copy review remains outstanding.
 8. Automated usability checks and an in-game/printable supervised child-playtest guide are included. Actual sessions with children require a supervised setting and have not been conducted. No child observations are invented.
+
+
+## Hosting and installation
+
+The Web ZIP contains the complete static HTTPS distribution, including scope-relative
+manifest, 192/512 icons, a maskable icon, Apple touch icon and a versioned service
+worker. No live site was published by this change. Deployment, Safari Add to Home
+Screen, Chrome installation, cache readiness, update behavior and preview commands
+are documented in `docs/MOBILE_PWA.md`. A raw ZIP or file:// page cannot install
+a service worker. Browser/device storage eviction can require downloading again.

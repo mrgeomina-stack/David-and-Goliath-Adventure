@@ -1,12 +1,8 @@
-import { createServer } from "node:http";
+import { distServer } from "./dist-server.mjs";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 mkdirSync("qa", { recursive: true });
-const html = readFileSync("dist/index.html");
-const server = createServer((_req, res) => {
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(html);
-});
+const server = distServer();
 await new Promise((resolve) => server.listen(4174, "127.0.0.1", resolve));
 const scripts = [
   "maze-check",
@@ -18,6 +14,8 @@ const scripts = [
   "visual-check",
   "timeout-check",
   "premium-check",
+  "mobile-check",
+  "pwa-check",
 ];
 const results = [];
 let cursor = 0;

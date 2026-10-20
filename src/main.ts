@@ -1,7 +1,11 @@
 import Phaser from "phaser";
+import { AdventurePwa } from "./pwa";
+import { bindPress } from "./touch";
+import { fittedScale, compactLayout, ensureCanvasSupport } from "./mobile";
+ensureCanvasSupport();
 import "./style.css";
 import { World } from "./world";
-import { ORDER, path, GEAR, type Mission } from "./model";
+import { ORDER, path, GEAR, type Mission, type Point } from "./model";
 import {
   teacherHelp,
   copy,
@@ -17,11 +21,15 @@ const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const sound = new Sound();
 const narrator = new Narrator();
+const pwa = new AdventurePwa(() => {
+  if (world.ready) sync();
+});
 let localStore: Storage | null = null;
 try {
   localStore = window.localStorage;
 } catch {}
 const journal = new Journal(localStore);
+const heldDirections = new Map<HTMLElement, Point>();
 let mapCache = "",
   mapWasPaused = false,
   mapReturn: HTMLElement | null = null;
@@ -36,12 +44,12 @@ function toggleBook() {
   if (world.phase !== "title") world.setPaused(true);
   $("practice").hidden = false;
   sync();
-  $("map-close").focus();
+  $("map-close").focus({ preventScroll: true });
 }
 function closeBook() {
   $("practice").hidden = true;
   if (world.phase !== "title" && !mapWasPaused) world.setPaused(false);
-  mapReturn?.focus();
+  mapReturn?.focus({ preventScroll: true });
 }
 let lang: Language = "both",
   modalOpen = false,
@@ -62,15 +70,66 @@ const game = new Phaser.Game({
   scene: world,
   render: { antialias: true },
   audio: { noAudio: true },
+  input: { mouse: false, touch: false },
   banner: false,
   fps: { target: 60 },
 });
+let mobile = false,
+  portraitAcknowledged = false,
+  orientationPaused = false,
+  orientationPrior = false;
 function resize() {
-  const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+  const view = window.visualViewport,
+    width = view?.width || window.innerWidth,
+    height = view?.height || window.innerHeight;
+  const padding = getComputedStyle($("viewport"));
+  const availableWidth =
+    width -
+    (parseFloat(padding.paddingLeft) || 0) -
+    (parseFloat(padding.paddingRight) || 0);
+  const availableHeight =
+    height -
+    (parseFloat(padding.paddingTop) || 0) -
+    (parseFloat(padding.paddingBottom) || 0);
+  const scale = fittedScale(availableWidth, availableHeight);
+  document.documentElement.style.setProperty("--game-scale", String(scale));
   $("stage").style.transform = `scale(${scale})`;
+  mobile = compactLayout(availableWidth, availableHeight);
+  document.documentElement.classList.toggle("compact", mobile);
+  document.documentElement.classList.toggle(
+    "phone-portrait",
+    width < 600 && height > width,
+  );
+  $("viewport").style.width = width + "px";
+  $("viewport").style.height = height + "px";
+  const portrait = width < 600 && height > width;
+  $("rotate-notice").hidden = !portrait || portraitAcknowledged;
+  if (portrait && !portraitAcknowledged && !orientationPaused) {
+    orientationPaused = true;
+    orientationPrior = world.paused;
+    if (world.phase !== "title") world.setPaused(true);
+  }
+  if (!portrait && orientationPaused) {
+    orientationPaused = false;
+    portraitAcknowledged = false;
+    if (!orientationPrior && world.phase !== "title" && !modalOpen)
+      world.setPaused(false);
+  }
   if (game.canvas) game.scale.refresh();
 }
 window.addEventListener("resize", resize);
+window.visualViewport?.addEventListener("resize", resize);
+window.addEventListener("orientationchange", () => {
+  world.clearInput();
+  requestAnimationFrame(resize);
+});
+$("portrait-continue").onclick = () => {
+  portraitAcknowledged = true;
+  $("rotate-notice").hidden = true;
+  if (orientationPaused && !orientationPrior && world.phase !== "title")
+    world.setPaused(false);
+  orientationPaused = false;
+};
 resize();
 const instructions: Record<Mission, [string, string, string]> = {
   sheep: [
@@ -113,6 +172,48 @@ function sync() {
     victory = world.phase === "victory",
     encounter = world.phase === "encounter";
   $("stage").dataset.ready = String(world.ready);
+  $("pwa-settings").hidden = $("practice").hidden;
+  $("pwa-status").dataset.state = pwa.state;
+  $("pwa-status").textContent =
+    pwa.state === "ready"
+      ? bilingual("✓ Offline ready", "✓ جاهزة بدون إنترنت")
+      : pwa.state === "saving"
+        ? bilingual(
+            "Saving adventure for offline play…",
+            "بنحفظ المغامرة للعب بدون إنترنت…",
+          )
+        : pwa.state === "failed"
+          ? bilingual(
+              "Not saved yet. Connect and try again.",
+              "لسه ما اتحفظتش. اتصل بالإنترنت وجرّب تاني.",
+            )
+          : bilingual(
+              "Install from a secure hosted game link.",
+              "ثبّت اللعبة من رابط الاستضافة الآمن.",
+            );
+  $("offline-retry").hidden = pwa.state !== "failed";
+  $("pwa-update").hidden = !pwa.updateAvailable;
+  $("offline-retry").textContent = bilingual("Save again", "احفظ تاني");
+  $("pwa-update").textContent = bilingual("Update adventure", "حدّث المغامرة");
+
+  $("stage").dataset.phase = world.phase;
+  const labels: Record<string, string> = {
+    pause: "II",
+    sound: sound.muted ? "♬" : "♫",
+    "book-toggle": "Book",
+    narration: "◖",
+    language: "ع/EN",
+    fullscreen: "⛶",
+    restart: "↻",
+    help: "?",
+    install: "＋",
+  };
+  for (const [id, short] of Object.entries(labels)) {
+    const b = $(id);
+    b.dataset.short = short;
+    b.setAttribute("aria-label", b.title || b.textContent || id);
+  }
+
   $("stage").dataset.chapter = world.mission;
   if (success && world.successTime >= world.payoffDuration)
     journal.earn(world.mission);
@@ -136,7 +237,7 @@ function sync() {
     "Complete a chapter to collect its keepsake. You can replay any chapter.",
     "كمّل المهمة واجمع تذكارها. تقدر تلعب أي مهمة تاني.",
   );
-  const cache = lang + ":" + [...journal.completed].join(",");
+  const cache = lang + ":" + mobile + ":" + [...journal.completed].join(",");
   if (cache !== mapCache) {
     mapCache = cache;
     for (const [i, ch] of CHAPTERS.entries()) {
@@ -151,13 +252,24 @@ function sync() {
         "aria-label",
         `${i + 1}. ${bilingual(ch.name[0], ch.name[1])}${journal.completed.has(ch.mission) ? " ✓" : ""}`,
       );
-      button.innerHTML = `<span class="chapter-art">${emblem(ch.icon)}</span><span class="chapter-label"><b>${i + 1}</b> ${bilingual(ch.name[0], ch.name[1])}</span><span class="chapter-tick">${journal.completed.has(ch.mission) ? "✓" : "↗"}</span>`;
+      const shortNames = [
+        ["Sheep", "الخراف"],
+        ["Maze", "المتاهة"],
+        ["Armour", "الدرع"],
+        ["Brook", "الجدول"],
+        ["Goliath", "جليات"],
+      ];
+      const chapterName = mobile
+        ? bilingual(shortNames[i][0], shortNames[i][1])
+        : bilingual(ch.name[0], ch.name[1]);
+      button.innerHTML = `<span class="chapter-art">${emblem(ch.icon)}</span><span class="chapter-label"><b>${i + 1}</b> ${chapterName}</span><span class="chapter-tick">${journal.completed.has(ch.mission) ? "✓" : "↗"}</span>`;
     }
     $("keepsakes").innerHTML = CHAPTERS.map(
       (ch) =>
         `<div class="keepsake ${journal.completed.has(ch.mission) ? "collected" : ""}" aria-label="${bilingual(ch.gift[0], ch.gift[1])}: ${journal.completed.has(ch.mission) ? "earned" : "not yet earned"}">${emblem(ch.giftIcon)}<span>${bilingual(ch.gift[0], ch.gift[1])}</span>${journal.completed.has(ch.mission) ? "<b>✓</b>" : "<b>·</b>"}</div>`,
     ).join("");
   }
+  if (world.paused || title) heldDirections.clear();
   if (world.paused || title) narrator.stop();
   else
     narrator.speak(
@@ -241,6 +353,17 @@ function sync() {
                 "Save all four before the lion!",
                 "أنقذ الأربعة قبل الأسد!",
               );
+  if (mobile)
+    $("sheep-warning").textContent =
+      remaining === null
+        ? bilingual("Free", "حر")
+        : world.failed
+          ? bilingual("Retry", "تاني")
+          : remaining === 0
+            ? bilingual("Run!", "اجري!")
+            : remaining <= 30
+              ? bilingual("Hurry!", "بسرعة!")
+              : bilingual("Time", "الوقت");
   clock.setAttribute("aria-label", `Rescue time remaining: ${stamp}`);
   $("directions").hidden =
     !encounter && !["maze", "sheep"].includes(world.mission);
@@ -369,7 +492,7 @@ function modal(
     $("modal-actions").append(b);
   }
   $("modal-backdrop").hidden = false;
-  $("modal-actions").querySelector("button")?.focus();
+  $("modal-actions").querySelector("button")?.focus({ preventScroll: true });
 }
 function close() {
   modalOpen = false;
@@ -457,14 +580,27 @@ $("sound").onclick = () => {
   sync();
 };
 $("pause").onclick = pause;
-$("fullscreen").onclick = () => {
-  if (document.fullscreenElement) void document.exitFullscreen();
-  else
-    void $("viewport")
-      .requestFullscreen()
-      .catch(() =>
-        toast(bilingual("Use F11 for full screen.", "اضغط F11 لملء الشاشة")),
+$("fullscreen").onclick = async () => {
+  try {
+    if (document.fullscreenElement && document.exitFullscreen)
+      await document.exitFullscreen();
+    else if ($("viewport").requestFullscreen)
+      await $("viewport").requestFullscreen();
+    else
+      toast(
+        bilingual(
+          "For full-screen play, use Share → Add to Home Screen.",
+          "للعب بملء الشاشة، اختار مشاركة ثم إضافة للشاشة الرئيسية.",
+        ),
       );
+  } catch {
+    toast(
+      bilingual(
+        "You can keep playing here, or add the game to your Home Screen.",
+        "تقدر تكمّل هنا أو تضيف اللعبة للشاشة الرئيسية.",
+      ),
+    );
+  }
 };
 $("restart").onclick = () =>
   modal(
@@ -483,6 +619,31 @@ $("restart").onclick = () =>
       },
     ],
   );
+$("offline-retry").onclick = () => void pwa.start();
+$("pwa-update").onclick = () =>
+  modal(
+    bilingual("A fresh adventure is ready", "تحديث المغامرة جاهز"),
+    `<p>${bilingual("Reload to use the saved update. Keepsakes stay in your book; the current mission will restart.", "حدّث اللعبة. التذكارات هتفضل محفوظة والمهمة الحالية هتبدأ تاني.")}</p>`,
+    [
+      { label: label("resume", lang), run: close },
+      {
+        label: bilingual("Update now", "حدّث دلوقتي"),
+        run: () => pwa.applyUpdate(),
+      },
+    ],
+  );
+$("install").onclick = async () => {
+  sound.unlock();
+  if (await pwa.install()) return;
+  modal(
+    bilingual(
+      "Keep the adventure on your Home Screen",
+      "ضيف المغامرة للشاشة الرئيسية",
+    ),
+    `<p>${bilingual("On iPhone or iPad: open this hosted game in Safari, tap Share, then Add to Home Screen. On Android: open it in Chrome and choose Install app or Add to Home screen.", "على آيفون أو آيباد: افتح اللعبة في سفاري واختار مشاركة ثم إضافة للشاشة الرئيسية. على أندرويد: افتحها في كروم واختار تثبيت التطبيق أو إضافة للشاشة الرئيسية.")}</p><p>${bilingual("For offline play, keep the game open online until the adventure book says Offline ready. Installation needs an HTTPS game link; a downloaded HTML file cannot install as an app.", "للعب بدون إنترنت، استنى لحد ما كتاب المغامرة يقول إنها جاهزة بدون إنترنت. التثبيت محتاج رابط HTTPS للعبة.")}</p>`,
+    [{ label: label("resume", lang), run: close }],
+  );
+};
 $("help").onclick = () =>
   modal(
     bilingual("Every little explorer can help", "كل مستكشف صغير يقدر يساعد"),
@@ -521,38 +682,55 @@ $("continue").onclick = () => {
   world.continue();
 };
 $("hint").onclick = () => world.hint();
-for (const b of document.querySelectorAll<HTMLButtonElement>("[data-dir]")) {
-  b.onpointerdown = (e) => {
-    e.preventDefault();
-    b.setPointerCapture(e.pointerId);
-    const [x, y] = b.dataset.dir!.split(",").map(Number);
-    if (!world.paused) {
-      world.pressDirection({ x, y });
-    }
-  };
-  b.onpointerup = () => (world.stepDir = { x: 0, y: 0 });
-  b.onpointercancel = () => (world.stepDir = { x: 0, y: 0 });
+function directionVector() {
+  let x = 0,
+    y = 0;
+  for (const d of heldDirections.values()) {
+    x += d.x;
+    y += d.y;
+  }
+  const length = Math.hypot(x, y);
+  return length ? { x: x / length, y: y / length } : { x: 0, y: 0 };
 }
-$("action").onpointerdown = (e) => {
-  e.preventDefault();
-  $("action").setPointerCapture(e.pointerId);
-  world.action(true);
-};
-$("action").onpointerup = () => world.action(false);
-$("action").onpointercancel = () => world.clearInput();
+for (const b of document.querySelectorAll<HTMLButtonElement>("[data-dir]")) {
+  const [x, y] = b.dataset.dir!.split(",").map(Number);
+  bindPress(
+    b,
+    () => {
+      sound.unlock();
+      if (!world.paused) {
+        heldDirections.set(b, { x, y });
+        world.pressDirection(directionVector());
+      }
+    },
+    () => {
+      heldDirections.delete(b);
+      world.stepDir = directionVector();
+    },
+  );
+}
+bindPress(
+  $("action"),
+  () => {
+    sound.unlock();
+    world.action(true);
+  },
+  () => world.action(false),
+  () => world.clearInput(),
+);
 window.addEventListener("keydown", (e) => {
   if (e.code === "Tab" && !$("practice").hidden) {
     const nodes = [
       ...$("practice").querySelectorAll<HTMLButtonElement>("button"),
-    ].filter((b) => !b.disabled);
+    ].filter((b) => !b.disabled && b.getClientRects().length > 0);
     const first = nodes[0],
       last = nodes[nodes.length - 1];
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
-      last.focus();
+      last.focus({ preventScroll: true });
     } else if (!e.shiftKey && document.activeElement === last) {
       e.preventDefault();
-      first.focus();
+      first.focus({ preventScroll: true });
     }
   }
   if (e.code === "Escape") {
@@ -563,6 +741,7 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
 });
 function loseFocus() {
+  heldDirections.clear();
   if (world.phase !== "title" && !world.paused) pause();
   else world.clearInput();
 }
@@ -571,11 +750,13 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) loseFocus();
 });
 window.setInterval(sync, 100);
+if (import.meta.env.PROD) void pwa.start();
 // Read-only QA state. Available only when explicitly requested; never advances or mutates gameplay.
 if (new URL(location.href).searchParams.has("qa"))
   Object.defineProperty(window, "adventureQA", {
     value: {
       snapshot: () => ({
+        pwaState: pwa.state,
         keepsakes: [...journal.completed],
         narration: narrator.enabled,
         music: sound.music,

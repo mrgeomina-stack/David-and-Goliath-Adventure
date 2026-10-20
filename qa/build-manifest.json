@@ -1,14 +1,14 @@
 {
-  "version": "1.4.0",
-  "html_sha256": "fcde6cd3cd2f8086b11bc112be33b5d4f5eb875604e0531bcb34e336022e93f8",
-  "html_bytes": 37785526,
-  "unit_tests_passed": 21,
-  "browser_checks_passed": 9,
-  "screenshots": 60,
+  "version": "1.5.0",
+  "html_sha256": "6584d65c2406054746f642576d23efe78cbb8de16eff8547d7adfcd036402a1e",
+  "html_bytes": 37811535,
+  "unit_tests_passed": 27,
+  "browser_checks_passed": 11,
+  "screenshots": 68,
   "direct_file_launch": "blocked by managed browser; unverified",
-  "offline_runtime": "network disabled, initial document supplied by routing",
+  "offline_runtime": "actual scoped service worker: interrupted cache/retry, offline reload, offline maze completion, new-tab relaunch, explicit update and keepsake preservation",
   "visual_milestone": "illustrated journey map, earned keepsakes, colourful cards, unified animated hero, scenery depth, action particles, cinematic beats",
-  "final_targeted_checks": "all nine browser scripts passed against production distribution",
+  "final_targeted_checks": "all eleven browser scripts passed against final production distribution",
   "sheep_rescue": {
     "flock": 4,
     "easy_seconds": 40,
@@ -22,5 +22,7 @@
     "tutorial": "countdown waits during opening card"
   },
   "audio": "instrumental score, environment, action textures and optional installed local voice narration",
-  "child_playtesting": "supervised guide prepared; human sessions not conducted"
+  "child_playtesting": "supervised guide prepared; human sessions not conducted",
+  "mobile": "native emulated touch at seven phone/tablet sizes; physical iOS/Android not tested",
+  "safari": "WebKit installation blocked by official mirror HTTP 403 Domain forbidden; Safari not executed"
 }

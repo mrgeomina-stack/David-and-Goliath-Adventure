@@ -1,17 +1,26 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.4: illustrated journey map, keepsake book, colourful instructions, animated David, environmental audio and a 40-second sheep rescue.
+Version 1.5: mobile touch controls, responsive landscape layouts, installable offline web app, plus illustrated journey map, keepsake book, colourful instructions, animated David, environmental audio and a 40-second sheep rescue.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
-**Start:** Extract the offline ZIP completely and open `index.html` in Chrome or
+**Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
+(Android), then turn the device sideways. Use the large direction/action buttons,
+swipe the maze, drag armour with a finger and tap stones. Sheep carrying supports
+two fingers. Portrait rotation pauses a phone game safely. Use Safari Share → Add
+to Home Screen, Chrome Install app, or the ＋ toolbar button. Open the installed app
+online and wait for **Book → Offline ready** before going offline. See
+[mobile/PWA instructions](docs/MOBILE_PWA.md). The Web ZIP needs an HTTPS static host;
+the downloaded ZIP itself is not an installable game address.
+
+**Start on a desktop:** Extract the offline ZIP completely and open `index.html` in Chrome or
 Edge. Choose Easy, Normal or Free play, then **Let’s begin**. The game needs no
 account, installation or internet. Rehearse on your classroom laptop first.
 
 | Mission | Controls and goal |
 | --- | --- |
 | 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four. |
-| 2. Maze | Follow real corridors using arrows / WASD or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
+| 2. Maze | Follow real corridors using arrows / WASD, finger swipes or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
 | Goliath’s challenge | Walk right to hear the giant, then return left to Saul’s tent. |
 | 3. Armour | Drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
 | 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone. Collect exactly five; jagged rocks do not count. |
