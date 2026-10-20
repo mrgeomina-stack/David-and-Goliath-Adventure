@@ -1,6 +1,6 @@
 {
-  "normalSeconds": 90,
-  "easySeconds": 120,
+  "normalSeconds": 40,
+  "easySeconds": 40,
   "checks": [
     "four sheep",
     "countdown pause",

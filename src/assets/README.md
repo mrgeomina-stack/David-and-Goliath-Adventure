@@ -20,3 +20,5 @@ Version 1.2 adds original 1672×941 RGB backgrounds: `meadow.png`,
 - `cast-atlas.png`: 1536×1024 RGBA, 3×2; standing, startled and seated Goliath; two adult brothers; Saul.
 
 All nine original PNGs are embedded in the offline HTML. Runtime sprite caching does not modify the source artwork.
+
+Version 1.4 adds `journey-map.png`: original 1672×941 RGB painting of the five chapter locations. The map uses separate interactive chapter nodes and earned keepsake motifs. David’s shared animated rendering is `src/hero.ts`, reusing the approved face and linen material with layered original Canvas drawing. All ten original PNGs are embedded locally.

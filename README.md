@@ -4,15 +4,30 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Four-sheep rescue · 1.3
+## Storybook edition · 1.4
 
-Press Space or **Lift sheep** near a sheep to raise it into David’s hands. Run to
-the pen’s right opening; David sets it down automatically. Rescue all four before
-the visible countdown ends: Easy 2:00, Normal 1:30, or untimed Free Play.
-Warnings appear at 30 and 15 seconds. At zero the lion chases an unprotected sheep;
-a non-graphic catch triggers retry. Pause freezes time.
+The five chapters now share an illustrated adventure map, earned keepsakes,
+colourful instruction cards, a poseable illustration-based David, layered scenery,
+action particles and cinematic payoffs. Soft instrumental music, environmental
+sound and optional installed local narration support the captions.
 
-![David carries a sheep to safety](qa/49-sheep-carried.png)
+The sheep rescue has a **40-second limit** in Easy and Normal, with warnings at
+30 and 15 seconds. David runs faster while carrying; the timer waits through the
+opening instruction card. Free Play remains untimed. Space or **Lift sheep** raises
+one sheep into David’s hands; entering the pen triggers a gentle set-down.
+
+![The illustrated chapter map](qa/50-storybook-map.png)
+![Colourful illustrated instructions](qa/51-colourful-instructions.png)
+![Earned keepsakes](qa/53-keepsake-book.png)
+
+**Book** pauses play while open. A chapter earns its keepsake only after its real
+completion and celebration; progress is saved locally when browser storage is
+available. **Voice** uses an installed local English or Arabic voice. Captions stay
+available if no voice is installed. **Music** can be toggled separately in the book.
+
+Human child playtesting has not been conducted here. A supervised worksheet and
+observation guide are included in [docs/CHILD_PLAYTEST.md](docs/CHILD_PLAYTEST.md)
+and in the teacher help menu.
 
 ## Storybook artwork
 
@@ -62,7 +77,7 @@ Set `CHROMIUM_PATH` to another installed Chromium binary when running elsewhere.
 `npm run test:browser` starts its own temporary HTTP server on port 4174, tests the
 production bundle using real input events, writes evidence into `qa/`, and stops
 that server. It also checks the self-contained HTML with networking disabled.
-Do not run two copies of the browser suite concurrently.
+The runner uses two independent browser workers. Set `BROWSER_WORKERS=1` on smaller machines. Do not run two copies of the browser suite concurrently.
 
 `dist/index.html` contains all CSS, original art, audio code and the Phaser bundle
 in a classic script. It uses no runtime imports, fetches, CDN assets or service

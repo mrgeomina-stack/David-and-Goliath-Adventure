@@ -2,41 +2,46 @@
   {
     "script": "maze-check",
     "code": 0,
-    "seconds": 15.625
+    "seconds": 17.256
   },
   {
     "script": "armor-check",
     "code": 0,
-    "seconds": 16.822
+    "seconds": 19.078
   },
   {
     "script": "sling-check",
     "code": 0,
-    "seconds": 19.922
+    "seconds": 20.823
   },
   {
     "script": "remaining-check",
     "code": 0,
-    "seconds": 58.468
+    "seconds": 48.214
   },
   {
     "script": "story-check",
     "code": 0,
-    "seconds": 88.798
+    "seconds": 80.723
   },
   {
     "script": "ui-offline-check",
     "code": 0,
-    "seconds": 14.403
+    "seconds": 15.955
   },
   {
     "script": "visual-check",
     "code": 0,
-    "seconds": 43.944
+    "seconds": 48.827
   },
   {
     "script": "timeout-check",
     "code": 0,
-    "seconds": 79.92
+    "seconds": 51.817
+  },
+  {
+    "script": "premium-check",
+    "code": 0,
+    "seconds": 24.492
   }
 ]

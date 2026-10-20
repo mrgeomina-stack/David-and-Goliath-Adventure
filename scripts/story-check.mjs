@@ -32,7 +32,12 @@ async function moveTo(x, y) {
           : "ArrowUp",
       Math.min(
         170,
-        Math.max(25, (Math.max(Math.abs(dx), Math.abs(dy)) / 190) * 1000),
+        Math.max(
+          25,
+          (Math.max(Math.abs(dx), Math.abs(dy)) /
+            ((await state()).carriedIndex !== null ? 290 : 245)) *
+            1000,
+        ),
       ),
     );
   }
@@ -53,9 +58,9 @@ for (let i = 0; i < 4; i++) {
   await moveTo(s.x - 30, s.y);
   await page.keyboard.press("Space");
   await moveTo(450, 498);
-  await page.waitForTimeout(650);
+  await page.waitForTimeout(100);
   await moveTo(225, 498);
-  await page.waitForTimeout(1400);
+  await page.waitForTimeout(460);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
   if (i < 3) await moveTo(450, 498);
 }

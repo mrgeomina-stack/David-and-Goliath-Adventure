@@ -38,7 +38,12 @@ async function moveTo(x, y) {
     await page.waitForTimeout(
       Math.min(
         180,
-        Math.max(25, (Math.max(Math.abs(dx), Math.abs(dy)) / 190) * 1000),
+        Math.max(
+          25,
+          (Math.max(Math.abs(dx), Math.abs(dy)) /
+            ((await state()).carriedIndex !== null ? 290 : 245)) *
+            1000,
+        ),
       ),
     );
     await page.keyboard.up(key);
@@ -66,9 +71,9 @@ for (let i = 0; i < 4; i++) {
     await page.screenshot({ path: "qa/49-sheep-carried.png" });
   }
   await moveTo(450, 498);
-  await page.waitForTimeout(650);
+  await page.waitForTimeout(100);
   await moveTo(225, 498);
-  await page.waitForTimeout(1400);
+  await page.waitForTimeout(460);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
   if (i === 1) await page.setViewportSize({ width: 1280, height: 720 });
   if (i < 3) {

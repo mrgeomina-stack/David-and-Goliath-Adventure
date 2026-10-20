@@ -217,7 +217,7 @@ export class SheepModel {
   caughtIndex: number | null = null;
   constructor(
     seed = 1,
-    public timeLimit: number | null = 120,
+    public timeLimit: number | null = 40,
   ) {
     const random = rng(seed);
     this.sheep = [
@@ -273,7 +273,7 @@ export class SheepModel {
     this.time += dt;
     const carrying = this.carried;
     if (!carrying || (this.liftProgress >= 1 && this.placing === 0)) {
-      const speed = carrying ? 220 : 190;
+      const speed = carrying ? 290 : 245;
       walk(this.david, dir.x * speed * dt, dir.y * speed * dt, fieldBlocked);
     }
     if (carrying) {

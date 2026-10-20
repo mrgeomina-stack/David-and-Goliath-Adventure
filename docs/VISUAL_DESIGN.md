@@ -60,3 +60,24 @@ The source retains editable illustrations, typed rendering helpers, and procedur
 
 ## Carry animation and countdown — 1.3
 The sheep mission now has four sheep and replaces following with actual carrying. David bends both arms as the nearby sheep rises over 0.55s, his hands render in front of the fleece, and the sheep moves with him while running. Inside the pen, the sheep lowers over 0.4s to one of four visible slots. A separate timer card keeps the playfield clear and uses amber at 30s, terracotta at 15s, and explicit warning text. Catch staging is non-graphic. These mechanics follow the user’s later request; see IMPLEMENTATION.md for model rules.
+
+## Storybook edition — 1.4
+
+An original hand-painted chapter map (`journey-map.png`) anchors the interface.
+Each chapter has a shared motif and accent: teal sheep, amber bread, lavender armour,
+aqua stones and coral courage. Illustrated emblem tiles appear on the map,
+instruction cards and celebration panels. Earned keepsakes use ribbon, basket,
+feather, stone and star motifs in a matching SVG style.
+
+David’s new rendering lives in `hero.ts`: illustrated face and linen with shaded
+anatomical limbs, embroidered seams, woven satchel, sandals and articulated poses.
+Breathing, blink/strain, walking, pickup/carry, kneel, throw and wave motions use the
+same rig and costume. Water pickups create ripples, splashes and droplets; footfalls
+kick up dust; armour landing and final impact trigger distinct particles. Scene
+cloud drift, warm light and foreground foliage move independently of collision.
+
+The title retains its separate cover illustration. The map image is a normal embedded
+image element, decoded before map capture; the original PNG stays in source. No CSS
+custom property contains a multi-megabyte image. Typography uses local Georgia and
+Tahoma/Arial, with Arabic direction handled per caption. Human typography, Arabic
+copy and child-comprehension review should use the included playtest guide.

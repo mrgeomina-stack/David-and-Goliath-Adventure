@@ -18,7 +18,7 @@ try {
   await page.click("#start");
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
   if (
-    (await state()).sheepTimeLimit !== 90 ||
+    (await state()).sheepTimeLimit !== 40 ||
     (await state()).sheep.length !== 4
   )
     throw Error("Normal rescue setup");
@@ -29,7 +29,7 @@ try {
     throw Error("Paused countdown moved");
   await page.click("#modal-actions button:first-child");
   // Advance the browser clock through real game updates; never edit game state.
-  await page.clock.runFor(62000);
+  await page.clock.runFor(14000);
   if (
     !(await page
       .locator("#sheep-clock")
@@ -61,7 +61,7 @@ try {
     reset.caughtIndex !== null ||
     reset.carriedIndex !== null ||
     reset.sheep.length !== 4 ||
-    reset.sheepRemaining < 89
+    reset.sheepRemaining < 39
   )
     throw Error("Retry did not reset countdown and flock");
   await page.click("#restart");
@@ -78,8 +78,8 @@ try {
     "qa/sheep-countdown-results.json",
     JSON.stringify(
       {
-        normalSeconds: 90,
-        easySeconds: 120,
+        normalSeconds: 40,
+        easySeconds: 40,
         checks: [
           "four sheep",
           "countdown pause",

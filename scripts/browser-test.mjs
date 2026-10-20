@@ -8,30 +8,50 @@ const server = createServer((_req, res) => {
   res.end(html);
 });
 await new Promise((resolve) => server.listen(4174, "127.0.0.1", resolve));
+const scripts = [
+  "maze-check",
+  "armor-check",
+  "sling-check",
+  "remaining-check",
+  "story-check",
+  "ui-offline-check",
+  "visual-check",
+  "timeout-check",
+  "premium-check",
+];
 const results = [];
-try {
-  for (const script of [
-    "maze-check",
-    "armor-check",
-    "sling-check",
-    "remaining-check",
-    "story-check",
-    "ui-offline-check",
-    "visual-check",
-    "timeout-check",
-  ]) {
-    const start = Date.now();
+let cursor = 0;
+const workers = Math.max(
+  1,
+  Math.min(2, Number(process.env.BROWSER_WORKERS) || 2),
+);
+async function worker() {
+  while (cursor < scripts.length) {
+    const index = cursor++,
+      script = scripts[index],
+      start = Date.now();
     const code = await new Promise((resolve) => {
-      const p = spawn(process.execPath, [`scripts/${script}.mjs`], {
+      const child = spawn(process.execPath, [`scripts/${script}.mjs`], {
         stdio: "inherit",
         env: { ...process.env, GAME_URL: "http://localhost:4174/" },
       });
-      p.on("exit", resolve);
+      child.on("error", () => resolve(1));
+      child.on("exit", (code) => resolve(code ?? 1));
     });
-    results.push({ script, code, seconds: (Date.now() - start) / 1000 });
-    if (code !== 0) throw Error(`${script} failed`);
+    results[index] = { script, code, seconds: (Date.now() - start) / 1000 };
   }
+}
+try {
+  await Promise.all(Array.from({ length: workers }, worker));
+  if (results.some((r) => r.code !== 0))
+    throw Error(
+      "Browser checks failed: " +
+        results
+          .filter((r) => r.code !== 0)
+          .map((r) => r.script)
+          .join(", "),
+    );
 } finally {
   writeFileSync("qa/browser-results.json", JSON.stringify(results, null, 2));
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
 }

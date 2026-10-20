@@ -26,6 +26,9 @@
           <nav aria-label="Teacher controls">
             <button id="pause">Ⅱ Pause</button
             ><button id="sound">♫ Sound on</button
+            ><button id="book-toggle" title="Adventure book">✦ Book</button
+            ><button id="narration" title="Optional local voice narration">
+              ◖ Voice off</button
             ><button id="language">ع / EN</button
             ><button id="fullscreen" title="Full screen">⛶</button
             ><button id="restart" title="Restart">↺</button
@@ -71,16 +74,43 @@
           ><button id="practice-toggle" class="text-button">
             Choose a mission <span>↗</span>
           </button>
-          <div id="practice" hidden>
-            <button data-mission="sheep">1 · Sheep</button
-            ><button data-mission="maze">2 · Maze</button
-            ><button data-mission="armor">3 · Armour</button
-            ><button data-mission="brook">4 · Brook</button
-            ><button data-mission="sling">5 · Goliath</button>
-          </div>
           <small>1 SAMUEL 17 <b>•</b> AGES 5–8 <b>•</b> OFFLINE PLAY</small>
         </section>
         <div id="title-note">✦ &nbsp; Small steps. Big faith.</div>
+        <section
+          id="practice"
+          hidden
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="map-title"
+        >
+          <div class="map-heading">
+            <div>
+              <span class="eyebrow" id="map-eyebrow"
+                >YOUR STORYBOOK JOURNEY</span
+              >
+              <h2 id="map-title">Every small step tells a story</h2>
+            </div>
+            <div>
+              <button id="music-toggle">♫ Music on</button
+              ><button id="map-close" aria-label="Close adventure book">
+                ×
+              </button>
+            </div>
+          </div>
+          <div id="journey-landscape">
+            <img id="journey-art" alt="" aria-hidden="true" />
+            <button data-mission="sheep"></button
+            ><button data-mission="maze"></button
+            ><button data-mission="armor"></button
+            ><button data-mission="brook"></button
+            ><button data-mission="sling"></button>
+          </div>
+          <div id="keepsakes" aria-label="Earned keepsakes"></div>
+          <p id="map-note">
+            Complete a chapter to add a keepsake to your adventure book.
+          </p>
+        </section>
         <div id="bottom" hidden>
           <div id="input-controls">
             <div id="directions">
@@ -95,6 +125,7 @@
           <button id="hint">✧ Hint</button>
         </div>
         <div id="message" hidden>
+          <div id="message-emblem" aria-hidden="true"></div>
           <div class="eyebrow" id="message-tag">A LITTLE MOMENT OF COURAGE</div>
           <h2 id="message-ar" dir="rtl"></h2>
           <p id="message-en"></p>

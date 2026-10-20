@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "illustrated map and chapter bounds at 3 viewports",
+    "no unearned rewards",
+    "music and local narration controls",
+    "colourful instruction bounds",
+    "real maze completion earns reward",
+    "keepsake persists across reload",
+    "40-second timer",
+    "book pauses and resumes countdown",
+    "honest child-playtest guide"
+  ],
+  "errors": []
+}

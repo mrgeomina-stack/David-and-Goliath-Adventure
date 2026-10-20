@@ -1,7 +1,65 @@
 {
-  "html_sha256": "8b71ce86c64824cd4a0ba9fecb7891b10d8b542be929086090098a5f7952aa39",
-  "checks": {
-    "remaining-check": "passed: four individual carries, animated lift, tablet touch pickup, pen deliveries, brook pickups",
-    "ui-offline-check": "passed: final self-contained HTML with networking disabled, touch, EN/AR, audio, focus"
-  }
+  "html_sha256": "fcde6cd3cd2f8086b11bc112be33b5d4f5eb875604e0531bcb34e336022e93f8",
+  "browser_scripts": [
+    {
+      "script": "maze-check",
+      "code": 0,
+      "seconds": 17.256
+    },
+    {
+      "script": "armor-check",
+      "code": 0,
+      "seconds": 19.078
+    },
+    {
+      "script": "sling-check",
+      "code": 0,
+      "seconds": 20.823
+    },
+    {
+      "script": "remaining-check",
+      "code": 0,
+      "seconds": 48.214
+    },
+    {
+      "script": "story-check",
+      "code": 0,
+      "seconds": 80.723
+    },
+    {
+      "script": "ui-offline-check",
+      "code": 0,
+      "seconds": 15.955
+    },
+    {
+      "script": "visual-check",
+      "code": 0,
+      "seconds": 48.827
+    },
+    {
+      "script": "timeout-check",
+      "code": 0,
+      "seconds": 51.817
+    },
+    {
+      "script": "premium-check",
+      "code": 0,
+      "seconds": 24.492
+    }
+  ],
+  "premium_checks": {
+    "checks": [
+      "illustrated map and chapter bounds at 3 viewports",
+      "no unearned rewards",
+      "music and local narration controls",
+      "colourful instruction bounds",
+      "real maze completion earns reward",
+      "keepsake persists across reload",
+      "40-second timer",
+      "book pauses and resumes countdown",
+      "honest child-playtest guide"
+    ],
+    "errors": []
+  },
+  "child_playtesting": "not conducted; guide included"
 }

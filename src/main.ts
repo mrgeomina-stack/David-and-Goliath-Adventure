@@ -10,9 +10,39 @@ import {
   label,
 } from "./strings";
 import { Sound } from "./audio";
+import { Journal, CHAPTERS, emblem } from "./journal";
+import { Narrator } from "./narration";
+import mapUrl from "./assets/journey-map.png";
 const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const sound = new Sound();
+const narrator = new Narrator();
+let localStore: Storage | null = null;
+try {
+  localStore = window.localStorage;
+} catch {}
+const journal = new Journal(localStore);
+let mapCache = "",
+  mapWasPaused = false,
+  mapReturn: HTMLElement | null = null;
+$<HTMLImageElement>("journey-art").src = mapUrl;
+function toggleBook() {
+  if (!$("practice").hidden) {
+    closeBook();
+    return;
+  }
+  mapReturn = document.activeElement as HTMLElement;
+  mapWasPaused = world.paused;
+  if (world.phase !== "title") world.setPaused(true);
+  $("practice").hidden = false;
+  sync();
+  $("map-close").focus();
+}
+function closeBook() {
+  $("practice").hidden = true;
+  if (world.phase !== "title" && !mapWasPaused) world.setPaused(false);
+  mapReturn?.focus();
+}
 let lang: Language = "both",
   modalOpen = false,
   toastTimer = 0;
@@ -83,6 +113,68 @@ function sync() {
     victory = world.phase === "victory",
     encounter = world.phase === "encounter";
   $("stage").dataset.ready = String(world.ready);
+  $("stage").dataset.chapter = world.mission;
+  if (success && world.successTime >= world.payoffDuration)
+    journal.earn(world.mission);
+  const chapter = CHAPTERS.find((c) => c.mission === world.mission)!;
+  $("stage").style.setProperty("--chapter-color", chapter.color);
+  $("book-toggle").textContent = bilingual("✦ Book", "✦ الكتاب");
+  $("narration").textContent = narrator.enabled
+    ? bilingual("◖ Voice on", "◖ صوت الراوي")
+    : bilingual("◖ Voice off", "◖ بدون راوي");
+  $("narration").setAttribute("aria-pressed", String(narrator.enabled));
+  $("music-toggle").textContent = sound.music
+    ? bilingual("♫ Music on", "♫ موسيقى")
+    : bilingual("♫ Music off", "♫ بدون موسيقى");
+  $("music-toggle").setAttribute("aria-pressed", String(sound.music));
+  $("map-title").textContent = bilingual("Your adventure book", "كتاب مغامرتك");
+  $("map-eyebrow").textContent = bilingual(
+    "YOUR STORYBOOK JOURNEY",
+    "رحلتك في كتاب المغامرة",
+  );
+  $("map-note").textContent = bilingual(
+    "Complete a chapter to collect its keepsake. You can replay any chapter.",
+    "كمّل المهمة واجمع تذكارها. تقدر تلعب أي مهمة تاني.",
+  );
+  const cache = lang + ":" + [...journal.completed].join(",");
+  if (cache !== mapCache) {
+    mapCache = cache;
+    for (const [i, ch] of CHAPTERS.entries()) {
+      const button = document.querySelector<HTMLButtonElement>(
+        `[data-mission="${ch.mission}"]`,
+      )!;
+      button.style.left = ch.position[0] + "%";
+      button.style.top = ch.position[1] + "%";
+      button.style.setProperty("--chapter", ch.color);
+      button.classList.toggle("earned", journal.completed.has(ch.mission));
+      button.setAttribute(
+        "aria-label",
+        `${i + 1}. ${bilingual(ch.name[0], ch.name[1])}${journal.completed.has(ch.mission) ? " ✓" : ""}`,
+      );
+      button.innerHTML = `<span class="chapter-art">${emblem(ch.icon)}</span><span class="chapter-label"><b>${i + 1}</b> ${bilingual(ch.name[0], ch.name[1])}</span><span class="chapter-tick">${journal.completed.has(ch.mission) ? "✓" : "↗"}</span>`;
+    }
+    $("keepsakes").innerHTML = CHAPTERS.map(
+      (ch) =>
+        `<div class="keepsake ${journal.completed.has(ch.mission) ? "collected" : ""}" aria-label="${bilingual(ch.gift[0], ch.gift[1])}: ${journal.completed.has(ch.mission) ? "earned" : "not yet earned"}">${emblem(ch.giftIcon)}<span>${bilingual(ch.gift[0], ch.gift[1])}</span>${journal.completed.has(ch.mission) ? "<b>✓</b>" : "<b>·</b>"}</div>`,
+    ).join("");
+  }
+  if (world.paused || title) narrator.stop();
+  else
+    narrator.speak(
+      `${world.run}:${world.phase}:${world.mission}:${lang}:${world.failed}`,
+      world.failed
+        ? "Let’s try again. You can do it."
+        : success
+          ? copy[`${world.mission}Success` as CopyKey][1]
+          : copy[world.mission][1],
+      world.failed
+        ? "يلا نجرّب تاني. إنت تقدر."
+        : success
+          ? copy[`${world.mission}Success` as CopyKey][0]
+          : copy[world.mission][0],
+      lang,
+      sound.muted,
+    );
   $<HTMLButtonElement>("start").disabled = !world.ready;
   $<HTMLButtonElement>("practice-toggle").disabled = !world.ready;
   $("title").hidden = !title;
@@ -114,16 +206,6 @@ function sync() {
   Array.from($<HTMLSelectElement>("difficulty").options).forEach(
     (o, i) => (o.textContent = difficultyLabels[i]),
   );
-  const missionNames = [
-    bilingual("Sheep", "الخراف"),
-    bilingual("Maze", "المتاهة"),
-    bilingual("Armour", "الدرع"),
-    bilingual("Brook", "الجدول"),
-    bilingual("Goliath", "جليات"),
-  ];
-  document
-    .querySelectorAll<HTMLButtonElement>("[data-mission]")
-    .forEach((b, i) => (b.textContent = `${i + 1} · ${missionNames[i]}`));
   const key: CopyKey = encounter ? "encounter" : world.mission;
   textPair("objective-ar", "objective-en", key);
   $("mission-badge").textContent = String(ORDER.indexOf(world.mission) + 1);
@@ -194,7 +276,7 @@ function sync() {
         : "charge";
   $("action").textContent =
     world.mission === "sheep" && world.sheep.carried
-      ? bilingual("To pen →", "للحظيرة ←")
+      ? bilingual("To the pen", "للحظيرة")
       : label(action, lang);
   $("hint").textContent = "✧ " + label("hint", lang);
   $("hint").hidden = success || encounter;
@@ -256,7 +338,14 @@ function sync() {
     world.phase !== "play" || world.tutorialTime <= 0 || world.paused;
   if (!$("tutorial").hidden)
     $("tutorial").innerHTML =
-      `<b>${legend}</b>${lang === "en" ? instruction[2] : instruction[1]}`;
+      `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "ar" ? "rtl" : "ltr"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${bilingual("Move or press an arrow to begin", "حرّك داود أو اضغط سهم عشان تبدأ")}</small></div>`;
+  if (!$("message").hidden) {
+    const icon = world.failed ? "sheep" : chapter.icon;
+    if ($("message-emblem").dataset.icon !== icon) {
+      $("message-emblem").dataset.icon = icon;
+      $("message-emblem").innerHTML = emblem(icon);
+    }
+  }
 }
 function modal(
   title: string,
@@ -312,8 +401,35 @@ $("start").onclick = () => {
   sound.unlock();
   world.start("sheep");
 };
-$("practice-toggle").onclick = () => {
-  $("practice").hidden = !$("practice").hidden;
+$("practice-toggle").onclick = toggleBook;
+$("book-toggle").onclick = toggleBook;
+$("map-close").onclick = closeBook;
+$("music-toggle").onclick = () => {
+  sound.unlock();
+  sound.setMusic(!sound.music);
+  sync();
+};
+$("narration").onclick = () => {
+  sound.unlock();
+  narrator.enabled = !narrator.enabled;
+  narrator.reset();
+  sync();
+  if (
+    narrator.enabled &&
+    (!narrator.available ||
+      !speechSynthesis
+        .getVoices()
+        .some(
+          (v) =>
+            v.localService && v.lang.startsWith(lang === "ar" ? "ar" : "en"),
+        ))
+  )
+    toast(
+      bilingual(
+        "No installed local voice for this language. Captions are always available.",
+        "مفيش صوت محلي للغة دي. الكلام المكتوب موجود دايمًا.",
+      ),
+    );
 };
 document.querySelectorAll<HTMLButtonElement>("[data-mission]").forEach(
   (b) =>
@@ -371,7 +487,18 @@ $("help").onclick = () =>
   modal(
     bilingual("Every little explorer can help", "كل مستكشف صغير يقدر يساعد"),
     teacherHelp.map(([ar, en]) => `<p>${bilingual(en, ar)}</p>`).join(""),
-    [{ label: label("resume", lang), run: close }],
+    [
+      { label: label("resume", lang), run: close },
+      {
+        label: bilingual("Playtest guide", "دليل تجربة الأطفال"),
+        run: () =>
+          modal(
+            bilingual("Watch, listen, then help", "شوف واسمع وبعدين ساعد"),
+            `<p>${bilingual("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 40-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الأربعين ثانية؟")}</p><p>${bilingual("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${bilingual("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
+            [{ label: label("resume", lang), run: close }],
+          ),
+      },
+    ],
   );
 $("continue").onclick = () => {
   // Return keyboard control to the game after a retry or story transition.
@@ -414,7 +541,24 @@ $("action").onpointerdown = (e) => {
 $("action").onpointerup = () => world.action(false);
 $("action").onpointercancel = () => world.clearInput();
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Escape") pause();
+  if (e.code === "Tab" && !$("practice").hidden) {
+    const nodes = [
+      ...$("practice").querySelectorAll<HTMLButtonElement>("button"),
+    ].filter((b) => !b.disabled);
+    const first = nodes[0],
+      last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+  if (e.code === "Escape") {
+    if (!$("practice").hidden) closeBook();
+    else pause();
+  }
   if (e.code === "Space" && e.target instanceof HTMLButtonElement)
     e.preventDefault();
 });
@@ -432,6 +576,9 @@ if (new URL(location.href).searchParams.has("qa"))
   Object.defineProperty(window, "adventureQA", {
     value: {
       snapshot: () => ({
+        keepsakes: [...journal.completed],
+        narration: narrator.enabled,
+        music: sound.music,
         phase: world.phase,
         mission: world.mission,
         paused: world.paused,

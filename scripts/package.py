@@ -9,7 +9,7 @@ for name in required:
         raise SystemExit(f'Missing deliverable: {name}')
 with ZipFile(root / 'Davids_Big_Adventure_Offline.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(root / 'dist/index.html', 'index.html')
-    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt']:
+    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/CHILD_PLAYTEST.md']:
         archive.write(root / name, name)
 # Keep the playable download small; detailed QA evidence is a separate archive.
 with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive:

@@ -3,6 +3,7 @@ import {
   MazeModel,
   ArmorModel,
   SheepModel,
+  SHOT,
   BrookModel,
   SlingModel,
   ORDER,
@@ -20,6 +21,7 @@ import {
   type Gear,
 } from "./model";
 import * as A from "./art";
+import { Effects, depth, cinematicFrame } from "./effects";
 import landscapeUrl from "./assets/countryside.png";
 import heroUrl from "./assets/david-hero.png";
 import meadowUrl from "./assets/meadow.png";
@@ -42,6 +44,8 @@ export interface Hooks {
 }
 export class World extends Phaser.Scene {
   ready = false;
+  private effects = new Effects();
+  private lastDust = 0;
   phase: Phase = "title";
   mission: Mission = "maze";
   maze = new MazeModel();
@@ -126,6 +130,24 @@ export class World extends Phaser.Scene {
     this.input.keyboard!.on("keydown", (e: KeyboardEvent) => {
       if (e.repeat || this.paused) return;
       this.held.add(e.code);
+      const taps: Record<string, Point> = {
+        ArrowLeft: { x: -1, y: 0 },
+        KeyA: { x: -1, y: 0 },
+        ArrowRight: { x: 1, y: 0 },
+        KeyD: { x: 1, y: 0 },
+        ArrowUp: { x: 0, y: -1 },
+        KeyW: { x: 0, y: -1 },
+        ArrowDown: { x: 0, y: 1 },
+        KeyS: { x: 0, y: 1 },
+      };
+      if (
+        taps[e.code] &&
+        this.phase === "play" &&
+        this.mission === "maze" &&
+        !this.failed &&
+        this.moveWait <= 0
+      )
+        this.stepMaze(taps[e.code]);
       if (e.code === "Space") this.action(true);
       if (
         [
@@ -163,6 +185,7 @@ export class World extends Phaser.Scene {
     this.practice = practice;
     this.phase = "play";
     this.failed = false;
+    this.effects.particles = [];
     this.successTime = 0;
     this.deliveryCheered = false;
     this.hintTime = 0;
@@ -171,10 +194,7 @@ export class World extends Phaser.Scene {
     this.run++;
     this.maze = new MazeModel(this.seed + this.run * 41);
     this.armor = new ArmorModel();
-    this.sheep = new SheepModel(
-      this.run,
-      this.free ? null : this.easy ? 120 : 90,
-    );
+    this.sheep = new SheepModel(this.run, this.free ? null : 40);
     this.brook = new BrookModel(this.run);
     this.sling = new SlingModel();
     this.paused = false;
@@ -224,7 +244,15 @@ export class World extends Phaser.Scene {
     }
     if (!down) return;
     if (this.mission === "sheep") {
-      this.hooks.sound.play(this.sheep.pickup() ? "call" : "wall");
+      const picked = this.sheep.pickup();
+      this.hooks.sound.play(picked ? "call" : "wall");
+      if (picked)
+        this.effects.burst(
+          this.sheep.david.x,
+          this.sheep.david.y - 35,
+          "spark",
+          9,
+        );
     }
     if (this.mission === "brook") this.scoop();
   }
@@ -276,6 +304,8 @@ export class World extends Phaser.Scene {
   }
   scoop(p?: Point) {
     const ok = this.brook.scoop(p);
+    if (ok && this.brook.last)
+      this.effects.burst(this.brook.last.x, this.brook.last.y, "water", 18);
     this.hooks.sound.play(ok ? "plop" : "wall");
     this.hooks.changed();
   }
@@ -287,6 +317,12 @@ export class World extends Phaser.Scene {
 
   finish() {
     if (this.phase !== "play") return;
+    this.effects.burst(
+      this.mission === "sling" ? 1000 : 640,
+      this.mission === "sling" ? 259 : 350,
+      "spark",
+      26,
+    );
     this.phase = "success";
     this.successTime = 0;
     this.deliveryCheered = false;
@@ -339,6 +375,16 @@ export class World extends Phaser.Scene {
     const dt = Math.min(delta / 1000, 0.05);
     if (!this.paused) {
       this.clock += dt;
+      this.effects.update(dt);
+      if (
+        this.clock - this.lastDust > 0.22 &&
+        (this.dir.x || this.dir.y) &&
+        this.phase === "play" &&
+        this.mission === "sheep"
+      ) {
+        this.lastDust = this.clock;
+        this.effects.burst(this.sheep.david.x, this.sheep.david.y, "dust", 3);
+      }
       this.hintTime = Math.max(0, this.hintTime - dt);
       this.wrongTime = Math.max(0, this.wrongTime - dt);
       this.bumpTime = Math.max(0, this.bumpTime - dt);
@@ -388,14 +434,16 @@ export class World extends Phaser.Scene {
         if (this.mission === "armor") {
           const before = this.armor.fallTime;
           this.armor.update(dt);
-          if (before < 2.8 && this.armor.fallTime >= 2.8)
-            this.hooks.sound.play("wall");
+          if (before < 2.8 && this.armor.fallTime >= 2.8) {
+            this.effects.burst(620, 589, "dust", 20);
+            this.hooks.sound.play("metal");
+          }
           if (this.armor.complete) this.finish();
         }
         if (this.mission === "sheep") {
           const count = this.sheep.count;
           const beforeTime = this.sheep.remaining;
-          this.sheep.update(dt, dir);
+          this.sheep.update(this.tutorialTime > 0 ? 0 : dt, dir);
           for (const threshold of [30, 15, 5])
             if (
               beforeTime !== null &&
@@ -405,6 +453,7 @@ export class World extends Phaser.Scene {
             )
               this.hooks.sound.tone(330, 0.15, 0, "triangle");
           if (this.sheep.count > count) {
+            this.effects.burst(230, 460, "spark", 20);
             this.hooks.sound.play("win");
             this.hooks.changed();
           }
@@ -431,12 +480,21 @@ export class World extends Phaser.Scene {
               "triangle",
             );
           const before = this.sling.state;
-          this.sling.update(dt);
+          const close =
+            this.sling.state === "flying" &&
+            distance(this.sling.stone, SHOT.target) < 150;
+          this.sling.update(dt * (close ? 0.65 : 1));
           if (this.sling.state === "hit") this.finish();
           else if (before !== this.sling.state) this.hooks.changed();
         }
       }
     }
+    this.hooks.sound.tick(
+      this.mission,
+      this.paused || this.failed,
+      !!(this.dir.x || this.dir.y),
+      dt,
+    );
     this.render();
   }
   say(en: string, ar: string) {
@@ -465,11 +523,12 @@ export class World extends Phaser.Scene {
       cover(
         c,
         this.textures.get(key).getSourceImage() as HTMLImageElement,
-        0,
-        0,
-        1280,
-        720,
+        -5 + Math.sin(this.clock * 0.17) * 2,
+        -3,
+        1290,
+        726,
       );
+      depth(c, this.clock, this.mission);
       motes(c, this.clock, 12);
     }
     if (this.phase === "title") this.drawTitle(c);
@@ -480,6 +539,9 @@ export class World extends Phaser.Scene {
     else if (this.mission === "sheep") this.drawSheep(c);
     else if (this.mission === "brook") this.drawBrook(c);
     else this.drawSling(c);
+    if (this.phase !== "title") depth(c, this.clock, this.mission, true);
+    this.effects.draw(c);
+    if (this.phase === "success") cinematicFrame(c, this.successTime);
     A.vignette(c);
     if (this.debug) {
       c.strokeStyle = "#ff55bb";
@@ -990,6 +1052,7 @@ export class World extends Phaser.Scene {
       walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
       arm: this.phase === "success" ? 1 : 0,
       carry: this.sheep.carried ? this.sheep.liftProgress : undefined,
+      sit: this.sheep.carried ? (1 - this.sheep.liftProgress) * 0.7 : 0,
     });
     const heldSheep = this.sheep.carried;
     if (heldSheep) {
@@ -1006,7 +1069,14 @@ export class World extends Phaser.Scene {
         ? lerp(target.y, pen.y, drop)
         : lerp(this.sheep.pickupFrom.y, target.y, eased) -
           Math.sin(f * Math.PI) * 12;
-      A.sheep(c, sx, sy, 0.83, 0, true);
+      A.sheep(
+        c,
+        sx,
+        sy,
+        0.83,
+        Math.sin(this.clock * 6) * (f < 1 ? 0.65 : 0.08),
+        true,
+      );
       // Hands sit in front of the fleece: David visibly supports the sheep.
       for (const side of [-1, 1])
         A.ellipse(
@@ -1096,12 +1166,35 @@ export class World extends Phaser.Scene {
       if (i < this.brook.count) pebble(c, i, x, 200, 28, 23);
       else A.ellipse(c, x, 200, 14, 11, "#315e6144");
     }
-    A.person(c, 1112, 586, 0.8, { bag: true, sit: 0.8, arm: 0.6 });
+    A.person(c, 1112, 586, 0.8, {
+      bag: true,
+      sit: 0.95,
+      arm: 0.6,
+      action: "kneel",
+    });
     if (this.brook.last && this.brook.cooldown > 0) {
       const f = 1 - this.brook.cooldown / 0.4,
         s = this.brook.last;
       const x = lerp(s.x, 1141, f),
         y = lerp(s.y, 550, f) - Math.sin(f * Math.PI) * 100;
+      c.save();
+      c.globalAlpha = 1 - f;
+      c.strokeStyle = "#e7fff0";
+      c.lineWidth = 2;
+      for (let ring = 0; ring < 2; ring++) {
+        c.beginPath();
+        c.ellipse(
+          s.x,
+          s.y,
+          15 + f * 55 + ring * 12,
+          5 + f * 15 + ring * 4,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        c.stroke();
+      }
+      c.restore();
       pebble(
         c,
         this.brook.stones.indexOf(s) % 5,
@@ -1117,7 +1210,8 @@ export class World extends Phaser.Scene {
   drawSling(c: A.Ctx) {
     A.person(c, 130, 597, 1.05, {
       bag: true,
-      arm: this.sling.charging ? 0.7 : 0.2,
+      action: "throw",
+      arm: this.sling.charging ? 0.9 : 0.2,
     });
     const t = this.phase === "success" ? this.successTime : 0;
     A.giant(

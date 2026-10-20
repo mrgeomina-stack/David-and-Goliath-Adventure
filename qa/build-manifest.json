@@ -1,21 +1,26 @@
 {
-  "version": "1.3.0",
-  "html_sha256": "8b71ce86c64824cd4a0ba9fecb7891b10d8b542be929086090098a5f7952aa39",
-  "html_bytes": 32608327,
-  "unit_tests_passed": 17,
-  "browser_checks_passed": 8,
-  "screenshots": 55,
+  "version": "1.4.0",
+  "html_sha256": "fcde6cd3cd2f8086b11bc112be33b5d4f5eb875604e0531bcb34e336022e93f8",
+  "html_bytes": 37785526,
+  "unit_tests_passed": 21,
+  "browser_checks_passed": 9,
+  "screenshots": 60,
   "direct_file_launch": "blocked by managed browser; unverified",
   "offline_runtime": "network disabled, initial document supplied by routing",
-  "visual_milestone": "all five painted settings; animated sheep and lion components; illustrated David face and linen on articulated rig; original adult Goliath and cast; textured armour and stones",
-  "final_targeted_checks": "four-sheep carrying, emulated tablet pickup and bilingual footer on final build",
+  "visual_milestone": "illustrated journey map, earned keepsakes, colourful cards, unified animated hero, scenery depth, action particles, cinematic beats",
+  "final_targeted_checks": "all nine browser scripts passed against production distribution",
   "sheep_rescue": {
     "flock": 4,
-    "easy_seconds": 120,
-    "normal_seconds": 90,
+    "easy_seconds": 40,
+    "normal_seconds": 40,
     "free_play": "untimed",
     "pickup": "one nearby sheep; 0.55 second lift",
     "delivery": "0.4 second set-down inside pen",
-    "lion": "physical pursuit and catch only after countdown reaches zero"
-  }
+    "lion": "physical pursuit and catch only after countdown reaches zero",
+    "walk_speed": 245,
+    "carry_speed": 290,
+    "tutorial": "countdown waits during opening card"
+  },
+  "audio": "instrumental score, environment, action textures and optional installed local voice narration",
+  "child_playtesting": "supervised guide prepared; human sessions not conducted"
 }

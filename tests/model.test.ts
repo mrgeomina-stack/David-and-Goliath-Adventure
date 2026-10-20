@@ -97,9 +97,9 @@ describe("sheep rescue", () => {
     expect(s.carried).toBe(null);
     expect(s.complete).toBe(false);
   });
-  it("allows four real round trips across varied starts within Normal's deadline", () => {
+  it("allows four real round trips across varied starts within the 40-second deadline", () => {
     for (let seed = 1; seed <= 30; seed++) {
-      const s = new SheepModel(seed, 90);
+      const s = new SheepModel(seed, 40);
       const moveTo = (target: { x: number; y: number }) => {
         for (let frame = 0; frame < 900; frame++) {
           const dx = target.x - s.david.x,
@@ -123,7 +123,7 @@ describe("sheep rescue", () => {
         expect(s.count).toBe(index + 1);
       }
       expect(s.complete).toBe(true);
-      expect(s.time).toBeLessThan(50);
+      expect(s.time).toBeLessThan(35);
     }
   });
   it("starts a real lion pursuit at zero and catches an unprotected sheep", () => {
