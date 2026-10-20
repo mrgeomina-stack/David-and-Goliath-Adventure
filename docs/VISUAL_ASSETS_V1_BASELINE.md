@@ -1,4 +1,8 @@
-# Visual asset integration baseline
+# Visual asset integration baseline (historical inspection)
+
+This document records the earlier inspection before the three artwork ZIPs arrived.
+Its missing-file statements are historical; see VISUAL_ASSETS_V1_PROGRESS.md for
+the completed integration, quarantine decisions and current tests.
 
 Baseline: `715181850ceae33f29e29a59e3af15450959268f` (mobile/PWA edition 1.5).
 Local tag: `baseline/visual-assets-v1-7151818`.

@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { visualLibrary } from "./visual-assets";
+import { giantForehead } from "./art";
 import { deliveryAt } from "./food";
 import { AdventurePwa } from "./pwa";
 import { bindPress } from "./touch";
@@ -760,6 +761,9 @@ if (new URL(location.href).searchParams.has("qa"))
       snapshot: () => ({
         pwaState: pwa.state,
         visualAssetsLoaded: visualLibrary.loadedCount,
+        renderedGoliathForehead: giantForehead,
+        renderedProjectile: world.renderedProjectile,
+        visualAssetsUsed: [...visualLibrary.used],
         visualAssetIssues: [...visualLibrary.issues],
         foodDelivery:
           world.mission === "maze" && world.phase === "success"

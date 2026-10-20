@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.5: mobile touch controls, responsive landscape layouts, installable offline web app, plus illustrated journey map, keepsake book, colourful instructions, animated David, environmental audio and a 40-second sheep rescue.
+Version 1.6: supplied visual-assets-v1 artwork integrated across all five activities, with existing articulated animations, mobile controls, offline PWA, keepsakes, colourful instructions and the 40-second sheep rescue preserved.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome

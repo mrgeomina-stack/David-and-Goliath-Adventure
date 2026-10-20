@@ -1,4 +1,4 @@
-# Mobile and installable edition · 1.5
+# Mobile and installable edition · 1.6
 
 The five original games, illustrated scenes, story order, keepsakes, Arabic/English
 captions and 40-second rescue remain intact. The world keeps its 1280×720 coordinate

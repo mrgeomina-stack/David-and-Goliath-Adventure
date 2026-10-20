@@ -59,6 +59,7 @@ export function rootForAnchor(
 const urls = import.meta.glob<string>(
   [
     "../visual-assets-v1/backgrounds/**/*.png",
+    "!../visual-assets-v1/backgrounds/level01_shepherd_hills_1920x1080.png",
     "../visual-assets-v1/sprites/**/*.png",
     "../visual-assets-v1/ui/**/*.png",
     "../visual-assets-v1/effects/**/*.png",
@@ -67,6 +68,7 @@ const urls = import.meta.glob<string>(
 );
 class VisualLibrary {
   private images = new Map<string, HTMLImageElement>();
+  readonly used = new Set<string>();
   private requested: VisualAsset[] = [];
   readonly issues: string[] = [];
   preload(loader: Phaser.Loader.LoaderPlugin) {
@@ -74,6 +76,9 @@ class VisualLibrary {
     for (const asset of visualManifest.assets) {
       // Provisional/reference files cannot silently replace finished animation.
       if (asset.status !== "integration_candidate") continue;
+      // Original preserved on disk; its IDAT checksum is incomplete. Keep the
+      // existing meadow instead of drawing a browser's partially decoded rows.
+      if (asset.id === "background_01_shepherd_hills") continue;
       const url = urls["../visual-assets-v1/" + asset.path];
       if (!url) continue;
       this.requested.push(asset);
@@ -82,6 +87,7 @@ class VisualLibrary {
   }
   configure(textures: Phaser.Textures.TextureManager) {
     this.images.clear();
+    this.used.clear();
     this.issues.length = 0;
     for (const asset of this.requested) {
       const key = "visual-v1:" + asset.id;
@@ -98,7 +104,40 @@ class VisualLibrary {
     }
   }
   image(id: string) {
-    return this.images.get(id);
+    const image = this.images.get(id);
+    if (image) this.used.add(id);
+    return image;
+  }
+  asset(id: string) {
+    return visualManifest.assets.find((a) => a.id === id);
+  }
+  animationFrame(id: string, elapsed: number) {
+    const animation = visualAnimations[id];
+    if (!animation || animation.status === "provisional") return null;
+    if (!animation.frames.every((frame) => this.images.has(frame))) return null;
+    const times =
+      animation.durationsMs ||
+      animation.frames.map(() => 1000 / (animation.fps || 8));
+    const total = times.reduce((sum, time) => sum + time, 0);
+    let time = Math.max(0, elapsed * 1000);
+    time = animation.loop ? time % total : Math.min(time, total - 0.001);
+    for (let i = 0; i < times.length; i++) {
+      if (time < times[i]) return animation.frames[i];
+      time -= times[i];
+    }
+    return animation.frames.at(-1)!;
+  }
+  drawFeet(
+    c: CanvasRenderingContext2D,
+    id: string,
+    x: number,
+    y: number,
+    height: number,
+    mirrored = false,
+  ) {
+    const asset = this.asset(id);
+    if (!asset) return false;
+    return this.drawAt(c, id, { x, y }, height / (asset.pivot.y - 8), mirrored);
   }
   get loadedCount() {
     return this.images.size;

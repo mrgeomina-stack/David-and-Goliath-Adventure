@@ -2,56 +2,72 @@
   {
     "script": "maze-check",
     "code": 0,
-    "seconds": 17.311
+    "seconds": 18.681
   },
   {
     "script": "armor-check",
     "code": 0,
-    "seconds": 18.652
+    "seconds": 19.661
   },
   {
     "script": "sling-check",
     "code": 0,
-    "seconds": 21.898
+    "seconds": 22.301
   },
   {
     "script": "remaining-check",
     "code": 0,
-    "seconds": 49.811
+    "seconds": 50.382
   },
   {
     "script": "story-check",
     "code": 0,
-    "seconds": 82.411
+    "seconds": 81.93
   },
   {
     "script": "ui-offline-check",
     "code": 0,
-    "seconds": 18.413
+    "seconds": 17.825
   },
   {
     "script": "visual-check",
     "code": 0,
-    "seconds": 50.71
+    "seconds": 50.88
   },
   {
     "script": "timeout-check",
     "code": 0,
-    "seconds": 55.091
+    "seconds": 49.711
   },
   {
     "script": "premium-check",
     "code": 0,
-    "seconds": 24.457
+    "seconds": 25.417
   },
   {
     "script": "mobile-check",
     "code": 0,
-    "seconds": 94.246
+    "seconds": 70.579
   },
   {
     "script": "pwa-check",
     "code": 0,
-    "seconds": 82.718
+    "seconds": 84.415
+  },
+  {
+    "script": "food-check",
+    "code": 0,
+    "seconds": 16.051
+  },
+  {
+    "script": "v1-integration-check",
+    "code": 0,
+    "seconds": 37.055,
+    "rerun": {
+      "status": "passed",
+      "url": "http://localhost:4173/",
+      "reason": "Corrected test expectation: canonical victory precedes restart to title. Production code unchanged.",
+      "evidence": "qa/v1-integration-results.json"
+    }
   }
 ]

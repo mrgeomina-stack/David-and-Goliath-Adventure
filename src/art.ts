@@ -1,3 +1,5 @@
+import { visualLibrary, rootForAnchor, placedAnchor } from "./visual-assets";
+import { SHOT } from "./model";
 import { drawHero } from "./hero";
 import { painted } from "./painted";
 import { clamp, lerp, rng, type Point, type Gear } from "./model";
@@ -195,6 +197,7 @@ export function flower(c: Ctx, x: number, y: number, color = "#fff4c6", s = 1) {
   c.restore();
 }
 export function bush(c: Ctx, x: number, y: number, s = 1) {
+  if (visualLibrary.drawFeet(c, "props_maze_wall_shrub", x, y, 46 * s)) return;
   c.save();
   c.translate(x, y);
   c.scale(s, s);
@@ -330,6 +333,7 @@ export type Pose = {
   food?: boolean;
   hands?: { left?: Point; right?: Point };
   character?: "saul" | "brother";
+  actor?: string;
   walk?: number;
   arm?: number;
   strain?: number;
@@ -349,6 +353,28 @@ export type Pose = {
   look?: number;
 };
 export function person(c: Ctx, x: number, y: number, s = 1, p: Pose = {}) {
+  if (p.mature || p.character || p.actor) {
+    let id =
+      p.actor ||
+      (p.character === "saul"
+        ? "npcs_saul"
+        : p.beard
+          ? "npcs_brother_01_welcome"
+          : "npcs_brother_02_idle");
+    if ((p.arm || 0) > 0.8) {
+      if (id === "npcs_brother_02_idle") id = "npcs_brother_02_cheer";
+      if (id === "npcs_brother_03_idle") id = "npcs_brother_03_clap";
+    }
+    if (visualLibrary.image(id)) {
+      shadow(c, x, y, 35 * s);
+      c.save();
+      c.translate(x, y);
+      c.rotate((p.tilt || 0) + Math.sin(artTime * 2 + x) * 0.004);
+      visualLibrary.drawFeet(c, id, 0, -Math.abs(p.walk || 0) * 2, 183 * s);
+      c.restore();
+      return;
+    }
+  }
   if (painted && (p.mature || p.character)) {
     c.save();
     c.translate(x, y);
@@ -441,7 +467,18 @@ export function sheep(
   s = 1,
   hop = 0,
   following = false,
+  variant = 0,
 ) {
+  const idle = "animals_sheep_idle_0" + (1 + (variant % 3));
+  const frame =
+    !following && Math.abs(hop) > 0.3
+      ? visualLibrary.animationFrame("sheep_hop", artTime)
+      : null;
+  if (visualLibrary.image(idle)) {
+    shadow(c, x, y, 30 * s);
+    visualLibrary.drawFeet(c, frame || idle, x, y - Math.abs(hop) * 5, 61 * s);
+    return;
+  }
   if (painted) {
     c.save();
     c.translate(x, y);
@@ -506,7 +543,23 @@ export function sheep(
   if (following) ellipse(c, 0, -29, 4, 4, "#64a694");
   c.restore();
 }
-export function lion(c: Ctx, x: number, y: number, s = 1, time = 0) {
+export function lion(
+  c: Ctx,
+  x: number,
+  y: number,
+  s = 1,
+  time = 0,
+  moving = false,
+) {
+  const frame = moving
+    ? visualLibrary.animationFrame("lion_walk", time)
+    : "animals_lion_idle";
+  if (frame && visualLibrary.image(frame)) {
+    shadow(c, x, y, 55 * s);
+    // All source lion frames face right; mirror to face the flock on the left.
+    visualLibrary.drawFeet(c, frame, x, y, 96 * s, true);
+    return;
+  }
   if (painted) {
     c.save();
     c.translate(x, y);
@@ -572,6 +625,10 @@ export function lion(c: Ctx, x: number, y: number, s = 1, time = 0) {
   c.restore();
 }
 export function gear(c: Ctx, item: Gear, x: number, y: number, s = 1) {
+  if (
+    visualLibrary.drawCentered(c, "props_armor_" + item, x, y, 128 * s, 132 * s)
+  )
+    return;
   if (painted) {
     c.save();
     c.translate(x, y);
@@ -713,6 +770,14 @@ export function star(
   color = "#ffe4a1",
   angle = 0,
 ) {
+  if (visualLibrary.image("success_star")) {
+    c.save();
+    c.translate(x, y);
+    c.rotate(angle);
+    visualLibrary.drawCentered(c, "success_star", 0, 0, r * 2, r * 2);
+    c.restore();
+    return;
+  }
   const pts = [];
   for (let i = 0; i < 10; i++) {
     const a = angle + (i * Math.PI) / 5;
@@ -740,7 +805,39 @@ export function burst(c: Ctx, time: number, x = 640, y = 350) {
   }
   c.globalAlpha = 1;
 }
-export function giant(c: Ctx, x: number, y: number, time: number, fall = 0) {
+export let giantForehead: Point | null = null;
+export function giant(
+  c: Ctx,
+  x: number,
+  y: number,
+  time: number,
+  fall = 0,
+  taunt = false,
+) {
+  const idle = visualLibrary.asset("goliath_idle");
+  if (idle && visualLibrary.image(idle.id)) {
+    const scale =
+      (590 - SHOT.target.y) / (idle.pivot.y - idle.anchors!.forehead.y);
+    const root = rootForAnchor(
+      idle,
+      { x, y: y - 331 },
+      scale,
+      idle.anchors!.forehead,
+    );
+    giantForehead =
+      fall === 0 && !taunt
+        ? placedAnchor(idle, root, scale, idle.anchors!.forehead)
+        : null;
+    const frame =
+      fall > 0
+        ? visualLibrary.animationFrame("goliath_defeat", fall * 2.02)
+        : taunt
+          ? "goliath_taunt"
+          : idle.id;
+    shadow(c, root.x, y, 95);
+    visualLibrary.drawAt(c, frame || idle.id, root, scale);
+    return;
+  }
   if (painted) {
     c.save();
     c.translate(x, y);

@@ -21,6 +21,7 @@ import {
   type Gear,
 } from "./model";
 import * as A from "./art";
+import { receivingBrother } from "./npcs";
 import { foodBasket, deliveryAt } from "./food";
 import { visualLibrary, visualRoles } from "./visual-assets";
 import { bindCanvasGestures } from "./touch";
@@ -28,9 +29,9 @@ import { Effects, depth, cinematicFrame } from "./effects";
 import landscapeUrl from "./assets/countryside.png";
 import heroUrl from "./assets/david-hero.png";
 import meadowUrl from "./assets/meadow.png";
-import tentUrl from "./assets/royal-tent.png";
-import brookUrl from "./assets/brook.png";
-import valleyUrl from "./assets/valley.png";
+import tentUrl from "../visual-assets-v1/backgrounds/level03_saul_tent_1920x1080.png";
+import brookUrl from "../visual-assets-v1/backgrounds/level04_brook_1920x1080.png";
+import valleyUrl from "../visual-assets-v1/backgrounds/level05_battlefield_1920x1080.png";
 import animalsUrl from "./assets/animals-atlas.png";
 import propsUrl from "./assets/props-atlas.png";
 import castUrl from "./assets/cast-atlas.png";
@@ -95,6 +96,7 @@ export class World extends Phaser.Scene {
   private mazePainting: HTMLCanvasElement | null = null;
   private mazePaintingSeed = -1;
   private deliveryCheered = false;
+  renderedProjectile: Point | null = null;
   private texture!: Phaser.Textures.CanvasTexture;
   private c!: CanvasRenderingContext2D;
   constructor(public hooks: Hooks) {
@@ -550,6 +552,7 @@ export class World extends Phaser.Scene {
   render() {
     const c = this.c;
     if (!c) return;
+    c.clearRect(0, 0, 1280, 720);
     A.setArtTime(this.clock);
     const painted =
       this.phase === "title" ||
@@ -607,7 +610,14 @@ export class World extends Phaser.Scene {
     this.texture.refresh();
   }
   drawTitle(c: A.Ctx) {
-    cover(c, this.landscape, 0, 0, 1280, 720);
+    cover(
+      c,
+      visualLibrary.image("background_01_shepherd_hills") || this.landscape,
+      0,
+      0,
+      1280,
+      720,
+    );
     const light = c.createLinearGradient(0, 0, 860, 0);
     light.addColorStop(0, "#fff5dbf0");
     light.addColorStop(0.6, "#fff4dfe6");
@@ -618,7 +628,10 @@ export class World extends Phaser.Scene {
     // Their palette, headband, curls, linen tunic and woven food bag share one design.
     A.shadow(c, 934, 662, 99);
     const breathe = Math.sin(this.clock * 1.8) * 1.8;
-    c.drawImage(this.hero, 762, 141 - breathe, 371, 557 + breathe);
+    if (visualLibrary.image("david_idle")) {
+      visualLibrary.drawAt(c, "david_idle", { x: 934, y: 665 }, 1.32);
+      visualLibrary.drawFeet(c, "props_staff", 1008, 665, 387);
+    } else c.drawImage(this.hero, 762, 141 - breathe, 371, 557 + breathe);
     A.sheep(c, 1132, 652, 1.12, Math.sin(this.clock * 2) * 0.08);
     A.sheep(c, 708, 675, 0.82, Math.sin(this.clock * 1.7) * 0.07);
     motes(c, this.clock, 24);
@@ -724,6 +737,11 @@ export class World extends Phaser.Scene {
     for (let i = 0; i < 3; i++)
       A.person(c, 960 + i * 68, 506 + (i % 2) * 22, 0.8, {
         mature: true,
+        actor: [
+          "npcs_brother_01_welcome",
+          "npcs_brother_02_idle",
+          "npcs_brother_03_idle",
+        ][i],
         beard: i !== 1,
         look: -0.5,
         tunic: ["#bd7952", "#618e82", "#e0c185"][i],
@@ -818,7 +836,7 @@ export class World extends Phaser.Scene {
     A.ellipse(c, 666, 535, 350, 47, "#d3b07580");
     const delivery = deliveryAt(t),
       basket = delivery.basket;
-    const gripY = basket.y - 14;
+    const gripY = basket.y + delivery.gripOffset;
     A.person(c, delivery.davidX, 542, 1.2, {
       walk: delivery.walk,
       arm: 0,
@@ -838,18 +856,28 @@ export class World extends Phaser.Scene {
             right: { x: 30, y: -43 },
           },
     });
-    for (let i = 0; i < 3; i++)
+    const receiving = t >= 1.3;
+    for (let i = 0; i < 3; i++) {
+      if (i === 0 && receiving && receivingBrother(c, 649, 542, 183 * 1.35))
+        continue;
       A.person(c, 649 + i * 108, 542, 1.35, {
         mature: true,
+        actor: [
+          "npcs_brother_01_welcome",
+          "npcs_brother_02_idle",
+          "npcs_brother_03_idle",
+        ][i],
         beard: i !== 1,
         look: -0.7,
         tunic: ["#c99c68", "#709c8d", "#dfc795"][i],
         headcloth: ["#927451", "#b67551", "#5a7d77"][i],
         arm: t > 1 ? 1 : 0.2,
       });
+    }
     // The existing receiver's left hand is at (575,398). Align the basket's
     // handle to it; adding arms over the old welcome sprite would duplicate limbs.
     foodBasket(c, basket.x, basket.y, 1.2);
+    if (receiving) receivingBrother(c, 649, 542, 183 * 1.35, true);
     if (delivery.davidHolding) {
       for (const side of [-1, 1])
         A.ellipse(c, basket.x + side * 34, gripY, 5, 6, "#dfad7c");
@@ -1043,6 +1071,18 @@ export class World extends Phaser.Scene {
         A.gradient(c, ax, ay - 30, 0, 9, ["#eacf98", "#bb8d52", "#906437"]),
         8,
       );
+      if (ay === by && visualLibrary.image("props_fence")) {
+        const count = Math.ceil(Math.abs(bx - ax) / 50);
+        for (let i = 0; i < count; i++)
+          visualLibrary.drawCentered(
+            c,
+            "props_fence",
+            lerp(ax, bx, (i + 0.5) / count),
+            ay - 17,
+            Math.abs(bx - ax) / count + 2,
+            39,
+          );
+      }
       const n = Math.ceil(Math.hypot(bx - ax, by - ay) / 45);
       for (let i = 0; i <= n; i++) {
         const x = lerp(ax, bx, i / n),
@@ -1078,6 +1118,8 @@ export class World extends Phaser.Scene {
     fence(128, 568, 328, 568);
     fence(328, 410, 328, 458);
     fence(328, 538, 328, 568);
+    // A shut side panel dresses the solid left fence; the right entry stays open.
+    visualLibrary.drawFeet(c, "props_pen_gate", 128, 524, 47);
     A.round(c, 157, 346, 143, 43, 10, "#fff1d2");
     A.text(
       c,
@@ -1100,6 +1142,7 @@ export class World extends Phaser.Scene {
             ? Math.sin(this.clock * 9)
             : Math.sin(this.clock * 2) * 0.1,
         s.carried,
+        Math.round(s.phase / 3),
       );
       if (this.hintTime > 0 && !s.saved) {
         c.strokeStyle = "#fff6b6";
@@ -1110,7 +1153,14 @@ export class World extends Phaser.Scene {
       }
       if (s.startled > 0) A.text(c, "!", s.x, s.y - 70, 25, "#fff4c6");
     }
-    A.lion(c, this.sheep.lion.x, this.sheep.lion.y, 1.1, this.clock * 3);
+    A.lion(
+      c,
+      this.sheep.lion.x,
+      this.sheep.lion.y,
+      1.1,
+      this.clock,
+      this.sheep.hunting,
+    );
     A.person(c, this.sheep.david.x, this.sheep.david.y, 1, {
       walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
       arm: this.phase === "success" ? 1 : 0,
@@ -1139,6 +1189,7 @@ export class World extends Phaser.Scene {
         0.83,
         Math.sin(this.clock * 6) * (f < 1 ? 0.65 : 0.08),
         true,
+        this.sheep.carriedIndex!,
       );
       // Hands sit in front of the fleece: David visibly supports the sheep.
       for (const side of [-1, 1])
@@ -1229,17 +1280,28 @@ export class World extends Phaser.Scene {
       if (i < this.brook.count) pebble(c, i, x, 200, 28, 23);
       else A.ellipse(c, x, 200, 14, 11, "#315e6144");
     }
+    const pickup = this.brook.cooldown > 0 ? 1 - this.brook.cooldown / 0.4 : 0;
+    const stow = clamp((pickup - 0.65) / 0.35, 0, 1);
     A.person(c, 1112, 586, 0.8, {
       bag: true,
       sit: 0.95,
-      arm: 0.6,
+      arm: 0,
       action: "kneel",
+      hands: {
+        left: { x: lerp(-50, 34, stow), y: lerp(-42, -80, stow) },
+        right: { x: 30, y: -72 },
+      },
     });
     if (this.brook.last && this.brook.cooldown > 0) {
       const f = 1 - this.brook.cooldown / 0.4,
         s = this.brook.last;
-      const x = lerp(s.x, 1141, f),
-        y = lerp(s.y, 550, f) - Math.sin(f * Math.PI) * 100;
+      const reach = clamp(f / 0.65, 0, 1),
+        store = clamp((f - 0.65) / 0.35, 0, 1);
+      const x = store > 0 ? lerp(1072, 1139, store) : lerp(s.x, 1072, reach);
+      const y =
+        store > 0
+          ? lerp(588, 558, store) - Math.sin(store * Math.PI) * 10
+          : lerp(s.y, 588, reach) - Math.sin(reach * Math.PI) * 70;
       c.save();
       c.globalAlpha = 1 - f;
       c.strokeStyle = "#e7fff0";
@@ -1271,10 +1333,18 @@ export class World extends Phaser.Scene {
   }
 
   drawSling(c: A.Ctx) {
+    this.renderedProjectile = null;
+    const follow =
+      this.sling.state === "ready" ? 0 : clamp(this.sling.time / 0.25, 0, 1);
+    const hand = { x: lerp(174, 215, follow), y: lerp(512, 485, follow) };
     A.person(c, 130, 597, 1.05, {
       bag: true,
       action: "throw",
-      arm: this.sling.charging ? 0.9 : 0.2,
+      arm: 0,
+      hands: {
+        right: { x: (hand.x - 130) / 1.05, y: (hand.y - 597) / 1.05 },
+        left: { x: -26, y: -64 + follow * 12 },
+      },
     });
     const t = this.phase === "success" ? this.successTime : 0;
     A.giant(
@@ -1293,7 +1363,7 @@ export class World extends Phaser.Scene {
       c.stroke();
     }
     if (this.sling.state === "ready") {
-      const pivot = { x: 174, y: 512 },
+      const pivot = hand,
         a = this.sling.charging
           ? this.clock * (8 + this.sling.charge * 13)
           : -1;
@@ -1317,9 +1387,11 @@ export class World extends Phaser.Scene {
       A.line(
         c,
         [
-          [173, 510],
-          [213, 483],
-          [205, 470],
+          [hand.x, hand.y],
+          [
+            lerp(SHOT.origin.x, hand.x - 7, follow),
+            lerp(SHOT.origin.y, hand.y + 30, follow),
+          ],
         ],
         "#795435",
         2,
@@ -1327,8 +1399,8 @@ export class World extends Phaser.Scene {
       A.line(
         c,
         [
-          [173, 510],
-          [188, 540],
+          [hand.x, hand.y],
+          [hand.x + 15, hand.y + 30],
         ],
         "#795435",
         2,
@@ -1342,6 +1414,7 @@ export class World extends Phaser.Scene {
       const p = { ...this.sling.stone };
       if (this.phase === "success" && t > 0.5)
         p.y = Math.min(594, p.y + 450 * (t - 0.5) ** 2);
+      this.renderedProjectile = { ...p };
       A.shadow(c, p.x, 600, 6);
       pebble(c, 0, p.x, p.y, 16, 13);
     }
@@ -1393,6 +1466,7 @@ export class World extends Phaser.Scene {
   }
 
   drawEncounter(c: A.Ctx) {
+    A.person(c, 310, 536, 0.65, { mature: true, actor: "npcs_soldier" });
     A.tent(c, 175, 493, 1.25, "#d7af67");
     A.person(c, 145, 543, 1.15, {
       character: "saul",
@@ -1400,7 +1474,7 @@ export class World extends Phaser.Scene {
       headcloth: "#a07646",
     });
     A.text(c, this.say("SAUL’S TENT", "خيمة شاول"), 167, 573, 19, "#3b584a");
-    A.giant(c, 1030, 588, this.clock);
+    A.giant(c, 1030, 588, this.clock, 0, !this.heard);
     A.person(c, this.encounterX, 590, 1, {
       bag: true,
       walk: this.dir.x ? Math.sin(this.clock * 13) : 0,
@@ -1439,6 +1513,7 @@ export class World extends Phaser.Scene {
   }
 
   drawVictory(c: A.Ctx) {
+    visualLibrary.drawCentered(c, "medal", 640, 260, 96, 120);
     A.person(c, 230, 560, 1.65, { bag: true, arm: 1 });
     for (let i = 0; i < 3; i++)
       A.person(c, 995 + i * 86, 550, 0.9, {

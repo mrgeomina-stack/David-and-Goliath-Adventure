@@ -4,20 +4,24 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Visual assets v1 integration — in progress
+## Visual assets v1 edition · 1.6
 
-All seven metadata/integration documents are saved under `visual-assets-v1/`.
-The manifest-based offline loader and a single-basket walking/handover animation
-are implemented. **The supplied PNGs are still missing (0/89 candidates available).**
-Existing illustrations remain as fallback; the new visual library is not yet fully
-integrated. See [current status](docs/VISUAL_ASSETS_V1_PROGRESS.md).
+The supplied art is integrated into the existing five-mission game. Four new
+backgrounds, sheep, lion, brothers, Saul, Goliath, stones, separate armour pieces,
+food basket, pouch and scenery use manifest pivots and uniform scale. David uses
+the supplied face on his existing articulated rig, preserving running, carrying,
+kneeling, tumble/recovery and sling motion. One basket visibly changes ownership.
 
-## Mobile and installable edition · 1.5
+All seven supplied integration documents and original PNGs are retained under
+`visual-assets-v1/`. **64 valid candidate images load**. The supplied meadow PNG is
+incomplete, so the existing meadow remains. The 28 provisional David poses stay
+out of the runtime; missing optional effect frames retain existing animated effects.
+See [integration decisions](docs/VISUAL_ASSETS_V1_PROGRESS.md) and
+[test evidence and limitations](TEST_REPORT.md).
 
-Responsive landscape play, native finger gestures, safe-area support and installable
-offline gameplay are included. Use `Davids_Big_Adventure_Web.zip` on an HTTPS static
-host for iPhone/iPad Safari and Android Chrome. See [mobile and PWA instructions](docs/MOBILE_PWA.md)
-for installation, offline readiness, hosting and touch controls.
+Responsive landscape play, finger gestures and offline PWA installation remain.
+Host `Davids_Big_Adventure_Web.zip` on HTTPS for phones/tablets. See
+[mobile and PWA instructions](docs/MOBILE_PWA.md).
 
 ## Storybook presentation
 
@@ -47,9 +51,8 @@ and in the teacher help menu.
 ## Storybook artwork
 
 All five games now share richer illustrated settings: the olive meadow, food maze,
-royal armour tent, clear brook and wide battlefield. Sheep and lion have detailed
-animated components; David combines an illustrated face and linen texture with
-his poseable rig. Goliath, Saul, the brothers, armour and mineral stones have
+royal armour tent, clear brook and wide battlefield. Sheep and lion use the supplied sprites and animation sequences; David combines
+the supplied illustrated face with his poseable rig. Goliath, Saul, the brothers, armour and mineral stones have
 original artwork. See [visual design notes](docs/VISUAL_DESIGN.md).
 
 ![Storybook title screen](qa/01-title.png)
@@ -105,7 +108,8 @@ the static web distribution; no application backend is needed.
 - `src/model.ts`: deterministic gameplay and collision models.
 - `src/world.ts`: authoritative mission/phase state machine, Phaser loop/input,
   scene rendering and staged success animations.
-- `src/art.ts`: editable original Canvas illustrations and character rigs.
+- `src/art.ts`, `src/hero.ts`, `src/costume.ts`, `src/npcs.ts`: supplied art and articulated Canvas rendering.
+- `src/visual-assets.ts`, `visual-assets-v1/`: manifest pivots, animation timing and original supplied images.
 - `src/scenery.ts`, `src/assets/`: cached maze painting and locally embedded cover illustrations.
 - `src/strings.ts`: narrative strings and localization.
 - `src/main.ts`, `src/style.css`: responsive accessible HTML UI and teacher controls.

@@ -5,10 +5,11 @@ import { visualLibrary } from "./visual-assets";
 export function deliveryAt(time: number) {
   const approach = clamp(time / 0.8, 0, 1),
     pass = clamp((time - 0.8) / 1.5, 0, 1);
-  const davidX = lerp(387, 485, approach) + 40 * pass;
+  const davidX = lerp(387, 485, approach) + 70 * pass;
   return {
     davidX,
-    basket: { x: lerp(davidX, 575, pass), y: lerp(467.6, 446, pass) },
+    gripOffset: lerp(-14, 13, pass),
+    basket: { x: lerp(davidX, 615, pass), y: lerp(467.6, 410, pass) },
     owner: time < 2.05 ? "david" : time < 2.3 ? "shared" : "brother",
     davidHolding: time < 2.3,
     brotherReach: clamp((time - 1.8) / 0.25, 0, 1),
@@ -31,7 +32,7 @@ export function foodBasket(
   c.save();
   c.translate(x, y);
   c.scale(scale, scale);
-  if (visualLibrary.drawCentered(c, "props_food_basket", 0, 0, 70, 51)) {
+  if (visualLibrary.drawCentered(c, "props_food_basket", 0, 0, 76, 56)) {
     c.restore();
     return;
   }

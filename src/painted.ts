@@ -1,3 +1,4 @@
+import { visualLibrary } from "./visual-assets";
 import type { Ctx } from "./art";
 
 type Frame = { x: number; y: number; w: number; h: number };
@@ -145,5 +146,8 @@ export function pebble(
   w = 72,
   h = 54,
 ) {
+  const id =
+    index >= 5 ? "props_stone_jagged" : "props_stone_0" + ((index % 3) + 1);
+  if (visualLibrary.drawCentered(c, id, x, y, w, h)) return;
   painted?.props.draw(c, 4 + (index % 8), x - w / 2, y - h / 2, w, h);
 }

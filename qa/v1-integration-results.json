@@ -1,0 +1,30 @@
+{
+  "forehead": {
+    "x": 1000,
+    "y": 259
+  },
+  "flight": {
+    "model": {
+      "x": 214.94775639898032,
+      "y": 474.5132282069753
+    },
+    "rendered": {
+      "x": 214.94775639898032,
+      "y": 474.5132282069753
+    },
+    "charge": 0.9999700000000001
+  },
+  "checks": [
+    "sheep: live supplied sprites/background and existing articulated motion",
+    "maze: live supplied sprites/background and existing articulated motion",
+    "armor: live supplied sprites/background and existing articulated motion",
+    "brook: live supplied sprites/background and existing articulated motion",
+    "sling: live supplied sprites/background and existing articulated motion",
+    "read-only geometry overlay checked and removed",
+    "drawn projectile equals real ballistic object; genuine hit triggers supplied reaction sequence",
+    "canonical finale followed by real restart to title"
+  ],
+  "errors": [],
+  "quarantine": "Damaged meadow IDAT checksum; original meadow retained",
+  "missing": "24 optional effect frames; existing procedural animation retained"
+}

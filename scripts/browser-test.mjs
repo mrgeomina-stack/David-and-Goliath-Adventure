@@ -16,6 +16,8 @@ const scripts = [
   "premium-check",
   "mobile-check",
   "pwa-check",
+  "food-check",
+  "v1-integration-check",
 ];
 const results = [];
 let cursor = 0;

@@ -25,9 +25,17 @@ with ZipFile(root / 'Davids_Big_Adventure_Offline.zip', 'w', ZIP_DEFLATED) as ar
 # Keep the playable download small; detailed QA evidence is a separate archive.
 with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(root / 'TEST_REPORT.md', 'TEST_REPORT.md')
-    for file in sorted((root / 'qa').glob('*')):
-        if file.is_file():
+    # Focused integrated-game evidence keeps this download below large-file limits.
+    evidence_prefixes = ('10-', '11-', '12-', '13-', '26b-', '33-', '34-', '48-',
+                         '49-', '51-', '55-', '56-', '57-', '58-', '59-', '61-',
+                         '62-', '63-', '64-', '65-', '67-', '68-', '69-', '70-',
+                         '71-', '72-', '73-', '74-')
+    for file in sorted((root / 'qa').rglob('*')):
+        if file.is_file() and (file.suffix == '.json' or
+                              'baseline-v1' in file.parts or
+                              file.name.startswith(evidence_prefixes)):
             archive.write(file, str(file.relative_to(root)))
+    archive.write(root / 'docs/VISUAL_ASSETS_V1_PROGRESS.md', 'INTEGRATION_NOTES.md')
 with ZipFile(root / 'Davids_Big_Adventure_Source.zip', 'w', ZIP_DEFLATED) as archive:
     for name in ['src', 'tests', 'scripts', 'docs', 'public', 'visual-assets-v1']:
         for file in sorted((root / name).rglob('*')):

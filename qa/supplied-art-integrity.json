@@ -1,0 +1,378 @@
+{
+  "count": 93,
+  "allUnmodified": true,
+  "files": [
+    {
+      "path": "ui/button_blank.png",
+      "sha256": "184ae85ba8d09f4685f5e76a592063ff9dd4dfb68730de07d05279b1e5d239bd"
+    },
+    {
+      "path": "ui/medal.png",
+      "sha256": "1bfb3d91e2e7c9abf181f7deb84bec6f30150a6ce6bb7af6b9041842a94a4c55"
+    },
+    {
+      "path": "ui/panel_blank.png",
+      "sha256": "caad9d17452b1e12c2ddd48aa2a7270eb8109a4037d041b10fcb89d9f49d3ca1"
+    },
+    {
+      "path": "ui/success_star.png",
+      "sha256": "1315de9d187bdebe0e56e236d73efee5bb1947300effe8935ab65b1ce32160dc"
+    },
+    {
+      "path": "sprites/animals/lion_idle.png",
+      "sha256": "1c4d7d1035efb9e1d56fed96643d84976cac5bd11edbdc5b9bcf7888f60081da"
+    },
+    {
+      "path": "sprites/animals/lion_retreat.png",
+      "sha256": "8c9945bf60436061ba6bedc26f32d7e4f0dee7ea68fd1d59809ab7eb63fe011e"
+    },
+    {
+      "path": "sprites/animals/lion_walk_00.png",
+      "sha256": "080dee7df195e6ab9278282f866a87554c8fcb740433b0e8bf4e41ecc511f2f1"
+    },
+    {
+      "path": "sprites/animals/lion_walk_01.png",
+      "sha256": "471eb588e3514baf263d32e5e6af26cfa83b30b14fe5dc6c7a98df6c616b966e"
+    },
+    {
+      "path": "sprites/animals/sheep_hop_00.png",
+      "sha256": "a8c30e7a637b6b64d63fedd21f89b7f2575f399aab1394ba0404dfbe59dc5ef6"
+    },
+    {
+      "path": "sprites/animals/sheep_hop_01.png",
+      "sha256": "3fb06c4de4948362887587ef4566edba44bf694f3463fa03a604eab372e7bf3e"
+    },
+    {
+      "path": "sprites/animals/sheep_idle_01.png",
+      "sha256": "a5777f6930a1025cf053f4e1dcc642e4e58cdacab5b719ea884aa82d94d2040e"
+    },
+    {
+      "path": "sprites/animals/sheep_idle_02.png",
+      "sha256": "c440d46bfc88ecb3e8b76c343e838a4e356e411193072e8ee6f37edac2a392f1"
+    },
+    {
+      "path": "sprites/animals/sheep_idle_03.png",
+      "sha256": "73f0e42500696a25ccb584516787dd3b6b6def0166d6ebbdaea90d7288c1ccc9"
+    },
+    {
+      "path": "sprites/animals/sheep_walk_00.png",
+      "sha256": "7493128d0280ff37a95d0925ac73188eb3cc85af7d6d8a1d30b40c5160911313"
+    },
+    {
+      "path": "sprites/animals/sheep_walk_01.png",
+      "sha256": "f526195d8d6ebbb497d57185fd233329f2488e03432eea7c6ffdad678eca7c34"
+    },
+    {
+      "path": "sprites/animals/sheep_walk_02.png",
+      "sha256": "726c7f264fb7a9b68f5b43366f2b9401ae74ef6bccdc97d9115c9d5bbaf71f10"
+    },
+    {
+      "path": "sprites/david/armor_fall_00.png",
+      "sha256": "21806712ca2fd2f49a6a17143fdc7853feb2a6c867b9a15323d4041546974238"
+    },
+    {
+      "path": "sprites/david/armor_fall_01.png",
+      "sha256": "78a382b845958253153c882ba22f1ba65463a952a22e032e9236c3d850f24881"
+    },
+    {
+      "path": "sprites/david/armor_idle.png",
+      "sha256": "6e5b56900abd48affbd2bd7527f7dfeefc97306671c5ee67bf0d1020545053b5"
+    },
+    {
+      "path": "sprites/david/armor_recover.png",
+      "sha256": "08bb05d932b5cf434fd06198c78da1e9fcc4cc0e5af218f3984f87551d106641"
+    },
+    {
+      "path": "sprites/david/armor_remove_00.png",
+      "sha256": "c31659cea1fd7e9240a54e7b427f71d51520159b5c71ee91f20683010e365a0e"
+    },
+    {
+      "path": "sprites/david/armor_remove_01.png",
+      "sha256": "bbf1be01512a6f778e63ad6208bbe9c47cec239fd4203ff24763c774fc1f8679"
+    },
+    {
+      "path": "sprites/david/armor_remove_02.png",
+      "sha256": "50ace6efd2796f7b11bd750093e28eb139b183b0258c2084db213c0d4814a27e"
+    },
+    {
+      "path": "sprites/david/armor_seated.png",
+      "sha256": "a6ca8a5a785a9fec077a7b4f2d6e4283c740e6511b5f6a5461eff6a64da57d7d"
+    },
+    {
+      "path": "sprites/david/armor_step.png",
+      "sha256": "94380cf44d30a06a301064905227d901dfcaf69f00c2b53d1e833b942b4f0e68"
+    },
+    {
+      "path": "sprites/david/armor_wobble_00.png",
+      "sha256": "4cd106f202ccba873419d31625316aeb4028187c7d4727a4d0e375b3b60c2f5f"
+    },
+    {
+      "path": "sprites/david/armor_wobble_01.png",
+      "sha256": "2524c9fede0afd43588c9025ec1fa4efd924d86447e88ba4a7bee30ef79f62cf"
+    },
+    {
+      "path": "sprites/david/dress_00.png",
+      "sha256": "f247fdbc0a58159d82c911b2629bd4ab71e65bb8d42fe07523129998658b21d7"
+    },
+    {
+      "path": "sprites/david/dress_01.png",
+      "sha256": "ca9db70273c44165507c42ee837eaa14b2b50c52b42c456ee486051d0f2ec344"
+    },
+    {
+      "path": "sprites/david/dress_02.png",
+      "sha256": "d67aeb9bd38293007a4652bf519bea9bbbe7bdf65d05f3b0510bf5c0e5f7b5f2"
+    },
+    {
+      "path": "sprites/david/food_carry.png",
+      "sha256": "37d90863fc82a206943a7ecaf28aea72dae8ba3512c168c175aedef311be48f5"
+    },
+    {
+      "path": "sprites/david/food_offer.png",
+      "sha256": "95d0b309b96a34f3f1508955dea4928342a83c053e8c2672850bfc7019596852"
+    },
+    {
+      "path": "sprites/david/idle.png",
+      "sha256": "31b065fb31e59d5b93cbac2b4ce1b141a2d0ddb1b343b3c0e68db8ce12a4ccd3"
+    },
+    {
+      "path": "sprites/david/kneel_collect_00.png",
+      "sha256": "7fc30c78634938a2cd82dd339c8c8c6b498b14fb31a9b690c5b6044dbd45d782"
+    },
+    {
+      "path": "sprites/david/kneel_collect_01.png",
+      "sha256": "0247d9043f709bc9be7dbceb3cf354d8c5924e2eba045d29b34c4f9fc47cc8fa"
+    },
+    {
+      "path": "sprites/david/kneel_collect_02.png",
+      "sha256": "9de7869a6b958f086784ba48febddc8b9ecac7e9ab8f8f750a732a1aa360d2cb"
+    },
+    {
+      "path": "sprites/david/pouch_store.png",
+      "sha256": "2a64250e99a20ade8394aba6808e51564d0b65ce015216c8b6b012a4859ec6ee"
+    },
+    {
+      "path": "sprites/david/rig_idle.png",
+      "sha256": "2256492942851d4620a4ab888483ada09ef1d0a97eefe3239bc395d3972a3f2b"
+    },
+    {
+      "path": "sprites/david/run_00.png",
+      "sha256": "13ca32be0127da0758ad124dd2de9fbc6496cefb12afe8a1d48e693519362e73"
+    },
+    {
+      "path": "sprites/david/run_01.png",
+      "sha256": "c4e492416302d8a71b90a98662cc26fa7ca08fb15bc89775c825fbb426844199"
+    },
+    {
+      "path": "sprites/david/run_02.png",
+      "sha256": "9e1dda638cd7fb37e695099e2119590e9ce298990f4d1df93898336e6ce3971f"
+    },
+    {
+      "path": "sprites/david/run_03.png",
+      "sha256": "eaefe561b9ebacd9094132b6f9c0e0de1a69b7c3217decc33d547a5856e2b350"
+    },
+    {
+      "path": "sprites/david/shepherd_call.png",
+      "sha256": "dfe4e8df664136e9479afeb6554d6e3f888061accc49ebcb19670c75ec340d0b"
+    },
+    {
+      "path": "sprites/david/sling_charge_00.png",
+      "sha256": "0eec204fcd21ffcd1ff6a9a130bd75932e2ac8366a6c11c088c39d53b1000555"
+    },
+    {
+      "path": "sprites/david/sling_charge_01.png",
+      "sha256": "65a3ddd9535e76a4ac2685fb5910c9c661af96ae4f5aa3ac803a828c6990bc86"
+    },
+    {
+      "path": "sprites/david/sling_charge_02.png",
+      "sha256": "6c89dc3f295a296aa5c203b7060539ad09c5de03d9bf7a4d2ad03515a1db3c07"
+    },
+    {
+      "path": "sprites/david/sling_charge_03.png",
+      "sha256": "3c5744132403631b24a044f59951796925783f5d538759ce9ae34d32239dd0c2"
+    },
+    {
+      "path": "sprites/david/sling_followthrough.png",
+      "sha256": "c460f0e32fa757027e6cd46bbb65f30a8e1963e225a8346552a2db5661bf3bd1"
+    },
+    {
+      "path": "sprites/david/sling_release.png",
+      "sha256": "23a800176ead4d25b8a9fc61cc8878ab4b09af65e8abcc28142ee73ad856990f"
+    },
+    {
+      "path": "sprites/david/thankful.png",
+      "sha256": "d6ad423fb965f68e76abeee7d54c6ba0bcfab55c46a6c45f68a15959fedb9e22"
+    },
+    {
+      "path": "sprites/david/walk_00.png",
+      "sha256": "180fda5ac00274f6ead166af801f96533fd6cbcf53915305fe8f50fead7f0c31"
+    },
+    {
+      "path": "sprites/david/walk_01.png",
+      "sha256": "d2d84cddada2af40faf03407f159412a8fbac0cfd348b04c01a58e553eca040f"
+    },
+    {
+      "path": "sprites/david/walk_02.png",
+      "sha256": "548bfd0f6cd5f6d99bfbc55b0e948c2957632bdf1061151664c8f4e0e934a8b6"
+    },
+    {
+      "path": "sprites/david/walk_03.png",
+      "sha256": "08da769d2232c9c3c054d51c73db57fc2c79bb0374764ab680305988740df84d"
+    },
+    {
+      "path": "sprites/david/win_00.png",
+      "sha256": "c5605dd9ce6e4505a2df39ce8aab1301357165490219c3903092c98cdbf6ec40"
+    },
+    {
+      "path": "sprites/david/win_01.png",
+      "sha256": "7f53209cbfe1963beebe132d1198a9a246d5ca3af4e772f10aedf3475a5e20fb"
+    },
+    {
+      "path": "sprites/goliath/fall_00.png",
+      "sha256": "a1d36c592169a40e972ef21576e8addb703b514e089ed9a81bfeba903d31aa05"
+    },
+    {
+      "path": "sprites/goliath/fall_01.png",
+      "sha256": "ec49630cf83ef2ce8015b4b4495442d4c13d3e239a7bc1c49a757d3651975418"
+    },
+    {
+      "path": "sprites/goliath/fall_02.png",
+      "sha256": "50cfa4f64862d49f45858a0012096ee0c0bf4b34ef4045e3b89413e5fc3f08f3"
+    },
+    {
+      "path": "sprites/goliath/fall_03.png",
+      "sha256": "10d4530bd9ff18b73db2ce59f9c166dc0d931ffcc8544d63111cfad404811feb"
+    },
+    {
+      "path": "sprites/goliath/hit.png",
+      "sha256": "c5d167213e9cbe25d808da44a84260f12528ccbb4663d310203b1ddbb57ec71a"
+    },
+    {
+      "path": "sprites/goliath/idle.png",
+      "sha256": "f7dc2347d480caa077f6a90a6f36ba2f8abce67c4a0f215e2d6caa7f75048a11"
+    },
+    {
+      "path": "sprites/goliath/stumble.png",
+      "sha256": "f2152cb9491e04f7bd1ddd3fddc528c1851ceeadbca7f69e47dd49ed41d2bc96"
+    },
+    {
+      "path": "sprites/goliath/taunt.png",
+      "sha256": "9db574902e85418e24dd5cb86847f16ca7cdf7917b4e80be10086174f4e4869a"
+    },
+    {
+      "path": "sprites/npcs/brother_01_receive.png",
+      "sha256": "56699e4592a64401e57b9fce259b1afc21b5d25b6fb38a477f47545c9411dae5"
+    },
+    {
+      "path": "sprites/npcs/brother_01_welcome.png",
+      "sha256": "37f80637032c495be199e188219dab4cd0832026a052304ac15322bb85d446de"
+    },
+    {
+      "path": "sprites/npcs/brother_02_cheer.png",
+      "sha256": "f8206e85b38fa5c244559946b167db32b91e0d26f6973daa9d7b9c5a7e575151"
+    },
+    {
+      "path": "sprites/npcs/brother_02_idle.png",
+      "sha256": "d663b58e24797e5b112adcdb8566f3268bce676767913370c45cc02b84da6c30"
+    },
+    {
+      "path": "sprites/npcs/brother_03_clap.png",
+      "sha256": "2bb7c7cea4d064082d130bdeff2f1bce6e6e6950c0ad6c716563b0e3ace9769d"
+    },
+    {
+      "path": "sprites/npcs/brother_03_idle.png",
+      "sha256": "1be0f397b942f4717e4533bd14b2aa63ec006413a9f760cfd6ad61d23dbf5e78"
+    },
+    {
+      "path": "sprites/npcs/saul.png",
+      "sha256": "2772b08bb553a8f3dfb393d20292636f3cb22fb69dc5f6445e183d6a9212d530"
+    },
+    {
+      "path": "sprites/npcs/soldier.png",
+      "sha256": "aacd34004ff3a07fd5bf5b9510b2a24e7310eb50adc39ba13378a9db6ed97add"
+    },
+    {
+      "path": "sprites/props/armor_helmet.png",
+      "sha256": "f8f3f665c1a3ba5d6b73fe3bd039fde75da962d816d19142f02222a4c51bd20d"
+    },
+    {
+      "path": "sprites/props/armor_mail.png",
+      "sha256": "b600eb0ca129573cf0037a2f20a38cc723843575312933fe29aa9470b2c5fb0a"
+    },
+    {
+      "path": "sprites/props/armor_sword.png",
+      "sha256": "c6bbf4124a7f629d0fc5cfacbf12bcf01be1fa22f02a963d43c7460e92322b6d"
+    },
+    {
+      "path": "sprites/props/armor_tunic.png",
+      "sha256": "3d66aaf1b759725bd090acae34efd7bacee79577f5633f8df42526bf43df5ee9"
+    },
+    {
+      "path": "sprites/props/fence.png",
+      "sha256": "c830824b1e447a3f8c8ca98feb015cafc492463554ff20d8367b8c0a207c537f"
+    },
+    {
+      "path": "sprites/props/food_basket.png",
+      "sha256": "19af3cad4e64eccedce688cadccd648cc01150ecadd814b0baabcbd55435829e"
+    },
+    {
+      "path": "sprites/props/maze_wall_shrub.png",
+      "sha256": "854740b836591688b822f70388703d4f1d03d8420e3e1ae10cca147af38b43f2"
+    },
+    {
+      "path": "sprites/props/maze_wall_stone.png",
+      "sha256": "9a3fc64c29f8edcf48928d6ec067ab97fd07c416fc50f82a8766a02756a44a57"
+    },
+    {
+      "path": "sprites/props/pen_gate.png",
+      "sha256": "023015c47d4aa8590db4ef52027a881569b337b55738036d29ec1905e26bb977"
+    },
+    {
+      "path": "sprites/props/pouch.png",
+      "sha256": "9a22d5b743c34ad563399c62e13cb0691569f4b6cc4e0baedf581addffcd4a75"
+    },
+    {
+      "path": "sprites/props/sling.png",
+      "sha256": "921f4685f70cbf89dffba87c22296621ce25942bf3ac48cabbfecd3cf6f78443"
+    },
+    {
+      "path": "sprites/props/staff.png",
+      "sha256": "be9dcd4d42458ed8acdb5eb182f422586dd7b2504abf26c0c6bdd41434e86cd3"
+    },
+    {
+      "path": "sprites/props/stone_01.png",
+      "sha256": "193bf556701ca4d18a7cb5138b1a180bb057e0cf03514046be7024c50fec3b91"
+    },
+    {
+      "path": "sprites/props/stone_02.png",
+      "sha256": "cd4609e166cd65b32fa0421922a2de1967936173be7bb638970492e1699aa0e1"
+    },
+    {
+      "path": "sprites/props/stone_03.png",
+      "sha256": "9ba506b1cb38d88b0dd5e17c3cb92febc677d758cc9b82657b80812af54e6c53"
+    },
+    {
+      "path": "sprites/props/stone_jagged.png",
+      "sha256": "0b9a862bba8218b5174111ef927361f2ca3605edf32c28784e9ced5107519117"
+    },
+    {
+      "path": "backgrounds/level01_shepherd_hills_1920x1080.png",
+      "sha256": "88c8d2495571b2120a92d5d2e23c65a8fd9708db84908a39614f8ea7c6d51187"
+    },
+    {
+      "path": "backgrounds/level02_maze_ground_1920x1080.png",
+      "sha256": "726fc8c9b2a92c20e5ac00e1f8ae5c387a1a8aeec0cb24b8ca58c3a068e02589"
+    },
+    {
+      "path": "backgrounds/level03_saul_tent_1920x1080.png",
+      "sha256": "523afac79f585ea7ec2a21db52510e488d5cc0688e9abd773d710718b69ba750"
+    },
+    {
+      "path": "backgrounds/level04_brook_1920x1080.png",
+      "sha256": "471fa3909b0d644900523b62726a2874e508941a0bb5042dee8f0e749c1a4388"
+    },
+    {
+      "path": "backgrounds/level05_battlefield_1920x1080.png",
+      "sha256": "63eff3340c34d980d4b84658e2ba2d4d446bfea4ed6dc64e9192cfe134d9f07e"
+    }
+  ]
+}

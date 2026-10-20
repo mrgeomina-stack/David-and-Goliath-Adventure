@@ -1,5 +1,6 @@
 /** Static scenery is baked once per maze. Moving actors/effects stay separate. */
 import * as A from "./art";
+import { visualLibrary } from "./visual-assets";
 import { rng, type Maze } from "./model";
 export const MAZE = { x: 215, y: 192, size: 59 };
 
@@ -99,6 +100,19 @@ function stoneWall(
       1,
       "#8b957263",
     );
+  }
+  // Texture is clipped to the exact existing wall segment; passages keep their width.
+  if (visualLibrary.image("props_maze_wall_stone")) {
+    const length = Math.hypot(bx - ax, by - ay);
+    c.save();
+    c.translate(ax, ay);
+    c.rotate(Math.atan2(by - ay, bx - ax));
+    c.beginPath();
+    c.rect(0, -7, length, 14);
+    c.clip();
+    for (let p = 0; p < length; p += 22)
+      visualLibrary.drawCentered(c, "props_maze_wall_stone", p + 11, 0, 25, 16);
+    c.restore();
   }
   // Moss grows along the wall caps; it never conceals a corridor opening.
   if (r() > 0.45) {

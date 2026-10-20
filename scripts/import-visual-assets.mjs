@@ -1,3 +1,4 @@
+import { inspectPng } from "./png-check.mjs";
 import {
   readdirSync,
   readFileSync,
@@ -46,9 +47,8 @@ for (const [id, animation] of Object.entries(animations)) {
     throw Error("Invalid frame timing " + id);
 }
 function size(file) {
-  const b = readFileSync(file);
-  if (b.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a") return null;
-  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  const png = inspectPng(file);
+  return png.valid ? [png.width, png.height] : null;
 }
 const report = {
   available: [],
@@ -56,6 +56,7 @@ const report = {
   missing: [],
   ambiguous: [],
   invalid: [],
+  quarantined: [],
   excluded: [],
 };
 for (const asset of manifest.assets) {
@@ -65,6 +66,16 @@ for (const asset of manifest.assets) {
   }
   const target = resolve(root, asset.path);
   if (existsSync(target)) {
+    const validation = inspectPng(target);
+    if (!validation.valid && asset.id === "background_01_shepherd_hills") {
+      report.quarantined.push({
+        id: asset.id,
+        path: asset.path,
+        reason: validation.error,
+        fallback: "Existing meadow",
+      });
+      continue;
+    }
     const dims = size(target);
     if (dims?.[0] === asset.width && dims?.[1] === asset.height)
       report.available.push(asset.id);
@@ -114,6 +125,6 @@ writeFileSync(
   JSON.stringify(report, null, 2) + "\n",
 );
 console.log(
-  `${report.available.length}/89 candidate PNGs available; ${report.missing.length} missing, ${report.ambiguous.length} ambiguous, ${report.invalid.length} invalid. Provisional/reference assets excluded.`,
+  `${report.available.length}/89 candidate PNGs valid; ${report.missing.length} missing, ${report.quarantined.length} quarantined, ${report.ambiguous.length} ambiguous, ${report.invalid.length} invalid. Provisional/reference assets excluded.`,
 );
 if (report.invalid.length || report.ambiguous.length) process.exitCode = 1;

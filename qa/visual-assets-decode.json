@@ -1,0 +1,9 @@
+{
+  "fullyDecoded": 92,
+  "invalid": [
+    {
+      "path": "backgrounds/level01_shepherd_hills_1920x1080.png",
+      "error": "broken PNG file (incomplete checksum in b'IDAT')"
+    }
+  ]
+}
