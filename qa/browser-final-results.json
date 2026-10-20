@@ -1,0 +1,81 @@
+[
+  {
+    "script": "maze-check",
+    "code": 0,
+    "seconds": 19.139
+  },
+  {
+    "script": "armor-check",
+    "code": 0,
+    "seconds": 24.127
+  },
+  {
+    "script": "sling-check",
+    "code": 0,
+    "seconds": 22.841
+  },
+  {
+    "script": "remaining-check",
+    "code": 0,
+    "seconds": 54.187
+  },
+  {
+    "script": "story-check",
+    "code": 0,
+    "seconds": 89.297
+  },
+  {
+    "script": "ui-offline-check",
+    "code": 0,
+    "seconds": null,
+    "initialRun": {
+      "code": 1,
+      "seconds": 20.364
+    },
+    "rerun": {
+      "status": "passed",
+      "reason": "Wait for actual hit/miss outcome instead of fixed 1400ms delay under parallel software rendering. Production game unchanged.",
+      "evidence": "qa/ui-offline-rerun.log"
+    }
+  },
+  {
+    "script": "visual-check",
+    "code": 0,
+    "seconds": 57.984
+  },
+  {
+    "script": "timeout-check",
+    "code": 0,
+    "seconds": 63.488
+  },
+  {
+    "script": "premium-check",
+    "code": 0,
+    "seconds": 31.857
+  },
+  {
+    "script": "mobile-check",
+    "code": 0,
+    "seconds": 117.025
+  },
+  {
+    "script": "pwa-check",
+    "code": 0,
+    "seconds": 85.773
+  },
+  {
+    "script": "food-check",
+    "code": 0,
+    "seconds": 16.622
+  },
+  {
+    "script": "v1-integration-check",
+    "code": 0,
+    "seconds": 40.737
+  },
+  {
+    "script": "character-check",
+    "code": 0,
+    "seconds": 28.145
+  }
+]

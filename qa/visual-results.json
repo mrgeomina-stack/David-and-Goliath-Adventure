@@ -2,34 +2,34 @@
   "checks": "Title layouts in EN/AR, 1920 and tablet; actual full maze route via brief scaled touchscreen taps; cinematic and replay",
   "frames": {
     "frames": 120,
-    "seconds": 1.9832000000000007,
-    "estimatedFps": 60.00403388463088
+    "seconds": 1.983300000000003,
+    "estimatedFps": 60.001008420309496
   },
   "missionFrames": {
     "maze": {
       "frames": 120,
-      "seconds": 1.9832000000000007,
-      "estimatedFps": 60.00403388463088
+      "seconds": 1.983300000000003,
+      "estimatedFps": 60.001008420309496
     },
     "sheep": {
       "frames": 60,
-      "seconds": 0.9833000000000002,
-      "estimatedFps": 60.00203396725312
+      "seconds": 1.0833000000000002,
+      "estimatedFps": 54.463214252746226
     },
     "armor": {
       "frames": 60,
-      "seconds": 0.9833000000000002,
-      "estimatedFps": 60.00203396725312
+      "seconds": 1.1333000000000002,
+      "estimatedFps": 52.060354716315175
     },
     "brook": {
       "frames": 60,
-      "seconds": 0.9832000000000007,
-      "estimatedFps": 60.008136696501175
+      "seconds": 1.0165999999999995,
+      "estimatedFps": 58.03659256344682
     },
     "sling": {
       "frames": 60,
-      "seconds": 0.9833000000000002,
-      "estimatedFps": 60.00203396725312
+      "seconds": 1,
+      "estimatedFps": 59
     }
   },
   "errors": []

@@ -4,13 +4,15 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Visual assets v1 edition · 1.6
+## Cohesive David character · 1.6.1
 
 The supplied art is integrated into the existing five-mission game. Four new
 backgrounds, sheep, lion, brothers, Saul, Goliath, stones, separate armour pieces,
-food basket, pouch and scenery use manifest pivots and uniform scale. David uses
-the supplied face on his existing articulated rig, preserving running, carrying,
-kneeling, tumble/recovery and sling motion. One basket visibly changes ownership.
+food basket, pouch and scenery use manifest pivots and uniform scale. David now
+uses one high-resolution painted character across the cover and all levels. His head, neck, torso, hands and legs share one illustration and a
+continuous textured rig for running, carrying, kneeling, tumble/recovery and sling
+motion. See [character correction](docs/DAVID_CHARACTER_RIG.md). One basket visibly
+changes ownership.
 
 All seven supplied integration documents and original PNGs are retained under
 `visual-assets-v1/`. **64 valid candidate images load**. The supplied meadow PNG is
@@ -51,8 +53,7 @@ and in the teacher help menu.
 ## Storybook artwork
 
 All five games now share richer illustrated settings: the olive meadow, food maze,
-royal armour tent, clear brook and wide battlefield. Sheep and lion use the supplied sprites and animation sequences; David combines
-the supplied illustrated face with his poseable rig. Goliath, Saul, the brothers, armour and mineral stones have
+royal armour tent, clear brook and wide battlefield. Sheep and lion use the supplied sprites and animation sequences; David uses the same coherent painted anatomy and textured poseable rig in every activity. Goliath, Saul, the brothers, armour and mineral stones have
 original artwork. See [visual design notes](docs/VISUAL_DESIGN.md).
 
 ![Storybook title screen](qa/01-title.png)

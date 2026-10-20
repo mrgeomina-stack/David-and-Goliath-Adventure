@@ -102,7 +102,11 @@ await page.mouse.down();
 await page.waitForTimeout(1000);
 await page.mouse.move(400, 600);
 await page.mouse.up();
-await page.waitForTimeout(1400);
+await page.waitForFunction(
+  () => ["hit", "miss"].includes(window.adventureQA.snapshot().shot),
+  undefined,
+  { timeout: 10000 },
+);
 if ((await state()).shot !== "hit")
   throw Error(
     "Pointer hold/release capture failed: " + JSON.stringify(await state()),

@@ -1,0 +1,10 @@
+{
+  "source": "1024×1536 unified David illustration",
+  "checks": [
+    "same high-resolution painted anatomy on cover, idle, gait, actual carry and scaled phone",
+    "continuous kneeling torso/hips and actual stone pickup",
+    "same painted arms reach real sling grip and follow through; genuine collision still wins"
+  ],
+  "errors": [],
+  "visualReview": "Screenshots accompany real gameplay; automated tests do not judge artistic quality."
+}

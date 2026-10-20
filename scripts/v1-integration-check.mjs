@@ -24,7 +24,6 @@ try {
       "animals_sheep_idle_03",
       "animals_lion_idle",
       "props_fence",
-      "david_idle",
     ],
     maze: [
       "background_02_maze_ground",
@@ -57,6 +56,8 @@ try {
     await page.click(`[data-mission="${mission}"]`);
     await page.waitForTimeout(2700);
     const s = await state();
+    if (!s.heroRig.ready || s.heroRig.source !== "david-rig.png")
+      throw Error("Cohesive painted character rig did not load");
     if (s.visualAssetsLoaded !== 64 || s.visualAssetIssues.length)
       throw Error(
         "Asset validation/load failed " + JSON.stringify(s.visualAssetIssues),

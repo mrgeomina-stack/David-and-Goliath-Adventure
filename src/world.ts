@@ -23,6 +23,7 @@ import {
 import * as A from "./art";
 import { receivingBrother } from "./npcs";
 import { foodBasket, deliveryAt } from "./food";
+import { configureHero, heroRigUrl, drawHeroHand } from "./hero";
 import { visualLibrary, visualRoles } from "./visual-assets";
 import { bindCanvasGestures } from "./touch";
 import { Effects, depth, cinematicFrame } from "./effects";
@@ -104,6 +105,7 @@ export class World extends Phaser.Scene {
   }
   preload() {
     visualLibrary.preload(this.load);
+    this.load.image("david-cohesive-rig", heroRigUrl);
     this.load.image("painted-landscape", landscapeUrl);
     this.load.image("painted-david", heroUrl);
     for (const [key, url] of Object.entries({
@@ -119,6 +121,11 @@ export class World extends Phaser.Scene {
   }
   create() {
     visualLibrary.configure(this.textures);
+    configureHero(
+      this.textures
+        .get("david-cohesive-rig")
+        .getSourceImage() as HTMLImageElement,
+    );
     this.landscape = this.textures
       .get("painted-landscape")
       .getSourceImage() as HTMLImageElement;
@@ -624,14 +631,9 @@ export class World extends Phaser.Scene {
     light.addColorStop(1, "#fff4df00");
     c.fillStyle = light;
     c.fillRect(0, 88, 920, 632);
-    // The finished cover illustration is independent of the articulated in-game rig.
-    // Their palette, headband, curls, linen tunic and woven food bag share one design.
-    A.shadow(c, 934, 662, 99);
-    const breathe = Math.sin(this.clock * 1.8) * 1.8;
-    if (visualLibrary.image("david_idle")) {
-      visualLibrary.drawAt(c, "david_idle", { x: 934, y: 665 }, 1.32);
-      visualLibrary.drawFeet(c, "props_staff", 1008, 665, 387);
-    } else c.drawImage(this.hero, 762, 141 - breathe, 371, 557 + breathe);
+    // Cover and gameplay use the very same painted anatomy and articulated rig.
+    A.person(c, 934, 665, 2.9, {});
+    visualLibrary.drawFeet(c, "props_staff", 1008, 665, 387);
     A.sheep(c, 1132, 652, 1.12, Math.sin(this.clock * 2) * 0.08);
     A.sheep(c, 708, 675, 0.82, Math.sin(this.clock * 1.7) * 0.07);
     motes(c, this.clock, 24);
@@ -880,7 +882,7 @@ export class World extends Phaser.Scene {
     if (receiving) receivingBrother(c, 649, 542, 183 * 1.35, true);
     if (delivery.davidHolding) {
       for (const side of [-1, 1])
-        A.ellipse(c, basket.x + side * 34, gripY, 5, 6, "#dfad7c");
+        drawHeroHand(c, basket.x + side * 34, gripY, 0.85, side);
     }
     if (t > 2.6) A.burst(c, t - 2.5, 650, 351);
     motes(c, this.clock, 12);
@@ -1019,11 +1021,11 @@ export class World extends Phaser.Scene {
       }
     }
     if (t >= 2.8) {
-      A.round(c, 403, 170, 474, 70, 17, "#fff2d9f0");
+      A.round(c, 446, 104, 390, 58, 17, "#fff2d9f0");
       if (this.lang !== "ar")
-        A.text(c, "This armor isn’t right for me!", 640, 194, 22, "#76533b");
+        A.text(c, "This armor isn’t right for me!", 640, 127, 22, "#76533b");
       if (this.lang !== "en")
-        A.text(c, "الدرع ده مش مناسب ليا!", 640, 223, 23, "#76533b");
+        A.text(c, "الدرع ده مش مناسب ليا!", 640, 151, 23, "#76533b");
     }
     if (this.gearTween) {
       const g = this.gearTween,
@@ -1191,19 +1193,9 @@ export class World extends Phaser.Scene {
         true,
         this.sheep.carriedIndex!,
       );
-      // Hands sit in front of the fleece: David visibly supports the sheep.
+      // Painted hands from the same character material visibly support the fleece.
       for (const side of [-1, 1])
-        A.ellipse(
-          c,
-          d.x + side * 30,
-          d.y - lerp(44, 74, f),
-          7,
-          6,
-          A.gradient(c, d.x + side * 30 - 5, d.y - 80, 11, 12, [
-            "#f0c18d",
-            "#cd9363",
-          ]),
-        );
+        drawHeroHand(c, d.x + side * 30, d.y - lerp(44, 74, f), 1, side);
     }
     if (this.sheep.caughtIndex !== null) {
       A.sheep(c, this.sheep.lion.x - 35, this.sheep.lion.y + 6, 0.85, 0);

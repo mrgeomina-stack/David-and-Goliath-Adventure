@@ -18,6 +18,7 @@ const scripts = [
   "pwa-check",
   "food-check",
   "v1-integration-check",
+  "character-check",
 ];
 const results = [];
 let cursor = 0;

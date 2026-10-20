@@ -1,3 +1,4 @@
+import { heroRigInfo } from "./hero";
 import Phaser from "phaser";
 import { visualLibrary } from "./visual-assets";
 import { giantForehead } from "./art";
@@ -761,6 +762,7 @@ if (new URL(location.href).searchParams.has("qa"))
       snapshot: () => ({
         pwaState: pwa.state,
         visualAssetsLoaded: visualLibrary.loadedCount,
+        heroRig: { ...heroRigInfo },
         renderedGoliathForehead: giantForehead,
         renderedProjectile: world.renderedProjectile,
         visualAssetsUsed: [...visualLibrary.used],

@@ -1,8 +1,9 @@
-# David’s Big Adventure — validation report · 1.6
+# David’s Big Adventure — validation report · 1.6.1
 
-20 October 2026. This release integrates the supplied visual-assets-v1 artwork
-into the existing five-level game. The gameplay model is unchanged from the
-pre-art baseline `1a4277c`; controls, story order, scoring, collision rules, maze
+20 October 2026. This release fixes the disconnected David rendering using one cohesive painted
+character and textured limb animation across the existing five-level game and
+cover. The supplied visual-assets-v1 integration remains intact. The gameplay model is unchanged from the
+previous release `d3a3c28`; controls, story order, scoring, collision rules, maze
 generation, retries, timings and bilingual editable text remain intact.
 
 ## Build and automated checks
@@ -17,14 +18,23 @@ Logical resolution: 1280×720. Phone/tablet viewports include 568×320, 667×375
 | Command / check | Result |
 | --- | --- |
 | `npm run build` | Typecheck and production offline/PWA build passed. |
-| `npm test` | 32 tests passed, no failures or skips. |
-| `npm run test:browser` | 12 scripts passed in the complete run; the 13th passed its targeted rerun after correcting a test expectation (the sling goes to the finale before restart). Results are in `qa/browser-results.json`. |
+| `npm test` | 36 tests passed, no failures or skips. |
+| `npm run test:browser` | 13 passed in the full run; the offline input check passed its targeted rerun after replacing a fixed-delay assertion with an actual shot-outcome wait. All 14 final outcomes are recorded in `qa/browser-final-results.json`; the original run is retained in `qa/browser-results.json`. |
 | `node scripts/import-visual-assets.mjs` | 64 valid candidates, 24 absent optional effect frames, one quarantined damaged background, zero ambiguous/invalid active files. |
 | ZIP integrity | Packaging validates CRC; final archive verification compares playable HTML with the tested build. |
 
 The runner starts its own server at port 4174 and uses two browser workers.
 Set `BROWSER_WORKERS=1` for sequential execution; do not run two copies at once.
 The read-only QA inspector cannot move actors, equip armour or force a win.
+
+Four added character-skin tests verify bind-pose identity, connected elbow/hand
+anchors during reach, finite overreach and continuous bending through a joint.
+The character browser check captures actual game actions and verifies a real
+sheep lift, stone collection and ballistic hit. Artistic quality is reviewed from
+screenshots; automated state checks alone cannot judge a drawing. The short
+headless frame samples measured approximately 52–60 fps across the five missions
+in this run (`qa/visual-results.json`); this does not certify sustained physical
+device performance.
 
 ## Gameplay exercised
 
@@ -65,7 +75,11 @@ unchanged but excluded from the runtime; the existing meadow remains.
 Four new backgrounds, 56 candidate sprites and four UI images load successfully.
 Missing 24 optional effect frames use the existing procedural effects.
 28 provisional David frames do not replace better existing animations.
-David's supplied face/neck is combined with the existing articulated rig.
+David now uses one new 1024×1536 illustration made from the supplied design.
+His face, neck, torso, hands, clothing and legs share one painted material and
+continuous textured rig. The head/torso are connected, limbs bend without
+separating cutouts, and hips/gear follow the torso through crouch and recovery.
+The cover uses the same rig. See `docs/DAVID_CHARACTER_RIG.md`.
 
 Uniform scaling and pixel pivots are used. Goliath's forehead is fitted to the
 existing collider, stones retain their model centers, armour retains its drop
@@ -90,11 +104,13 @@ recipient's computer. The offline HTTP test does not certify that launch method.
 
 ## Actual-game visual evidence
 
-`qa/baseline-v1/` contains five pre-art screenshots. Current representative
+`qa/baseline-v1/` contains five pre-art screenshots; `qa/david-before/` records
+the prior mixed-material David. Current representative
 screenshots are packaged with JSON results in `Davids_Big_Adventure_QA.zip`:
 
 | Evidence | Files |
 | --- | --- |
+| New cohesive David across cover, gait, carry, phone, kneel and throw | `75-david-cohesive-cover.png` through `83-david-cohesive-release.png` |
 | Integrated title and five activities | `67-v1-title.png` through `72-v1-sling.png` |
 | Forehead / fixed launch overlay and genuine reaction | `73-v1-forehead-release-alignment.png`, `74-v1-goliath-reaction.png` |
 | Basket carry, shared support, receiver ownership | `63-food-carried-walk.png` through `65-brother-holds-basket.png` |

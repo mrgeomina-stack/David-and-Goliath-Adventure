@@ -29,10 +29,11 @@ with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive
     evidence_prefixes = ('10-', '11-', '12-', '13-', '26b-', '33-', '34-', '48-',
                          '49-', '51-', '55-', '56-', '57-', '58-', '59-', '61-',
                          '62-', '63-', '64-', '65-', '67-', '68-', '69-', '70-',
-                         '71-', '72-', '73-', '74-')
+                         '71-', '72-', '73-', '74-', '75-', '76-', '77-', '78-', '79-',
+                         '80-', '81-', '82-', '83-')
     for file in sorted((root / 'qa').rglob('*')):
-        if file.is_file() and (file.suffix == '.json' or
-                              'baseline-v1' in file.parts or
+        if file.is_file() and (file.suffix in ('.json', '.log') or
+                              'baseline-v1' in file.parts or 'david-before' in file.parts or
                               file.name.startswith(evidence_prefixes)):
             archive.write(file, str(file.relative_to(root)))
     archive.write(root / 'docs/VISUAL_ASSETS_V1_PROGRESS.md', 'INTEGRATION_NOTES.md')
