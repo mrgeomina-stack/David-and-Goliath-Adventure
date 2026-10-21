@@ -4,7 +4,15 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls and fully bundled illustrated artwork and procedural audio.
 
-## Cohesive David character · 1.6.1
+## Direction, branching maze and countdown · 1.7.0
+
+David faces left/right with keyboard, swipe and touch-arrow movement, including
+while carrying a sheep or the food basket. He keeps that facing when he stops.
+The maze starts with two open choices and guarantees six forks along the solution,
+including at least three detours continuing three or more cells before dead ends.
+Every Easy/Normal activity has a 30-second shrinking bar: green → orange at 20 →
+red below 10. Free Play stays untimed. Instructions, pause/book and committed
+completion animations do not consume action time; retries start a fresh timer.
 
 The supplied art is integrated into the existing five-mission game. Four new
 backgrounds, sheep, lion, brothers, Saul, Goliath, stones, separate armour pieces,
@@ -32,9 +40,10 @@ colourful instruction cards, a poseable illustration-based David, layered scener
 action particles and cinematic payoffs. Soft instrumental music, environmental
 sound and optional installed local narration support the captions.
 
-The sheep rescue has a **40-second limit** in Easy and Normal, with warnings at
-30 and 15 seconds. David runs faster while carrying; the timer waits through the
-opening instruction card. Free Play remains untimed. Space or **Lift sheep** raises
+The sheep rescue has a **30-second limit** in Easy and Normal. At zero the lion
+pursues an unprotected sheep and a gentle catch leads to retry. Other activities
+show a gentle time-up/retry card at zero. A sling stone released before zero may
+finish its genuine flight. Free Play remains untimed. Space or **Lift sheep** raises
 one sheep into David’s hands; entering the pen triggers a gentle set-down.
 
 ![The illustrated chapter map](qa/50-storybook-map.png)

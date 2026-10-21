@@ -41,7 +41,7 @@ keep targets unobstructed; overhead maze tiles 132x132, walls align to graph edg
 No Y-shaped slingshot, medieval armor/castles, gore, divine personification or beams.
 
 ## Sheep rescue update — 1.3
-The user’s four-sheep carry-and-countdown request supersedes the original two-sheep following mechanic in GAME_BLUEPRINT.md. `SheepModel` owns one-at-a-time pickup, 0.55s lift, 290px/s carrying run, 0.4s pen set-down, four protected pen slots, countdown and physical lion pursuit/catch. Walking is 245px/s. Pickup radius is 90px. Easy and Normal both start at 40s; Free Play uses a null deadline. A catch can only happen after zero, and saved sheep cannot be prey. David can finish a rescue while the lion approaches after zero. Game pause stops all model updates and the timer. The timer is a DOM element that scales with the stage and changes text and colour at 30s/15s. No model mutation or forced victory is used by browser tests.
+The user’s four-sheep carry-and-countdown request supersedes the original two-sheep following mechanic in GAME_BLUEPRINT.md. `SheepModel` owns one-at-a-time pickup, 0.55s lift, 290px/s carrying run, 0.4s pen set-down, four protected pen slots, countdown and physical lion pursuit/catch. Walking is 245px/s. Pickup radius is 90px. Easy and Normal both start at 30s; Free Play uses a null deadline. A catch can only happen after zero, and saved sheep cannot be prey. David can finish a rescue while the lion approaches after zero. Game pause stops all model updates and the timer. The timer is a DOM element that scales with the stage and changes text and colour at 20s/10s. No model mutation or forced victory is used by browser tests.
 
 ## Storybook presentation — 1.4
 
@@ -53,7 +53,7 @@ The user’s four-sheep carry-and-countdown request supersedes the original two-
 - `main.ts` / `style.css`: illustrated chapter-map dialog, collected keepsake shelf, focus handling, per-chapter colourful instruction and celebration panels. Book opening pauses the game and closing resumes its prior pause state.
 - `docs/CHILD_PLAYTEST.md`: supervised observation guide. Automated usability checks are implemented; human child sessions remain outstanding.
 
-The explicit later user request replaces the previous two-minute/90-second limits with 40 seconds. The timer waits while the opening instruction is shown. Thirty seeded input-driven model rescues complete within 35 seconds. This does not establish a typical child completion time.
+The explicit later user request replaces the previous two-minute/90-second limits with 30 seconds. The timer waits while the opening instruction is shown. Thirty seeded input-driven model rescues complete within 27 seconds. This does not establish a typical child completion time.
 
 
 ## Mobile / PWA milestone · 1.5
@@ -70,3 +70,17 @@ icons and a content-versioned service worker. All embedded artwork/game code and
 install assets must cache successfully before readiness is advertised. An explicit
 update flow protects active play and preserves keepsakes. Build/package/preview
 steps are in docs/MOBILE_PWA.md; exact browser evidence is in TEST_REPORT.md.
+
+## Version 1.7.0: facing, maze choices and activity deadlines
+
+The latest user request sets every Easy/Normal activity to 30 active seconds,
+with green→orange at20→red below10 progress bars. Free Play stays untimed.
+The shared ActivityTimer pauses with instructions/menus and committed completion
+animation; released sling shots finish real flight. Other expired rounds retry
+from a fresh timer; sheep still physically enter the pen and the lion catches
+unprotected sheep after zero. Maze generation now guarantees two initial choices,
+a start detour ≥3 cells, six forks on an 18–26-step solution, and at least three
+detours continuing ≥3 cells before later dead ends. Walls remain real collisions.
+David's whole painted rig and supporting hands mirror with persistent left/right
+facing, including brief taps and carrying. These requirements supersede earlier
+timer and maze-generation descriptions in the project history.

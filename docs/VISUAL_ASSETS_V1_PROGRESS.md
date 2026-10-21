@@ -1,4 +1,4 @@
-# Visual library integration · 1.6.1
+# Visual library integration · 1.7.0
 
 The three uploaded ZIPs were extracted into canonical manifest paths. All seven
 required documents were read first and are preserved unchanged. This is an
@@ -21,7 +21,7 @@ Vite embeds images and classic JavaScript in the offline HTML, without a CDN.
 
 | Scene | Replaced or enhanced | Kept |
 | --- | --- | --- |
-| Sheep | Three sheep appearances across four separate sheep; hop/lion-walk sequences; carried sheep and fingers; fence and gate surfaces; cohesive David rig/pouch | Existing meadow, articulated lift/carry/set-down, real pen entrance and collisions, 40-second timer and lion/retry behavior |
+| Sheep | Three sheep appearances across four separate sheep; hop/lion-walk sequences; carried sheep and fingers; fence and gate surfaces; cohesive David rig/pouch | Existing meadow, articulated lift/carry/set-down, real pen entrance and collisions, 30-second timer and lion/retry behavior |
 | Maze / delivery | Ground plate, texture within original wall segments, camp brothers, one separate basket, receiving hands masked from supplied artwork | Seeded graph, corridor width, wall rejection, hints, locomotion and four-second celebration gate |
 | Armour | Tent, Saul, four separate tray/worn props; layered helmet preserves David's face and slips during tumble | Correct body regions, wrong-drop reset, 4/4 gate, 6.5-second step/wobble/fall/removal/recovery |
 | Brook | Brook background, three smooth-stone appearances across five unique IDs, jagged rocks, pouch, articulated ground knee and hand-to-water pickup/stow | Stone centers, IDs, ring/tap controls, rejection, cooldown and exactly-five success |
@@ -46,7 +46,8 @@ Manifest dimensions, pixel pivots and uniform scale are validated. Goliath's
 forehead anchor maps exactly to the unchanged `(1000,259)` collision center;
 standing feet are at y590. The release point remains `(184,513)`. Read-only QA
 compares the actual drawn projectile with the model position in flight. Artwork
-alignment changes no model physics. `src/model.ts` is unchanged from the baseline.
+alignment changes no model physics. The subsequent 1.7.0 update changes maze generation and the activity deadline
+per the user’s request; see README.md and TEST_REPORT.md.
 
 ## Partial library handling
 

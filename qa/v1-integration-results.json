@@ -5,14 +5,14 @@
   },
   "flight": {
     "model": {
-      "x": 217.026140510926,
-      "y": 472.0078278894074
+      "x": 220.28456972438255,
+      "y": 468.0894686235502
     },
     "rendered": {
-      "x": 217.026140510926,
-      "y": 472.0078278894074
+      "x": 220.28456972438255,
+      "y": 468.0894686235502
     },
-    "charge": 1.0032699999999999
+    "charge": 1.02995
   },
   "checks": [
     "sheep: live supplied sprites/background and existing articulated motion",

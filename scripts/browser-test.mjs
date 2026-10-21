@@ -19,6 +19,7 @@ const scripts = [
   "food-check",
   "v1-integration-check",
   "character-check",
+  "direction-maze-timer-check",
 ];
 const results = [];
 let cursor = 0;

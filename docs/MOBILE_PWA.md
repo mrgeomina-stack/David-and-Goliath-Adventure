@@ -1,7 +1,7 @@
 # Mobile and installable edition · 1.6
 
 The five original games, illustrated scenes, story order, keepsakes, Arabic/English
-captions and 40-second rescue remain intact. The world keeps its 1280×720 coordinate
+captions and 30-second activity challenges remain intact. The world keeps its 1280×720 coordinate
 system and fits inside the available screen without cropping. Controls and readable
 cards scale independently on smaller screens, with 44 CSS-pixel primary targets.
 Safe-area padding protects iPhone cutouts and Home indicators. Dynamic viewport
@@ -15,7 +15,7 @@ active game; returning to landscape resumes it. Continuing in portrait is option
 but landscape provides more room. Tablets may remain in portrait with letterboxing.
 
 - Sheep and giant encounter: hold the large direction arrows. Tap Lift sheep near
-  a sheep; another finger can keep holding a direction. The timer still uses 40
+  a sheep; another finger can keep holding a direction. The timer uses 30
   seconds in Easy/Normal. Free Play is untimed.
 - Maze: swipe once per corridor step, or tap/hold the direction arrows. Walls and
   the real delivery goal work exactly as before.

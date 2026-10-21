@@ -39,37 +39,71 @@ export function path(maze: Maze, start = 0, end = 62): number[] {
   while (result[0] !== start) result.unshift(prev.get(result[0])!);
   return result;
 }
+/** Branches visible along the solution, with tempting routes ending several cells later. */
+export function mazeChoices(maze: Maze) {
+  const route = path(maze),
+    onRoute = new Set(route);
+  const depth = (cell: number, previous: number): number =>
+    1 +
+    Math.max(
+      0,
+      ...maze.edges[cell]
+        .filter((n) => n !== previous && !onRoute.has(n))
+        .map((n) => depth(n, cell)),
+    );
+  return route.slice(0, -1).map((cell, index) => ({
+    cell,
+    index,
+    detours: maze.edges[cell]
+      .filter((n) => !onRoute.has(n))
+      .map((n) => depth(n, cell)),
+  }));
+}
 export function createMaze(seed: number): Maze {
   for (let attempt = 0; attempt < 10000; attempt++) {
     const random = rng(seed + attempt),
       edges: number[][] = Array.from({ length: 63 }, () => []),
-      stack = [0],
-      seen = new Set([0]);
-    while (stack.length) {
-      const c = stack.at(-1)!,
-        x = c % 9,
-        y = Math.floor(c / 9);
-      const options = [
-        x > 0 ? c - 1 : -1,
-        x < 8 ? c + 1 : -1,
-        y > 0 ? c - 9 : -1,
-        y < 6 ? c + 9 : -1,
-      ].filter((n) => n >= 0 && !seen.has(n));
-      if (!options.length) {
-        stack.pop();
-        continue;
-      }
-      const n = options[Math.floor(random() * options.length)];
-      edges[c].push(n);
-      edges[n].push(c);
-      seen.add(n);
-      stack.push(n);
+      seen = new Set([0]),
+      frontier: [number, number][] = [];
+    const offer = (cell: number) => {
+      const x = cell % 9,
+        y = Math.floor(cell / 9);
+      for (const next of [
+        x > 0 ? cell - 1 : -1,
+        x < 8 ? cell + 1 : -1,
+        y > 0 ? cell - 9 : -1,
+        y < 6 ? cell + 9 : -1,
+      ])
+        if (next >= 0 && !seen.has(next)) frontier.push([cell, next]);
+    };
+    offer(0);
+    while (frontier.length) {
+      const index = Math.floor(random() * frontier.length),
+        [cell, next] = frontier[index];
+      frontier[index] = frontier.at(-1)!;
+      frontier.pop();
+      if (seen.has(next)) continue;
+      edges[cell].push(next);
+      edges[next].push(cell);
+      seen.add(next);
+      offer(next);
     }
-    const maze = { cols: 9, rows: 7, edges, seed: seed + attempt };
-    const len = path(maze).length - 1;
-    if (len >= 16 && len <= 22) return maze;
+    const maze = { cols: 9, rows: 7, edges, seed: seed + attempt },
+      route = path(maze),
+      choices = mazeChoices(maze);
+    const meaningful = choices.filter((c) => c.detours.some((d) => d >= 3));
+    if (
+      route.length >= 19 &&
+      route.length <= 27 &&
+      edges[0].length === 2 &&
+      choices[0].detours.some((depth) => depth >= 3) &&
+      choices.filter((c) => c.detours.length).length >= 6 &&
+      meaningful.length >= 3 &&
+      meaningful.some((c) => c.index < route.length / 2)
+    )
+      return maze;
   }
-  throw new Error("No suitable maze");
+  throw new Error("No suitable branching maze");
 }
 export class MazeModel {
   maze: Maze;
@@ -217,7 +251,7 @@ export class SheepModel {
   caughtIndex: number | null = null;
   constructor(
     seed = 1,
-    public timeLimit: number | null = 40,
+    public timeLimit: number | null = 30,
   ) {
     const random = rng(seed);
     this.sheep = [
@@ -312,7 +346,7 @@ export class SheepModel {
       null,
     );
     const retreat = distance(this.lion, this.david) < 185;
-    const stalking = this.remaining !== null && this.remaining <= 30;
+    const stalking = this.remaining !== null && this.remaining <= 20;
     const target =
       this.hunting && prey
         ? prey

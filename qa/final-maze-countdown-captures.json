@@ -1,0 +1,7 @@
+{
+  "startDetourDepths": [
+    3
+  ],
+  "checked": "Final production maze has a delayed dead end at start; screenshots show live green/orange/red/expired countdown states",
+  "errors": []
+}

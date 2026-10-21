@@ -18,7 +18,7 @@ try {
   await page.click("#start");
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
   if (
-    (await state()).sheepTimeLimit !== 40 ||
+    (await state()).sheepTimeLimit !== 30 ||
     (await state()).sheep.length !== 4
   )
     throw Error("Normal rescue setup");
@@ -35,9 +35,9 @@ try {
       .locator("#sheep-clock")
       .evaluate((e) => e.classList.contains("warning")))
   )
-    throw Error("Missing 30s warning");
+    throw Error("Missing 20s warning");
   await page.screenshot({ path: "qa/46-sheep-countdown-warning.png" });
-  await page.clock.runFor(15000);
+  await page.clock.runFor(10000);
   if (
     !(await page
       .locator("#sheep-clock")
@@ -45,7 +45,7 @@ try {
   )
     throw Error("Missing urgent warning");
   await page.screenshot({ path: "qa/47-sheep-countdown-urgent.png" });
-  await page.clock.runFor(19000);
+  await page.clock.runFor(15000);
   const failure = await state();
   if (
     !failure.failed ||
@@ -61,7 +61,7 @@ try {
     reset.caughtIndex !== null ||
     reset.carriedIndex !== null ||
     reset.sheep.length !== 4 ||
-    reset.sheepRemaining < 39
+    reset.sheepRemaining < 29
   )
     throw Error("Retry did not reset countdown and flock");
   await page.click("#restart");
@@ -78,13 +78,13 @@ try {
     "qa/sheep-countdown-results.json",
     JSON.stringify(
       {
-        normalSeconds: 40,
-        easySeconds: 40,
+        normalSeconds: 30,
+        easySeconds: 30,
         checks: [
           "four sheep",
           "countdown pause",
-          "30s warning",
-          "15s urgent warning",
+          "20s warning",
+          "10s urgent warning",
           "actual pursuit/catch after zero",
           "clean retry",
           "explicit untimed mode",

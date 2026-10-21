@@ -2,80 +2,105 @@
   {
     "script": "maze-check",
     "code": 0,
-    "seconds": 19.139
+    "seconds": 20.305
   },
   {
     "script": "armor-check",
     "code": 0,
-    "seconds": 24.127
+    "seconds": 24.489
   },
   {
     "script": "sling-check",
     "code": 0,
-    "seconds": 22.841
+    "seconds": 23.205
   },
   {
     "script": "remaining-check",
     "code": 0,
-    "seconds": 54.187
+    "seconds": null,
+    "initialRun": {
+      "code": 1,
+      "seconds": 57.576
+    },
+    "rerun": {
+      "status": "passed",
+      "reason": "Real simultaneous arrow keys replace slower single-axis automation; actual 30-second rescue passed.",
+      "evidence": "qa/remaining-check-rerun.log"
+    }
   },
   {
     "script": "story-check",
     "code": 0,
-    "seconds": 89.297
+    "seconds": 88.46
   },
   {
     "script": "ui-offline-check",
     "code": 0,
-    "seconds": null,
-    "initialRun": {
-      "code": 1,
-      "seconds": 20.364
-    },
-    "rerun": {
-      "status": "passed",
-      "reason": "Wait for actual hit/miss outcome instead of fixed 1400ms delay under parallel software rendering. Production game unchanged.",
-      "evidence": "qa/ui-offline-rerun.log"
-    }
+    "seconds": 20.492
   },
   {
     "script": "visual-check",
     "code": 0,
-    "seconds": 57.984
+    "seconds": 60.398
   },
   {
     "script": "timeout-check",
     "code": 0,
-    "seconds": 63.488
+    "seconds": 55.023
   },
   {
     "script": "premium-check",
     "code": 0,
-    "seconds": 31.857
+    "seconds": 33.897
   },
   {
     "script": "mobile-check",
     "code": 0,
-    "seconds": 117.025
+    "seconds": null,
+    "initialRun": {
+      "code": 1,
+      "seconds": 127.271
+    },
+    "rerun": {
+      "status": "passed",
+      "reason": "Native touch rerun passed after an initial transient rescue routing failure; no production change.",
+      "evidence": "qa/mobile-check-rerun.log"
+    }
   },
   {
     "script": "pwa-check",
     "code": 0,
-    "seconds": 85.773
+    "seconds": 87.602
   },
   {
     "script": "food-check",
     "code": 0,
-    "seconds": 16.622
+    "seconds": 17.901
   },
   {
     "script": "v1-integration-check",
     "code": 0,
-    "seconds": 40.737
+    "seconds": 44.48
   },
   {
     "script": "character-check",
     "code": 0,
-    "seconds": 28.145
+    "seconds": null,
+    "initialRun": {
+      "code": 1,
+      "seconds": 59.437
+    },
+    "rerun": {
+      "status": "passed",
+      "reason": "Capture earlier windup and release using read-only charge feedback; retry through real controls if screenshot encoding extended hold.",
+      "evidence": "qa/character-check-rerun.log"
+    }
+  },
+  {
+    "script": "direction-maze-timer-check",
+    "code": 0,
+    "execution": "separate real-input/browser-clock check",
+    "evidence": "qa/direction-maze-timer-results.json",
+    "finalMazeEvidence": "qa/final-maze-countdown-captures.json"
   }
 ]

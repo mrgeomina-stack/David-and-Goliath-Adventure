@@ -99,8 +99,8 @@ try {
     throw Error("Keepsake did not persist");
   await page.click("#start");
   await page.waitForTimeout(2700);
-  if ((await state()).sheepTimeLimit !== 40)
-    throw Error("Rescue does not start with 40 seconds");
+  if ((await state()).sheepTimeLimit !== 30)
+    throw Error("Rescue does not start with 30 seconds");
   await page.click("#book-toggle");
   const before = (await state()).sheepRemaining;
   await page.waitForTimeout(500);
@@ -129,7 +129,7 @@ try {
           "colourful instruction bounds",
           "real maze completion earns reward",
           "keepsake persists across reload",
-          "40-second timer",
+          "30-second timer",
           "book pauses and resumes countdown",
           "honest child-playtest guide",
         ],

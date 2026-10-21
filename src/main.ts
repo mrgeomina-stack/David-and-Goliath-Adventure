@@ -1,3 +1,4 @@
+import { countdownHue } from "./activity-timer";
 import { heroRigInfo } from "./hero";
 import Phaser from "phaser";
 import { visualLibrary } from "./visual-assets";
@@ -334,41 +335,51 @@ function sync() {
           ? `${world.brook.count} / 5`
           : `${lang === "ar" ? "المهمة" : "MISSION"} ${ORDER.indexOf(world.mission) + 1} / 5`;
   const clock = $("sheep-clock");
-  clock.hidden = world.mission !== "sheep" || world.phase !== "play";
-  const remaining = world.sheep.remaining;
+  clock.hidden = !["play", "encounter"].includes(world.phase);
+  const remaining = world.activityRemaining;
   const seconds = remaining === null ? null : Math.ceil(remaining);
   const stamp =
-    seconds === null
-      ? "∞"
-      : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    seconds === null ? "∞" : `0:${String(seconds).padStart(2, "0")}`;
   $("sheep-time").textContent = stamp;
-  clock.classList.toggle("warning", remaining !== null && remaining <= 30);
-  clock.classList.toggle("urgent", remaining !== null && remaining <= 15);
+  clock.classList.toggle("warning", remaining !== null && remaining <= 20);
+  clock.classList.toggle("urgent", remaining !== null && remaining < 10);
   $("sheep-warning").textContent =
     remaining === null
       ? bilingual("Free play", "لعب حر")
       : world.failed
         ? bilingual("Try again", "جرّب تاني")
-        : remaining === 0
+        : remaining === 0 &&
+            world.mission === "sheep" &&
+            world.phase !== "encounter"
           ? bilingual("Lion is chasing! Run!", "الأسد بيجري! اجري!")
-          : remaining <= 30
-            ? bilingual("Hurry—save the sheep!", "بسرعة، أنقذ الخراف!")
-            : bilingual(
-                "Save all four before the lion!",
-                "أنقذ الأربعة قبل الأسد!",
-              );
+          : remaining <= 20
+            ? bilingual("Keep going!", "كمّل يا بطل!")
+            : bilingual("Time remaining", "الوقت المتبقي");
   if (mobile)
     $("sheep-warning").textContent =
       remaining === null
         ? bilingual("Free", "حر")
         : world.failed
           ? bilingual("Retry", "تاني")
-          : remaining === 0
-            ? bilingual("Run!", "اجري!")
-            : remaining <= 30
-              ? bilingual("Hurry!", "بسرعة!")
-              : bilingual("Time", "الوقت");
-  clock.setAttribute("aria-label", `Rescue time remaining: ${stamp}`);
+          : bilingual("Time", "الوقت");
+  const track = $("countdown-track");
+  track.hidden = remaining === null;
+  track.setAttribute(
+    "aria-label",
+    bilingual("Activity time remaining", "الوقت المتبقي للمهمة"),
+  );
+  track.setAttribute("aria-valuenow", String(seconds ?? 30));
+  track.setAttribute(
+    "aria-valuetext",
+    remaining === null ? "Untimed" : `${seconds} seconds remaining`,
+  );
+  clock.style.setProperty(
+    "--time-color",
+    `hsl(${countdownHue(remaining ?? 30).toFixed(1)} 70% 40%)`,
+  );
+  $("countdown-fill").style.transform =
+    `scaleX(${Math.max(0, (remaining ?? 30) / 30)})`;
+  clock.setAttribute("aria-label", `Activity time remaining: ${stamp}`);
   $("directions").hidden =
     !encounter && !["maze", "sheep"].includes(world.mission);
   $("action").hidden =
@@ -416,7 +427,10 @@ function sync() {
         ? "victory"
         : (`${world.mission}Success` as CopyKey);
     textPair("message-ar", "message-en", k);
-    if (world.failed) {
+    if (world.failed && world.timedOut) {
+      $("message-ar").textContent = "خلص الوقت! يلا نجرّب المهمة تاني.";
+      $("message-en").textContent = "Time’s up! Let’s try this activity again.";
+    } else if (world.failed) {
       $("message-ar").textContent =
         "الأسد وصل لخروف. يلا ننقذ الأربعة ونجرّب تاني!";
       $("message-en").textContent =
@@ -467,7 +481,7 @@ function sync() {
     $("tutorial").innerHTML =
       `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "ar" ? "rtl" : "ltr"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${bilingual("Move or press an arrow to begin", "حرّك داود أو اضغط سهم عشان تبدأ")}</small></div>`;
   if (!$("message").hidden) {
-    const icon = world.failed ? "sheep" : chapter.icon;
+    const icon = world.failed && !world.timedOut ? "sheep" : chapter.icon;
     if ($("message-emblem").dataset.icon !== icon) {
       $("message-emblem").dataset.icon = icon;
       $("message-emblem").innerHTML = emblem(icon);
@@ -659,7 +673,7 @@ $("help").onclick = () =>
         run: () =>
           modal(
             bilingual("Watch, listen, then help", "شوف واسمع وبعدين ساعد"),
-            `<p>${bilingual("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 40-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الأربعين ثانية؟")}</p><p>${bilingual("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${bilingual("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
+            `<p>${bilingual("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 30-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الثلاثين ثانية؟")}</p><p>${bilingual("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${bilingual("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
             [{ label: label("resume", lang), run: close }],
           ),
       },
@@ -680,7 +694,7 @@ $("continue").onclick = () => {
     world.failed ||
     (world.mission === "sling" && world.sling.state === "miss")
   ) {
-    world.start(world.mission, world.practice);
+    world.retry();
     return;
   }
   world.continue();
@@ -786,6 +800,11 @@ if (new URL(location.href).searchParams.has("qa"))
         carriedIndex: world.sheep.carriedIndex,
         liftProgress: world.sheep.liftProgress,
         sheepRemaining: world.sheep.remaining,
+        activityRemaining: world.activityRemaining,
+        activityLimit: world.activityTimer.limit,
+        facing: world.facing,
+        timedOut: world.timedOut,
+        mazeEdges: world.maze.maze.edges,
         sheepTimeLimit: world.sheep.timeLimit,
         lion: world.sheep.lion,
         hunting: world.sheep.hunting,

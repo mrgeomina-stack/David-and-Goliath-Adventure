@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   createMaze,
+  mazeChoices,
   path,
   MazeModel,
   ArmorModel,
@@ -14,12 +15,21 @@ import {
   penInside,
 } from "../src/model";
 describe("maze", () => {
-  it("200 seeds are connected trees, have decisions, 16–22-step solutions", () => {
+  it("200 seeds have six route decisions and delayed dead ends in connected mazes", () => {
     for (let seed = 0; seed < 200; seed++) {
       const m = createMaze(seed);
-      expect(path(m).length).toBeGreaterThanOrEqual(17);
-      expect(path(m).length).toBeLessThanOrEqual(23);
+      expect(path(m).length).toBeGreaterThanOrEqual(19);
+      expect(path(m).length).toBeLessThanOrEqual(27);
       expect(m.edges.flat().length).toBe(124);
+      const choices = mazeChoices(m);
+      expect(m.edges[0]).toHaveLength(2);
+      expect(choices[0].detours.some((d) => d >= 3)).toBe(true);
+      expect(
+        choices.filter((c) => c.detours.length).length,
+      ).toBeGreaterThanOrEqual(6);
+      expect(
+        choices.filter((c) => c.detours.some((d) => d >= 3)).length,
+      ).toBeGreaterThanOrEqual(3);
       expect(m.edges.filter((e) => e.length === 1).length).toBeGreaterThan(3);
       for (let end = 0; end < 63; end++)
         expect(path(m, 0, end).length).toBeGreaterThan(0);
@@ -97,9 +107,9 @@ describe("sheep rescue", () => {
     expect(s.carried).toBe(null);
     expect(s.complete).toBe(false);
   });
-  it("allows four real round trips across varied starts within the 40-second deadline", () => {
+  it("allows four real round trips across varied starts within the 30-second deadline", () => {
     for (let seed = 1; seed <= 30; seed++) {
-      const s = new SheepModel(seed, 40);
+      const s = new SheepModel(seed, 30);
       const moveTo = (target: { x: number; y: number }) => {
         for (let frame = 0; frame < 900; frame++) {
           const dx = target.x - s.david.x,
@@ -123,7 +133,7 @@ describe("sheep rescue", () => {
         expect(s.count).toBe(index + 1);
       }
       expect(s.complete).toBe(true);
-      expect(s.time).toBeLessThan(35);
+      expect(s.time).toBeLessThan(27);
     }
   });
   it("starts a real lion pursuit at zero and catches an unprotected sheep", () => {

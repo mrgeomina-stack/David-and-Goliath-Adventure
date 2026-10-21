@@ -86,17 +86,30 @@ try {
     throw Error("Scoop capture did not exercise real collection");
   checks.push("continuous kneeling torso/hips and actual stone pickup");
   await open("sling");
-  const windup = Date.now();
   await page.keyboard.down("Space");
-  await page.waitForTimeout(650);
+  await page.waitForTimeout(150);
   await page.screenshot({ path: "qa/82-david-cohesive-charge.png" });
-  await page.waitForTimeout(Math.max(0, 1000 - (Date.now() - windup)));
+  await page.waitForFunction(
+    () => window.adventureQA.snapshot().charge >= 0.99,
+  );
   await page.keyboard.up("Space");
   await page.waitForTimeout(160);
   await page.screenshot({ path: "qa/83-david-cohesive-release.png" });
-  await page.waitForFunction(
-    () => window.adventureQA.snapshot().shot === "hit",
+  await page.waitForFunction(() =>
+    ["hit", "miss"].includes(window.adventureQA.snapshot().shot),
   );
+  if ((await state()).shot === "miss") {
+    // Screenshot encoding can extend a hold; retry through the real game controls.
+    await page.click("#continue");
+    await page.keyboard.down("Space");
+    await page.waitForFunction(
+      () => window.adventureQA.snapshot().charge >= 0.99,
+    );
+    await page.keyboard.up("Space");
+    await page.waitForFunction(
+      () => window.adventureQA.snapshot().shot === "hit",
+    );
+  }
   checks.push(
     "same painted arms reach real sling grip and follow through; genuine collision still wins",
   );

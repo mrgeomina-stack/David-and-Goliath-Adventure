@@ -1,10 +1,13 @@
-# David’s Big Adventure — validation report · 1.6.1
+# David’s Big Adventure — validation report · 1.7.0
 
-20 October 2026. This release fixes the disconnected David rendering using one cohesive painted
-character and textured limb animation across the existing five-level game and
-cover. The supplied visual-assets-v1 integration remains intact. The gameplay model is unchanged from the
-previous release `d3a3c28`; controls, story order, scoring, collision rules, maze
-generation, retries, timings and bilingual editable text remain intact.
+21 October 2026. This release adds persistent left/right character facing during walking/carrying,
+more branching maze choices with later dead ends, and a shared 30-second colour
+bar in every timed activity. Free Play remains untimed, as confirmed by the user.
+The cohesive painted character from 1.6.1 remains. Body/hand mirroring uses the
+same rig, including front hands supporting the sheep. The model changes are
+limited to the requested maze generation and countdown behavior; sheep count,
+carry/pen rules, armour drop regions, five unique stones, sling ballistics and
+forehead collision remain.
 
 ## Build and automated checks
 
@@ -18,10 +21,16 @@ Logical resolution: 1280×720. Phone/tablet viewports include 568×320, 667×375
 | Command / check | Result |
 | --- | --- |
 | `npm run build` | Typecheck and production offline/PWA build passed. |
-| `npm test` | 36 tests passed, no failures or skips. |
-| `npm run test:browser` | 13 passed in the full run; the offline input check passed its targeted rerun after replacing a fixed-delay assertion with an actual shot-outcome wait. All 14 final outcomes are recorded in `qa/browser-final-results.json`; the original run is retained in `qa/browser-results.json`. |
+| `npm test` | 39 tests passed, no failures or skips. |
+| Browser checks | 11 checks passed in the full batch; rescue, mobile and character checks passed targeted reruns. The dedicated direction/maze/countdown check also passed. All 15 final outcomes and original failures are retained in `qa/browser-final-results.json` and `qa/browser-results.json`. |
 | `node scripts/import-visual-assets.mjs` | 64 valid candidates, 24 absent optional effect frames, one quarantined damaged background, zero ambiguous/invalid active files. |
 | ZIP integrity | Packaging validates CRC; final archive verification compares playable HTML with the tested build. |
+
+The rescue automation now uses real simultaneous arrow keys for diagonal travel,
+which fits the requested deadline without changing game speed. Character capture
+automation uses read-only charge feedback and a real retry if image encoding
+extends a sling hold. A transient mobile routing failure passed on rerun; no
+reproducible game defect was isolated. Rerun logs remain in `qa/`.
 
 The runner starts its own server at port 4174 and uses two browser workers.
 Set `BROWSER_WORKERS=1` for sequential execution; do not run two copies at once.
@@ -32,7 +41,7 @@ anchors during reach, finite overreach and continuous bending through a joint.
 The character browser check captures actual game actions and verifies a real
 sheep lift, stone collection and ballistic hit. Artistic quality is reviewed from
 screenshots; automated state checks alone cannot judge a drawing. The short
-headless frame samples measured approximately 52–60 fps across the five missions
+headless frame samples measured approximately 47–60 fps across the five missions
 in this run (`qa/visual-results.json`); this does not certify sustained physical
 device performance.
 
@@ -40,9 +49,9 @@ device performance.
 
 - **Sheep:** Four distinct sheep, nearby-only pickup, actual lift/carry/set-down
   through the pen opening, keyboard and multi-touch carry. Distant pickup is
-  rejected. Easy/Normal remain 40 seconds; warnings, pause, lion catch and fresh
+  rejected. Easy/Normal now have 30 seconds; warnings, pause, lion catch and fresh
   retry are exercised with the actual game clock. Free Play remains untimed.
-- **Maze:** Connected seeded 9×7 graph, actual wall rejection, real-input route,
+- **Maze:** Connected seeded 9×7 branching graph, two start openings, at least six route forks and three detours with later dead ends, actual wall rejection, real-input route,
   hints, scaled touch/swipes and four-second celebration. David walks with one
   separate basket. Shared support changes to brother ownership after David lets
   go; the receiver's baked basket is masked to prevent duplicates.
@@ -87,6 +96,22 @@ regions, and maze-wall texture is clipped within original geometry.
 `docs/VISUAL_ASSETS_V1_PROGRESS.md` records per-level keep/enhance/replace choices.
 Source art is unchanged; masks, crops and layers are implemented in rendering code.
 
+## New timer/facing validation
+
+Unit checks cover 200 connected maze seeds, two start openings, six route choices,
+three detours with depth ≥3 and 18–26-step reachable solutions. Thirty seeded
+four-sheep model routes finish within 27 active seconds under the new deadline.
+The shared timer tests cover pause/freeze, untimed mode, zero clamping and smooth
+green/orange/red interpolation. Browser QA uses a real sheep lift and left/right
+keyboard/touch inputs, retains the side while idle or moving vertically, and
+captures both carry directions. It exercises each activity’s 30-second expiry,
+clean retry, bar thresholds, pause and all five untimed Free Play activities.
+The actual lion catch after zero remains separately tested.
+
+The clock pauses for instruction cards, menus and committed completion animations.
+Shots released before the deadline finish their real ballistic flight. These are
+explicit timing rules, not automatic wins or modified projectile physics.
+
 ## Offline evidence and limits
 
 `dist/index.html` embeds classic JavaScript, CSS and gameplay artwork. There are
@@ -110,6 +135,7 @@ screenshots are packaged with JSON results in `Davids_Big_Adventure_QA.zip`:
 
 | Evidence | Files |
 | --- | --- |
+| Facing and new maze/countdown states | `84-carry-facing-right.png` through `89-maze-timeout-retry.png` |
 | New cohesive David across cover, gait, carry, phone, kneel and throw | `75-david-cohesive-cover.png` through `83-david-cohesive-release.png` |
 | Integrated title and five activities | `67-v1-title.png` through `72-v1-sling.png` |
 | Forehead / fixed launch overlay and genuine reaction | `73-v1-forehead-release-alignment.png`, `74-v1-goliath-reaction.png` |

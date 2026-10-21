@@ -10,7 +10,7 @@ Use a small supervised group covering ages 5–8 and the actual classroom tablet
 - Can they explain the colourful instruction card in their own words?
 - Do they discover movement and pick up a nearby sheep without adult hand positioning?
 - Do they recognize the held sheep, the pen entrance, and the four-sheep progress display?
-- Do they understand the 40-second timer and its amber/red warnings?
+- Do they understand the 30-second timer and its amber/red warnings?
 - Does a lion catch feel like a manageable retry? Stop or switch to Free Play if it causes distress.
 - Can they identify the next chapter and an earned keepsake in the adventure book?
 
@@ -25,7 +25,7 @@ Watch for misleading scenery in the maze, difficulty dragging armour to body par
 | Age band / input device / language | |
 | Time to first independent movement | |
 | Time to first independent sheep pickup | |
-| Sheep saved before the 40-second deadline | |
+| Sheep saved before the 30-second deadline | |
 | Hints or adult prompts needed | |
 | First point of confusion | |
 | Successful independent retry? | |
@@ -33,7 +33,7 @@ Watch for misleading scenery in the maze, difficulty dragging armour to body par
 | Can the child describe their favourite moment? | |
 | One change to test next | |
 
-Keep observations separate from automated QA. Compare results across at least two children per age band before describing the difficulty as calibrated. The 40-second limit is the product owner's explicit choice; if it proves too tight, present that evidence before changing it. Free Play remains available for unhurried classroom turns.
+Keep observations separate from automated QA. Compare results across at least two children per age band before describing the difficulty as calibrated. The 30-second limit is the product owner's explicit choice; if it proves too tight, present that evidence before changing it. Free Play remains available for unhurried classroom turns.
 
 ## Current automated coverage
 

@@ -167,7 +167,7 @@ export function drawHero(
   };
   c.save();
   c.translate(x, y);
-  c.scale(scale, scale);
+  c.scale(scale * (p.facing || 1), scale);
   c.imageSmoothingEnabled = true;
   c.imageSmoothingQuality = "high";
   c.fillStyle = "#263e3328";

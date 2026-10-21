@@ -30,7 +30,7 @@ with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive
                          '49-', '51-', '55-', '56-', '57-', '58-', '59-', '61-',
                          '62-', '63-', '64-', '65-', '67-', '68-', '69-', '70-',
                          '71-', '72-', '73-', '74-', '75-', '76-', '77-', '78-', '79-',
-                         '80-', '81-', '82-', '83-')
+                         '80-', '81-', '82-', '83-', '84-', '85-', '86-', '87-', '88-', '89-')
     for file in sorted((root / 'qa').rglob('*')):
         if file.is_file() and (file.suffix in ('.json', '.log') or
                               'baseline-v1' in file.parts or 'david-before' in file.parts or

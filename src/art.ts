@@ -328,6 +328,7 @@ export function tent(c: Ctx, x: number, y: number, s = 1, color = "#e6bd7b") {
   c.restore();
 }
 export type Pose = {
+  facing?: -1 | 1;
   action?: "throw" | "kneel";
   carry?: number;
   food?: boolean;

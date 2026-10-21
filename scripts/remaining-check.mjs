@@ -19,36 +19,41 @@ await page.keyboard.press("Space");
 if ((await state()).sheep.some((s) => s.carried))
   throw Error("Distant pickup falsely worked");
 await page.screenshot({ path: "qa/22-sheep-distant-call.png" });
+// Real simultaneous arrow keys use the same diagonal movement available to children.
 async function moveTo(x, y) {
-  for (let i = 0; i < 80; i++) {
-    if ((await state()).phase === "success") return;
-    const d = (await state()).david,
-      dx = x - d.x,
-      dy = y - d.y;
+  for (let i = 0; i < 140; i++) {
+    const current = await state();
+    if (current.phase === "success") return;
+    if (current.failed) throw Error("Rescue expired during route");
+    const dx = x - current.david.x,
+      dy = y - current.david.y;
     if (Math.abs(dx) < 9 && Math.abs(dy) < 9) return;
-    const key =
-      Math.abs(dx) > Math.abs(dy)
-        ? dx > 0
-          ? "ArrowRight"
-          : "ArrowLeft"
-        : dy > 0
-          ? "ArrowDown"
-          : "ArrowUp";
-    await page.keyboard.down(key);
+    const keys = [];
+    const distances = [];
+    if (Math.abs(dx) >= 9) {
+      keys.push(dx > 0 ? "ArrowRight" : "ArrowLeft");
+      distances.push(Math.abs(dx));
+    }
+    if (Math.abs(dy) >= 9) {
+      keys.push(dy > 0 ? "ArrowDown" : "ArrowUp");
+      distances.push(Math.abs(dy));
+    }
+    const speed = current.carriedIndex !== null ? 290 : 245;
+    for (const key of keys) await page.keyboard.down(key);
     await page.waitForTimeout(
       Math.min(
-        180,
+        160,
         Math.max(
-          25,
-          (Math.max(Math.abs(dx), Math.abs(dy)) /
-            ((await state()).carriedIndex !== null ? 290 : 245)) *
+          20,
+          ((Math.min(...distances) * (keys.length === 2 ? Math.SQRT2 : 1)) /
+            speed) *
             1000,
         ),
       ),
     );
-    await page.keyboard.up(key);
+    for (const key of keys) await page.keyboard.up(key);
   }
-  throw Error("Cannot move to " + [x, y] + JSON.stringify(await state()));
+  throw Error("Rescue route blocked");
 }
 for (let i = 0; i < 4; i++) {
   let s = (await state()).sheep[i];

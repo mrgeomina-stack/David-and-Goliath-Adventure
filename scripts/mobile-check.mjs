@@ -201,7 +201,13 @@ try {
       );
       await dispatch("touchEnd", []);
     }
-    throw Error("Touch rescue route blocked");
+    await page.screenshot({ path: "qa/mobile-route-failure.png" });
+    throw Error(
+      "Touch rescue route blocked at " +
+        [x, y] +
+        " " +
+        JSON.stringify(await state()),
+    );
   };
   const sheep = (await state()).sheep[0];
   await moveTo(sheep.x - 35, sheep.y);

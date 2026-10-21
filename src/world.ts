@@ -1,3 +1,4 @@
+import { ActivityTimer, ACTIVITY_SECONDS } from "./activity-timer";
 import Phaser from "phaser";
 import {
   MazeModel,
@@ -49,6 +50,14 @@ export interface Hooks {
 }
 export class World extends Phaser.Scene {
   ready = false;
+  facing: -1 | 1 = 1;
+  activityTimer = new ActivityTimer();
+  timedOut = false;
+  get activityRemaining() {
+    return this.mission === "sheep" && this.phase !== "encounter"
+      ? this.sheep.remaining
+      : this.activityTimer.remaining;
+  }
   private fingerGesture = false;
   private effects = new Effects();
   private lastDust = 0;
@@ -156,6 +165,12 @@ export class World extends Phaser.Scene {
         KeyS: { x: 0, y: 1 },
       };
       if (
+        taps[e.code]?.x &&
+        !this.failed &&
+        (this.phase === "play" || this.phase === "encounter")
+      )
+        this.facing = taps[e.code].x < 0 ? -1 : 1;
+      if (
         taps[e.code] &&
         this.phase === "play" &&
         this.mission === "maze" &&
@@ -212,6 +227,9 @@ export class World extends Phaser.Scene {
     this.practice = practice;
     this.phase = "play";
     this.failed = false;
+    this.timedOut = false;
+    this.facing = 1;
+    this.activityTimer = new ActivityTimer(this.free ? null : ACTIVITY_SECONDS);
     this.effects.particles = [];
     this.successTime = 0;
     this.deliveryCheered = false;
@@ -221,7 +239,7 @@ export class World extends Phaser.Scene {
     this.run++;
     this.maze = new MazeModel(this.seed + this.run * 41);
     this.armor = new ArmorModel();
-    this.sheep = new SheepModel(this.run, this.free ? null : 40);
+    this.sheep = new SheepModel(this.run, this.free ? null : ACTIVITY_SECONDS);
     this.brook = new BrookModel(this.run);
     this.sling = new SlingModel();
     this.paused = false;
@@ -243,12 +261,14 @@ export class World extends Phaser.Scene {
   /** A brief touch/click must register even if pointerup precedes the next frame. */
   pressDirection(dir: Point) {
     if (this.paused || this.failed) return;
+    if (dir.x) this.facing = dir.x < 0 ? -1 : 1;
     this.stepDir = dir;
     this.tutorialTime = 0;
     if (this.phase === "play" && this.mission === "maze" && this.moveWait <= 0)
       this.stepMaze(dir);
   }
   private stepMaze(dir: Point) {
+    if (dir.x) this.facing = dir.x < 0 ? -1 : 1;
     const moved = this.maze.move(
       Math.abs(dir.x) >= Math.abs(dir.y) ? Math.sign(dir.x) : 0,
       Math.abs(dir.y) > Math.abs(dir.x) ? Math.sign(dir.y) : 0,
@@ -261,7 +281,7 @@ export class World extends Phaser.Scene {
     }
   }
   action(down: boolean) {
-    if (this.paused || this.phase !== "play") return;
+    if (this.paused || this.failed || this.phase !== "play") return;
     this.tutorialTime = 0;
     if (this.mission === "sling") {
       if (down) this.sling.hold();
@@ -284,7 +304,7 @@ export class World extends Phaser.Scene {
     if (this.mission === "brook") this.scoop();
   }
   pointerDown(p: Point) {
-    if (this.paused || this.phase !== "play") return;
+    if (this.paused || this.failed || this.phase !== "play") return;
     this.tutorialTime = 0;
     if (this.mission === "brook") {
       let target = p;
@@ -395,6 +415,10 @@ export class World extends Phaser.Scene {
       return;
     if (this.mission === "maze" && !this.practice) {
       this.phase = "encounter";
+      this.activityTimer = new ActivityTimer(
+        this.free ? null : ACTIVITY_SECONDS,
+      );
+      this.facing = 1;
       this.encounterX = 210;
       this.heard = false;
       this.heardTime = 0;
@@ -413,6 +437,21 @@ export class World extends Phaser.Scene {
       return;
     }
     this.start(ORDER[ORDER.indexOf(this.mission) + 1]);
+  }
+  retry() {
+    if (this.phase === "encounter") {
+      this.failed = false;
+      this.timedOut = false;
+      this.encounterX = 210;
+      this.heard = false;
+      this.heardTime = 0;
+      this.facing = 1;
+      this.activityTimer = new ActivityTimer(
+        this.free ? null : ACTIVITY_SECONDS,
+      );
+      this.clearInput();
+      this.hooks.changed();
+    } else this.start(this.mission, this.practice);
   }
   get payoffDuration() {
     return this.mission === "maze" ? 4 : this.mission === "sling" ? 3 : 2.5;
@@ -448,7 +487,30 @@ export class World extends Phaser.Scene {
         this.gearTween.remaining -= dt;
         if (this.gearTween.remaining <= 0) this.gearTween = null;
       }
+      const tutorialWasShowing = this.tutorialTime > 0;
       this.tutorialTime = Math.max(0, this.tutorialTime - dt);
+      if (
+        (this.phase === "play" || this.phase === "encounter") &&
+        !this.failed
+      ) {
+        if (this.dir.x) this.facing = this.dir.x < 0 ? -1 : 1;
+        const committed =
+          this.phase !== "encounter" &&
+          ((this.mission === "armor" && this.armor.fallTime >= 0) ||
+            (this.mission === "brook" && this.brook.complete));
+        const before = this.activityRemaining;
+        if (this.mission !== "sheep" || this.phase === "encounter")
+          this.activityTimer.tick(dt, !tutorialWasShowing && !committed);
+        const after = this.activityRemaining;
+        for (const threshold of [20, 10, 5])
+          if (
+            before !== null &&
+            after !== null &&
+            before > threshold &&
+            after <= threshold
+          )
+            this.hooks.sound.tone(330, 0.15, 0, "triangle");
+      }
       if (this.phase === "success") {
         this.successTime += dt;
         if (
@@ -460,7 +522,7 @@ export class World extends Phaser.Scene {
           this.hooks.sound.play("win");
         }
       }
-      if (this.phase === "encounter") {
+      if (this.phase === "encounter" && !this.failed) {
         this.encounterX = clamp(
           this.encounterX + this.dir.x * 210 * dt,
           150,
@@ -500,7 +562,7 @@ export class World extends Phaser.Scene {
           const count = this.sheep.count;
           const beforeTime = this.sheep.remaining;
           this.sheep.update(this.tutorialTime > 0 ? 0 : dt, dir);
-          for (const threshold of [30, 15, 5])
+          for (const threshold of [20, 10, 5])
             if (
               beforeTime !== null &&
               beforeTime > threshold &&
@@ -543,6 +605,26 @@ export class World extends Phaser.Scene {
           if (this.sling.state === "hit") this.finish();
           else if (before !== this.sling.state) this.hooks.changed();
         }
+      }
+    }
+    // Finish committed animations and shots released before zero; all other input expires.
+    if (
+      !this.paused &&
+      !this.failed &&
+      (this.phase === "play" || this.phase === "encounter") &&
+      this.activityRemaining === 0 &&
+      (this.mission !== "sheep" || this.phase === "encounter")
+    ) {
+      const committed =
+        this.phase !== "encounter" &&
+        ((this.mission === "armor" && this.armor.fallTime >= 0) ||
+          (this.mission === "brook" && this.brook.complete) ||
+          (this.mission === "sling" && this.sling.state === "flying"));
+      if (!committed) {
+        this.failed = true;
+        this.timedOut = true;
+        this.clearInput();
+        this.hooks.changed();
       }
     }
     this.hooks.sound.tick(
@@ -732,6 +814,7 @@ export class World extends Phaser.Scene {
         0.35,
         {
           food: true,
+          facing: this.facing,
           walk: this.maze.moveTime < 0.16 ? Math.sin(this.clock * 25) : 0,
         },
       );
@@ -1164,6 +1247,7 @@ export class World extends Phaser.Scene {
       this.sheep.hunting,
     );
     A.person(c, this.sheep.david.x, this.sheep.david.y, 1, {
+      facing: this.facing,
       walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
       arm: this.phase === "success" ? 1 : 0,
       carry: this.sheep.carried ? this.sheep.liftProgress : undefined,
@@ -1195,7 +1279,13 @@ export class World extends Phaser.Scene {
       );
       // Painted hands from the same character material visibly support the fleece.
       for (const side of [-1, 1])
-        drawHeroHand(c, d.x + side * 30, d.y - lerp(44, 74, f), 1, side);
+        drawHeroHand(
+          c,
+          d.x + side * 30,
+          d.y - lerp(44, 74, f),
+          1,
+          side * this.facing,
+        );
     }
     if (this.sheep.caughtIndex !== null) {
       A.sheep(c, this.sheep.lion.x - 35, this.sheep.lion.y + 6, 0.85, 0);
@@ -1469,6 +1559,7 @@ export class World extends Phaser.Scene {
     A.giant(c, 1030, 588, this.clock, 0, !this.heard);
     A.person(c, this.encounterX, 590, 1, {
       bag: true,
+      facing: this.facing,
       walk: this.dir.x ? Math.sin(this.clock * 13) : 0,
     });
     A.round(c, 390, 272, 370, 103, 20, "#fff2d7f0");

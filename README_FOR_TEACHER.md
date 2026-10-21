@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.6.1: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 40-second sheep rescue are preserved.
+Version 1.7.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
@@ -35,7 +35,7 @@ projector. **?** opens help; **Choose a mission** opens practice from the title.
 **Participation:** Make six teams of five. Everyone coaches, counts and cheers;
 nominate one operator per mission. Five minutes is a classroom target, not a
 measured typical duration or enough time for all thirty to touch the controls.
-Easy and Normal both give exactly 40 seconds to save all four sheep. The opening instruction card does not consume rescue time; moving dismisses it and begins the timer. David walks at 245px/s and runs at 290px/s while carrying. The visible timer turns amber at 30 seconds and red at 15. At zero, the lion pursues an unprotected sheep; reaching one triggers a child-friendly catch and retry. Sheep already inside the pen stay safe. Pause freezes the countdown. Free Play shows ∞ and has no deadline or catch. The 40-second limit is the requested challenge; human difficulty calibration still needs supervised playtesting.
+Easy and Normal give 30 active seconds in every activity. The shrinking bar begins green, fades to orange at 20 seconds and red below 10. David turns with left/right arrows, including when carrying. The maze includes several forks and detours that end later; turn back and try another route. The opening instruction card does not consume rescue time; moving dismisses it and begins the timer. David walks at 245px/s and runs at 290px/s while carrying. Completed armour equipment and the final brook pickup freeze the timer while their animations finish. A stone released before zero can complete its real flight. Other time-outs offer a fresh retry. At zero, the lion pursues an unprotected sheep; reaching one triggers a child-friendly catch and retry. Sheep already inside the pen stay safe. Pause freezes the countdown. Free Play shows ∞ and has no deadline or catch. The 30-second limit is the requested challenge; human difficulty calibration still needs supervised playtesting.
 
 **Story:** The lion catches an unprotected sheep after the rescue deadline, without injury or graphic imagery. The armour fall is playful embellishment:
 David was **unfamiliar with Saul’s armour**, not weak (17:39). Sling misses are game

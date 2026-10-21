@@ -29,7 +29,9 @@ Feet retain the existing world origin. Explicit prop grips remain world-relative
 body settling cannot move the hand away from a sheep/basket/sling attachment.
 No gameplay model, maze, collision, timer, scoring, drop-zone, physics, story or
 control rule is changed. English/Arabic text and mobile/PWA behavior are retained.
-`src/model.ts` is unchanged from `d3a3c28`.
+The 1.6.1 character correction left the model unchanged. Version 1.7.0 adds
+persistent lateral facing to this rig, introduces branching maze generation and
+sets all timed activities to 30 seconds; Free Play remains untimed.
 
 `src/character-skin.ts` contains the pure two-bone transform. Tests check bind-pose
 identity, exact elbow/hand attachment, finite overreach and continuity through a
