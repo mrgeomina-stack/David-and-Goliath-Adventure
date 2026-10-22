@@ -380,8 +380,11 @@ export type Stone = Point & { smooth: boolean; collected: boolean; id: number };
 export class BrookModel {
   stones: Stone[];
   ring = 230;
-  row = 0;
-  direction = 1;
+  ringY = 335;
+  private random: () => number;
+  private route: number[] = [];
+  private target = -1;
+  private rest = 0;
   count = 0;
   cooldown = 0;
   time = 0;
@@ -389,10 +392,22 @@ export class BrookModel {
   errorTime = 0;
   constructor(seed = 1) {
     const random = rng(seed);
-    this.stones = Array.from({ length: 10 }, (_, i) => ({
+    this.random = random;
+    let points: Point[] = [];
+    for (let attempt = 0; points.length < 10 && attempt < 4000; attempt++) {
+      const candidate = { x: 165 + random() * 760, y: 265 + random() * 290 };
+      if (points.every((p) => distance(p, candidate) > 112))
+        points.push(candidate);
+    }
+    // Bounded fallback for any unusually crowded seed; never leave objectives missing.
+    if (points.length < 10)
+      points = Array.from({ length: 10 }, (_, i) => ({
+        x: 180 + (i % 4) * 220 + (random() - 0.5) * 30,
+        y: 275 + Math.floor(i / 4) * 135 + (random() - 0.5) * 16,
+      }));
+    this.stones = points.map((point, i) => ({
+      ...point,
       id: i,
-      x: 230 + (i % 5) * 162 + (random() - 0.5) * 30,
-      y: 335 + Math.floor(i / 5) * 145 + (random() - 0.5) * 22,
       smooth: ![2, 5, 8].includes(i),
       collected: false,
     }));
@@ -401,18 +416,35 @@ export class BrookModel {
     this.time += dt;
     this.cooldown = Math.max(0, this.cooldown - dt);
     this.errorTime = Math.max(0, this.errorTime - dt);
-    this.ring += this.direction * (easy ? 155 : 215) * dt;
-    if (this.ring > 1010) {
-      this.ring = 1010;
-      this.direction = -1;
-      this.row = 1;
+    if (this.rest > 0) {
+      this.rest = Math.max(0, this.rest - dt);
+      return;
     }
-    if (this.ring < 200) {
-      this.ring = 200;
-      this.direction = 1;
-      this.row = 0;
+    if (this.target < 0 || this.stones[this.target].collected) {
+      if (!this.route.length) {
+        this.route = this.stones.filter((s) => !s.collected).map((s) => s.id);
+        for (let i = this.route.length - 1; i > 0; i--) {
+          const j = Math.floor(this.random() * (i + 1));
+          [this.route[i], this.route[j]] = [this.route[j], this.route[i]];
+        }
+      }
+      this.target = this.route.shift() ?? -1;
+    }
+    if (this.target < 0) return;
+    const target = this.stones[this.target];
+    const d = distance({ x: this.ring, y: this.ringY }, target);
+    const step = (easy ? 320 : 410) * dt;
+    if (d <= step) {
+      this.ring = target.x;
+      this.ringY = target.y;
+      this.rest = easy ? 0.22 : 0.12;
+      this.target = -1;
+    } else {
+      this.ring += ((target.x - this.ring) / d) * step;
+      this.ringY += ((target.y - this.ringY) / d) * step;
     }
   }
+
   scoop(p?: Point) {
     if (this.cooldown || this.count === 5) return false;
     this.cooldown = 0.4;
@@ -421,13 +453,12 @@ export class BrookModel {
       : this.stones
           .filter(
             (s) =>
-              !s.collected &&
-              distance(s, { x: this.ring, y: 335 + this.row * 145 }) < 58,
+              !s.collected && distance(s, { x: this.ring, y: this.ringY }) < 58,
           )
           .sort(
             (a, b) =>
-              distance(a, { x: this.ring, y: 335 + this.row * 145 }) -
-              distance(b, { x: this.ring, y: 335 + this.row * 145 }),
+              distance(a, { x: this.ring, y: this.ringY }) -
+              distance(b, { x: this.ring, y: this.ringY }),
           )[0];
     if (!target || !target.smooth) {
       this.errorTime = 0.5;

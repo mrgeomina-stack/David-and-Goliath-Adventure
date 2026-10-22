@@ -50,9 +50,9 @@ try {
   if (!(await state()).music) throw Error("Music did not resume");
   await page.keyboard.press("Escape");
   await page.click("#narration");
-  if (!(await state()).narration) throw Error("Voice toggle failed");
-  await page.click("#narration");
   if ((await state()).narration) throw Error("Voice did not turn off");
+  await page.click("#narration");
+  if (!(await state()).narration) throw Error("Voice did not resume");
   await page.click("#practice-toggle");
   await page.click('[data-mission="maze"]');
   await within("#tutorial");

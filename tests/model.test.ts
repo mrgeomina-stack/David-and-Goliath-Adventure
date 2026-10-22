@@ -208,14 +208,15 @@ describe("pause and timed pickups", () => {
     for (let i = 0; i < 100 && s.state === "flying"; i++) s.update(1 / 60);
     expect(s.state).toBe("hit");
   });
-  it("SPACE scoop uses a real 2D ring radius and misses other rows", () => {
+  it("SPACE scoop requires both horizontal and vertical proximity", () => {
     const b = new BrookModel();
+    b.stones = [b.stones[0]];
     b.ring = b.stones[0].x;
-    b.row = 1;
+    b.ringY = b.stones[0].y + 150;
     expect(b.scoop()).toBe(false);
     b.update(0.5);
     b.ring = b.stones[0].x;
-    b.row = 0;
+    b.ringY = b.stones[0].y;
     expect(b.scoop()).toBe(true);
     expect(b.count).toBe(1);
   });
@@ -257,4 +258,38 @@ it("keeps head, chest and waist equipment zones anatomically distinct", () => {
   expect(new ArmorModel().drop("tunic", anchors.sword)).toBe(false);
   expect(new ArmorModel().drop("mail", anchors.helmet)).toBe(false);
   expect(new ArmorModel().drop("helmet", anchors.tunic)).toBe(false);
+});
+
+it("scatters stones without overlapping finger targets and offers five timely keyboard pickups across seeds", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const brook = new BrookModel(seed);
+    for (let i = 0; i < brook.stones.length; i++) {
+      const stone = brook.stones[i];
+      expect(stone.x).toBeGreaterThan(140);
+      expect(stone.x).toBeLessThan(960);
+      expect(stone.y).toBeGreaterThan(250);
+      expect(stone.y).toBeLessThan(570);
+      for (const other of brook.stones.slice(i + 1))
+        expect(
+          Math.hypot(stone.x - other.x, stone.y - other.y),
+        ).toBeGreaterThan(100);
+    }
+    // A player reacting within the generous pickup radius can finish inside 30s.
+    for (let frame = 0; frame < 60 * 27 && !brook.complete; frame++) {
+      brook.update(1 / 60);
+      if (
+        !brook.cooldown &&
+        brook.stones.some(
+          (s) =>
+            !s.collected &&
+            s.smooth &&
+            Math.hypot(s.x - brook.ring, s.y - brook.ringY) < 40,
+        )
+      )
+        brook.scoop();
+    }
+    expect(brook.count, `seed ${seed}`).toBe(5);
+    expect(brook.stones.filter((s) => s.collected)).toHaveLength(5);
+  }
+  expect(new BrookModel(1).stones).not.toEqual(new BrookModel(2).stones);
 });

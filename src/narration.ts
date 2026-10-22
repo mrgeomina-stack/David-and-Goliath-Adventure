@@ -1,11 +1,26 @@
+import approachen from "./assets/audio/approach-en.mp3";
+import approachar from "./assets/audio/approach-ar.mp3";
+import challengeen from "./assets/audio/challenge-en.mp3";
+import challengear from "./assets/audio/challenge-ar.mp3";
+import saulen from "./assets/audio/saul-en.mp3";
+import saular from "./assets/audio/saul-ar.mp3";
+const bundled = {
+  approach: { en: approachen, ar: approachar },
+  challenge: { en: challengeen, ar: challengear },
+  saul: { en: saulen, ar: saular },
+};
 import type { Language } from "./strings";
 export class Narrator {
+  constructor(
+    private playback?: { play: (url: string) => void; stop: () => void },
+  ) {}
   enabled = false;
   private key = "";
   available =
     typeof speechSynthesis !== "undefined" &&
     typeof SpeechSynthesisUtterance !== "undefined";
   stop() {
+    this.playback?.stop();
     if (this.available) speechSynthesis.cancel();
   }
   reset() {
@@ -18,12 +33,34 @@ export class Narrator {
     arabic: string,
     language: Language,
     muted: boolean,
+    fallback?: keyof typeof bundled,
   ) {
     if (!this.enabled || muted) {
+      this.key = "";
       this.stop();
       return;
     }
-    if (!this.available || this.key === key) return;
+    if (this.key === key) return;
+    const local =
+      this.available &&
+      speechSynthesis
+        .getVoices()
+        .find(
+          (v) =>
+            v.localService &&
+            v.lang.startsWith(language === "ar" ? "ar" : "en"),
+        );
+    if (!local && fallback && this.playback) {
+      this.stop();
+      this.key = key;
+      this.playback.play(bundled[fallback][language === "ar" ? "ar" : "en"]);
+      return;
+    }
+    if (!local && !fallback) {
+      this.stop();
+      return;
+    }
+    if (!this.available) return;
     const utterance = new SpeechSynthesisUtterance(
       language === "ar" ? arabic : english,
     );

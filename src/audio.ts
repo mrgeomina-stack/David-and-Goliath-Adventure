@@ -1,5 +1,149 @@
+import sheepUrl from "./assets/audio/sheep.mp3";
+import victoryUrl from "./assets/audio/victory.mp3";
 export class Sound {
+  private samples = new Map<string, AudioBuffer>();
+  private loading: Promise<void> | null = null;
+  private sources = new Set<AudioBufferSourceNode>();
+  private generation = 0;
+  private voiceSource: AudioBufferSourceNode | null = null;
+  private voiceGeneration = 0;
+  stopVoice() {
+    this.voiceGeneration++;
+    this.voiceSource?.stop();
+    this.voiceSource = null;
+  }
+  async voice(url: string) {
+    this.stopVoice();
+    const generation = this.voiceGeneration;
+    try {
+      if (!this.context) return;
+      let buffer = this.samples.get(url);
+      if (!buffer) {
+        buffer = await this.context.decodeAudioData(
+          await (await fetch(url)).arrayBuffer(),
+        );
+        this.samples.set(url, buffer);
+      }
+      if (generation !== this.voiceGeneration || this.muted) return;
+      const source = this.context.createBufferSource(),
+        gain = this.context.createGain();
+      source.buffer = buffer;
+      gain.gain.value = 0.75;
+      source.connect(gain);
+      gain.connect(this.context.destination);
+      this.voiceSource = source;
+      source.onended = () => {
+        if (this.voiceSource === source) this.voiceSource = null;
+      };
+      this.events.voice = (this.events.voice ?? 0) + 1;
+      source.start();
+    } catch (error) {
+      console.warn("Narration unavailable", error);
+    }
+  }
+  get sampleDurations() {
+    return Object.fromEntries(
+      [...this.samples]
+        .filter(([key]) => !key.startsWith("data:"))
+        .map(([key, buffer]) => [key, buffer.duration]),
+    );
+  }
+  private roarWait = 5;
+  readonly events: Record<string, number> = {};
+  private async loadSamples() {
+    await Promise.all(
+      [
+        ["sheep", sheepUrl],
+        ["complete", victoryUrl],
+      ].map(async ([key, url]) => {
+        try {
+          const response = await fetch(url);
+          const buffer = await this.context!.decodeAudioData(
+            await response.arrayBuffer(),
+          );
+          this.samples.set(key, buffer);
+        } catch (error) {
+          console.warn(`Audio unavailable: ${key}`, error);
+        }
+      }),
+    );
+  }
+  stopSamples() {
+    this.generation++;
+    for (const source of this.sources) source.stop();
+    this.sources.clear();
+    this.roarWait = 5;
+  }
+  private sample(name: string) {
+    const generation = this.generation;
+    const start = () => {
+      const buffer = this.samples.get(name);
+      if (
+        !buffer ||
+        !this.context ||
+        this.muted ||
+        generation !== this.generation
+      )
+        return;
+      const source = this.context.createBufferSource();
+      const gain = this.context.createGain();
+      source.buffer = buffer;
+      gain.gain.value = name === "complete" ? 0.55 : 0.7;
+      source.connect(gain);
+      gain.connect(this.context.destination);
+      this.sources.add(source);
+      source.onended = () => this.sources.delete(source);
+      this.events[name] = (this.events[name] ?? 0) + 1;
+      source.start();
+    };
+    if (this.samples.has(name)) start();
+    else void this.loading?.then(start);
+  }
+  lion(dt: number, active: boolean) {
+    if (!active || this.muted || !this.context) return;
+    this.roarWait -= dt;
+    if (this.roarWait > 0) return;
+    this.roarWait = 7 + Math.random() * 3;
+    const c = this.context,
+      now = c.currentTime;
+    // A soft, breathy growl with a falling pitch; deliberately child-friendly.
+    const buffer = c.createBuffer(1, c.sampleRate * 1.4, c.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / c.sampleRate,
+        envelope = Math.sin((Math.PI * t) / 1.4) ** 2;
+      data[i] =
+        envelope *
+        (0.6 *
+          Math.sin(2 * Math.PI * (105 * t - 17 * t * t)) *
+          (0.6 + 0.4 * Math.sin(t * 45)) +
+          0.3 * (Math.random() * 2 - 1));
+    }
+    const source = c.createBufferSource(),
+      filter = c.createBiquadFilter(),
+      gain = c.createGain();
+    source.buffer = buffer;
+    filter.type = "lowpass";
+    filter.frequency.value = 650;
+    gain.gain.value = 0.24;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    this.sources.add(source);
+    source.onended = () => this.sources.delete(source);
+    source.start(now);
+    this.events.roar = (this.events.roar ?? 0) + 1;
+  }
   context: AudioContext | null = null;
+  private paused = false;
+  pause(paused: boolean) {
+    this.paused = paused;
+    if (!this.context) return;
+    if ((paused || this.muted) && this.context.state === "running")
+      void this.context.suspend();
+    else if (!paused && !this.muted && this.context.state === "suspended")
+      void this.context.resume();
+  }
   muted = false;
   music = true;
   private score: GainNode | null = null;
@@ -28,6 +172,7 @@ export class Sound {
   }
   tick(mission: string, paused: boolean, moving: boolean, dt: number) {
     if (!this.context || this.muted) return;
+    this.pause(paused);
     const c = this.context,
       t = c.currentTime;
     if (!this.score) {
@@ -118,7 +263,8 @@ export class Sound {
   }
   unlock() {
     this.context ??= new AudioContext();
-    if (!this.muted) void this.context.resume();
+    this.loading ??= this.loadSamples();
+    if (!this.muted && !this.paused) void this.context.resume();
   }
   tone(freq = 440, length = 0.15, delay = 0, type: OscillatorType = "sine") {
     if (!this.context || this.muted) return;
@@ -137,6 +283,10 @@ export class Sound {
     o.stop(t + length + 0.01);
   }
   play(name: string) {
+    if (name === "sheep" || name === "complete") {
+      this.sample(name);
+      return;
+    }
     if (["metal", "call", "plop", "launch"].includes(name))
       this.rustle(name === "plop" ? "water" : "cloth");
     if (name === "win") {
@@ -156,9 +306,6 @@ export class Sound {
   }
   setMuted(muted: boolean) {
     this.muted = muted;
-    if (this.context) {
-      if (muted) void this.context.suspend();
-      else if (!this.muted) void this.context.resume();
-    }
+    this.pause(this.paused);
   }
 }

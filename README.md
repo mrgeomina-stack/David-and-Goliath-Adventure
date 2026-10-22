@@ -2,7 +2,17 @@
 
 An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
-teacher controls and fully bundled illustrated artwork and procedural audio.
+teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
+
+## Audio, scattered stones and spoken story · 1.8.0
+
+Your sheep recording plays on successful lifts; occasional gentle synthesized lion
+calls add urgency. Your victory recording plays once after each completed mission.
+The faster stone circle travels in two dimensions through shuffled routes over
+separated, randomly scattered stones. The Goliath interlude explains David’s courage
+and asks the child to return and press Speak to volunteer to Saul. English/Arabic
+story guidance has bundled synthetic speech, with installed voices preferred.
+See [audio and encounter details](docs/AUDIO_AND_ENCOUNTER.md).
 
 ## Direction, branching maze and countdown · 1.7.0
 
@@ -38,7 +48,7 @@ Host `Davids_Big_Adventure_Web.zip` on HTTPS for phones/tablets. See
 The five chapters now share an illustrated adventure map, earned keepsakes,
 colourful instruction cards, a poseable illustration-based David, layered scenery,
 action particles and cinematic payoffs. Soft instrumental music, environmental
-sound and optional installed local narration support the captions.
+sound and initially enabled narration support the captions. Goliath/Saul guidance includes bundled English/Arabic synthetic speech when no installed voice is available.
 
 The sheep rescue has a **30-second limit** in Easy and Normal. At zero the lion
 pursues an unprotected sheep and a gentle catch leads to retry. Other activities
@@ -138,3 +148,5 @@ default. Settings and game progress do not require browser storage.
 The armour tumble is a playful dramatization: David was unfamiliar with Saul’s
 armour, not inherently weak. The sling has two cords and a pouch. Only a physical
 forehead/head collision unlocks the canonical victory.
+
+Version 1.8 adds supplied sheep/victory recordings, occasional gentle lion growls, faster shuffled brook routes and scattered stones, plus an explicit spoken Goliath → volunteer to Saul → armour story bridge. See [audio and encounter implementation](docs/AUDIO_AND_ENCOUNTER.md).

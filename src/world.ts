@@ -223,6 +223,7 @@ export class World extends Phaser.Scene {
   }
   start(mission: Mission = "sheep", practice = false) {
     this.clearInput();
+    this.hooks.sound.stopSamples();
     this.mission = mission;
     this.practice = practice;
     this.phase = "play";
@@ -255,6 +256,7 @@ export class World extends Phaser.Scene {
   }
   setPaused(value: boolean) {
     this.paused = value;
+    this.hooks.sound.pause(value);
     this.clearInput();
     this.hooks.changed();
   }
@@ -281,6 +283,18 @@ export class World extends Phaser.Scene {
     }
   }
   action(down: boolean) {
+    if (this.phase === "encounter") {
+      if (
+        down &&
+        !this.paused &&
+        !this.failed &&
+        this.heard &&
+        this.encounterX < 290
+      ) {
+        this.start("armor", this.practice);
+      }
+      return;
+    }
     if (this.paused || this.failed || this.phase !== "play") return;
     this.tutorialTime = 0;
     if (this.mission === "sling") {
@@ -292,7 +306,7 @@ export class World extends Phaser.Scene {
     if (!down) return;
     if (this.mission === "sheep") {
       const picked = this.sheep.pickup();
-      this.hooks.sound.play(picked ? "call" : "wall");
+      this.hooks.sound.play(picked ? "sheep" : "wall");
       if (picked)
         this.effects.burst(
           this.sheep.david.x,
@@ -403,17 +417,18 @@ export class World extends Phaser.Scene {
     this.successTime = 0;
     this.deliveryCheered = false;
     this.clearInput();
-    if (this.mission !== "maze") this.hooks.sound.play("win");
+    if (this.mission !== "maze") this.hooks.sound.play("complete");
     this.hooks.changed();
   }
   continue() {
-    if (this.phase === "encounter" && this.heard) {
+    if (this.phase === "encounter" && this.heard && this.encounterX < 290) {
       this.start("armor", this.practice);
       return;
     }
     if (this.phase !== "success" || this.successTime < this.payoffDuration)
       return;
     if (this.mission === "maze" && !this.practice) {
+      this.hooks.sound.stopSamples();
       this.phase = "encounter";
       this.activityTimer = new ActivityTimer(
         this.free ? null : ACTIVITY_SECONDS,
@@ -432,6 +447,7 @@ export class World extends Phaser.Scene {
       return;
     }
     if (this.practice) {
+      this.hooks.sound.stopSamples();
       this.phase = "title";
       this.hooks.changed();
       return;
@@ -519,7 +535,7 @@ export class World extends Phaser.Scene {
           this.successTime >= 2.55
         ) {
           this.deliveryCheered = true;
-          this.hooks.sound.play("win");
+          this.hooks.sound.play("complete");
         }
       }
       if (this.phase === "encounter" && !this.failed) {
@@ -536,7 +552,6 @@ export class World extends Phaser.Scene {
         }
         if (this.heard) {
           this.heardTime += dt;
-          if (this.encounterX < 270 && this.heardTime > 1) this.start("armor");
         }
       }
       if (this.phase === "play" && !this.failed) {
@@ -627,6 +642,14 @@ export class World extends Phaser.Scene {
         this.hooks.changed();
       }
     }
+    this.hooks.sound.lion(
+      dt,
+      this.mission === "sheep" &&
+        this.phase === "play" &&
+        !this.paused &&
+        !this.failed &&
+        this.tutorialTime <= 0,
+    );
     this.hooks.sound.tick(
       this.mission,
       this.paused || this.failed,
@@ -1333,7 +1356,7 @@ export class World extends Phaser.Scene {
       pebble(c, s.smooth ? index % 5 : 5 + (index % 3), s.x, s.y);
       A.ellipse(c, s.x, s.y + 19, 42, 9, "#c1f8ec28");
     }
-    const ringY = 335 + this.brook.row * 145;
+    const ringY = this.brook.ringY;
     c.strokeStyle = this.brook.errorTime ? "#d17b51" : "#fff4be";
     c.lineWidth = 5;
     c.beginPath();
@@ -1566,8 +1589,8 @@ export class World extends Phaser.Scene {
     A.text(
       c,
       this.heard
-        ? this.say("David chooses courage.", "داود اختار الشجاعة.")
-        : this.say("Who will face the giant?", "مين هيواجه العملاق؟"),
+        ? this.say("God helps me be brave!", "الله يساعدني أكون شجاعًا!")
+        : this.say("The soldiers need courage.", "الجنود يحتاجون إلى الشجاعة."),
       575,
       307,
       24,
@@ -1576,8 +1599,11 @@ export class World extends Phaser.Scene {
     A.text(
       c,
       this.heard
-        ? this.say("← Go and speak to Saul", "اتكلم مع شاول ←")
-        : this.say("Walk closer to listen →", "قرّب واسمع ←"),
+        ? this.say("← Tell Saul: I will help!", "قل لشاول: سأساعد! ←")
+        : this.say(
+            "Go hear Goliath’s challenge →",
+            "امش يمينًا واسمع تحدي جليات",
+          ),
       575,
       346,
       20,

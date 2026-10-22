@@ -49,3 +49,20 @@ describe("optional local narration", () => {
     ).not.toThrow();
   });
 });
+
+it("plays bundled Arabic/English encounter speech without browser voices, deduplicates and stops on mute", () => {
+  vi.stubGlobal("speechSynthesis", undefined);
+  const play = vi.fn(),
+    stop = vi.fn();
+  const voice = new Narrator({ play, stop });
+  voice.enabled = true;
+  voice.speak("intro", "Hello", "مرحبا", "ar", false, "approach");
+  voice.speak("intro", "Hello", "مرحبا", "ar", false, "approach");
+  expect(play).toHaveBeenCalledTimes(1);
+  expect(play.mock.calls[0][0]).toContain("approach-ar.mp3");
+  voice.speak("challenge", "Hello", "مرحبا", "en", false, "challenge");
+  expect(play.mock.calls[1][0]).toContain("challenge-en.mp3");
+  voice.speak("challenge", "Hello", "مرحبا", "en", true, "challenge");
+  expect(stop).toHaveBeenCalledTimes(3);
+  expect(play).toHaveBeenCalledTimes(2);
+});

@@ -1,0 +1,14 @@
+[
+  {
+    "source": "Victory sound.mp3",
+    "retained": "src/assets/audio/victory.mp3",
+    "sha256": "06f0bc242db51210edf0765cfe6f4835de3ab1de349600dda69b20064e100bef",
+    "byteIdentical": true
+  },
+  {
+    "source": "Sheep sound.m4a",
+    "retained": "src/assets/audio/original-sheep.m4a",
+    "sha256": "6dfcc966b7575906f11e0124e8ff9b20e76a0bb64d2388209eb3becf34c943d5",
+    "byteIdentical": true
+  }
+]

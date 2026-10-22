@@ -1,0 +1,14 @@
+{
+  "offline": true,
+  "language": "ar",
+  "audio": {
+    "voice": 3,
+    "complete": 1
+  },
+  "decodedSeconds": {
+    "sheep": 4.365351473922902,
+    "complete": 12.06857142857143
+  },
+  "touchUniqueStones": 5,
+  "errors": []
+}

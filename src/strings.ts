@@ -30,7 +30,10 @@ export const copy = {
     "لما نخاف، نثق في ربنا!",
     "God gives us courage when we trust Him.",
   ],
-  encounter: ["داود سمع تحدّي جليات.", "David heard Goliath’s challenge."],
+  encounter: [
+    "اسمع جليات، ثم اعرض مساعدتك على شاول.",
+    "Hear Goliath. Offer Saul your help.",
+  ],
   encounterInstruction: [
     "قرّب داود عشان يسمع، وبعدين روح لشاول.",
     "Walk closer to listen, then go to Saul.",

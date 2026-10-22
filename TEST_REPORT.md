@@ -1,173 +1,79 @@
-# David’s Big Adventure — validation report · 1.7.0
+# David’s Big Adventure — validation report · 1.8.0
 
-21 October 2026. This release adds persistent left/right character facing during walking/carrying,
-more branching maze choices with later dead ends, and a shared 30-second colour
-bar in every timed activity. Free Play remains untimed, as confirmed by the user.
-The cohesive painted character from 1.6.1 remains. Body/hand mirroring uses the
-same rig, including front hands supporting the sheep. The model changes are
-limited to the requested maze generation and countdown behavior; sheep count,
-carry/pen rules, armour drop regions, five unique stones, sling ballistics and
-forehead collision remain.
+22 October 2026. This release adds the uploaded sheep/victory recordings,
+periodic synthesized lion growls, faster two-dimensional brook-circle movement,
+seeded scattered stones, and an explicit spoken Goliath → volunteer to Saul →
+armour story bridge. Narration starts enabled. The interlude has bundled synthetic
+English/Arabic fallback speech, so it does not depend on installed system voices.
+The 30-second Easy/Normal activity bars and untimed Free Play remain.
 
-## Build and automated checks
+## Validation
 
-Linux x64, Node 24.19.0, npm 11.9.0; Phaser 3.90.0, TypeScript 5.9.3,
-Vite 7.3.1, Vitest 4.0.18 and Playwright 1.58.2. System Chromium 154,
-headless Canvas. Tests use keyboard, pointer and native emulated touch inputs.
-Logical resolution: 1280×720. Phone/tablet viewports include 568×320, 667×375,
-844×390, 915×412, 1024×768, 1180×820 and 1366×1024; desktop 1280×720 and
-1920×1080; phone portrait 390×844.
+Node 24.19.0, TypeScript 5.9.3, Phaser 3.90.0 Canvas, Vite 7.3.1,
+Vitest 4.0.18, Playwright 1.58.2 and system Chromium. Logical scene 1280×720.
 
-| Command / check | Result |
-| --- | --- |
-| `npm run build` | Typecheck and production offline/PWA build passed. |
-| `npm test` | 39 tests passed, no failures or skips. |
-| Browser checks | 11 checks passed in the full batch; rescue, mobile and character checks passed targeted reruns. The dedicated direction/maze/countdown check also passed. All 15 final outcomes and original failures are retained in `qa/browser-final-results.json` and `qa/browser-results.json`. |
-| `node scripts/import-visual-assets.mjs` | 64 valid candidates, 24 absent optional effect frames, one quarantined damaged background, zero ambiguous/invalid active files. |
-| ZIP integrity | Packaging validates CRC; final archive verification compares playable HTML with the tested build. |
+- Typecheck and production build: passed.
+- Unit tests: **43 passed**. New checks cover offline speech selection/cancellation,
+  immediate pause/mute audio behavior, and 100 seeded scattered-stone layouts with
+  five genuine ring pickups inside 27 simulated seconds. The seeds also verify separated finger targets.
+- Browser regression checks: **16 final outcomes passed**, including five clean
+  final-build checks (story/audio counts, Voice controls, offline Arabic audio/touch,
+  mobile regression and disconnected HTML). See `qa/browser-results.json` and the release result
+  index for original outcomes and final reruns. The initial run exposed an old
+  test assuming Voice started disabled; the test now verifies both toggle states.
+  A pre-final harness metadata read overlapped a rebuild; a clean final-build rerun
+  is indexed separately. Neither issue was a failed gameplay interaction.
+- Full-story input test: real sheep carries, maze walls/route, explicit approach/
+  return/Speak interaction, all four armour drops and recovery, five keyboard ring
+  pickups, and a genuine ballistic hit. Completion-audio counts are checked after
+  all five missions; the maze cue follows actual food transfer. Read-only QA
+  feedback guides automation; it cannot change game state or force outcomes.
+- Offline phone audio/touch test: no installed speech voices, Arabic fallback,
+  audio pause/mute, both supplied recordings decoded, faster 2D ring movement,
+  jagged rejection, five unique touch pickups and exactly one completion track.
+- Existing regression coverage includes low/high sling misses, failure/retry,
+  restarts, timed/untimed activities, touch armour, rotation, responsive bounds,
+  service-worker cache failure/retry, offline play and offline relaunch.
 
-The rescue automation now uses real simultaneous arrow keys for diagonal travel,
-which fits the requested deadline without changing game speed. Character capture
-automation uses read-only charge feedback and a real retry if image encoding
-extends a sling hold. A transient mobile routing failure passed on rerun; no
-reproducible game defect was isolated. Rerun logs remain in `qa/`.
+Actual integrated-game screenshots 90–95 show the story instructions, Saul armour
+transition, moving-circle pickups, Arabic phone guidance and scattered phone brook.
+The screenshots and machine-readable logs are included in the separate QA archive.
+See `docs/AUDIO_AND_ENCOUNTER.md` for audio provenance, generation and editable
+scripts. The original uploaded sheep file is retained; the victory MP3 is unchanged.
 
-The runner starts its own server at port 4174 and uses two browser workers.
-Set `BROWSER_WORKERS=1` for sequential execution; do not run two copies at once.
-The read-only QA inspector cannot move actors, equip armour or force a win.
+## Practical limits and unchanged asset gaps
 
-Four added character-skin tests verify bind-pose identity, connected elbow/hand
-anchors during reach, finite overreach and continuous bending through a joint.
-The character browser check captures actual game actions and verifies a real
-sheep lift, stone collection and ballistic hit. Artistic quality is reviewed from
-screenshots; automated state checks alone cannot judge a drawing. The short
-headless frame samples measured approximately 47–60 fps across the five missions
-in this run (`qa/visual-results.json`); this does not certify sustained physical
-device performance.
+These are headless Chromium tests with emulated phone/tablet touch, not physical
+iPhone/iPad/Android or Safari certification. No human listening or child classroom
+playtest is claimed. The fallback speech is synthetic rather than an actor recording;
+a professional recording remains an optional production improvement. Other chapters
+still need an installed local voice for speech, with bilingual captions always present.
 
-## Gameplay exercised
+Managed Chromium blocks direct `file://` navigation in this environment. Offline
+checks therefore load the self-contained production HTML with networking disabled;
+this does not certify every desktop file-opening policy. The ZIP contains a classic
+inline script and inline artwork/audio, without module/CDN/runtime internet imports.
+Phones/tablets should use the HTTPS/PWA setup in `docs/MOBILE_PWA.md`.
 
-- **Sheep:** Four distinct sheep, nearby-only pickup, actual lift/carry/set-down
-  through the pen opening, keyboard and multi-touch carry. Distant pickup is
-  rejected. Easy/Normal now have 30 seconds; warnings, pause, lion catch and fresh
-  retry are exercised with the actual game clock. Free Play remains untimed.
-- **Maze:** Connected seeded 9×7 branching graph, two start openings, at least six route forks and three detours with later dead ends, actual wall rejection, real-input route,
-  hints, scaled touch/swipes and four-second celebration. David walks with one
-  separate basket. Shared support changes to brother ownership after David lets
-  go; the receiver's baked basket is masked to prevent duplicates.
-- **Armour:** Actual pointer/finger drags, wrong-zone return, cancelled drag,
-  separate body attachment anchors, no payoff at 3/4; all four correct drops
-  trigger the 6.5-second step/wobble/gentle fall, helmet slip, visible removal and
-  recovery. Helmet back/front layering keeps David's eyes visible.
-- **Brook:** Jagged rejection, tap and timed SPACE inputs, five unique IDs,
-  cooldown, kneeling hand-to-water and pickup-to-pouch motion. Exactly five
-  smooth stones unlock completion; scenery rocks do not count.
-- **Sling:** Short/overpowered throws genuinely miss; hold/release produces a
-  real ballistic object, and swept forehead collision triggers the reaction.
-  Pause in flight and focus cancellation are exercised. No trajectory correction.
-  The drawn forehead is `(1000,259)` and the fixed launch is `(184,513)`;
-  `v1-integration-results.json` compares actual drawn/model projectile positions.
-- **Flow:** Real-input sheep → maze → walk toward Goliath / return to Saul →
-  armour → brook → sling → victory, plus practice return, replay, restart and
-  persistent earned keepsakes. Automated solver feedback measures no child play
-  time; see `qa/story-result.json` for the actual automated run duration.
-- **UI/mobile:** English/Arabic/bilingual layouts, colourful instruction bounds,
-  native emulated touch, multi-touch, rotation pause/resume, screen fit,
-  music/voice toggles, mute/unlock, focus pause and release outside controls.
+The supplied art pack still has one damaged meadow background, 24 absent optional
+effect frames and provisional character frames. Those remain quarantined or replaced
+by the better existing painting/procedural animation. No asset inspector replaces the
+game. David’s coherent painted rig, lateral facing, food handover, sheep pen physics,
+armour drop geometry, exactly five stones, sling ballistics and real Goliath forehead
+collision remain. Earlier validation detail is retained in docs/VALIDATION_1_7_0.md.
 
-## Artwork audit
+## Reproduce
 
-All seven supplied documents were read and retained unchanged. The source ZIP
-includes every supplied PNG. 92 of 93 decode fully. The meadow background
-`level01_shepherd_hills_1920x1080.png` fails IDAT CRC/full decoding and is retained
-unchanged but excluded from the runtime; the existing meadow remains.
-Four new backgrounds, 56 candidate sprites and four UI images load successfully.
-Missing 24 optional effect frames use the existing procedural effects.
-28 provisional David frames do not replace better existing animations.
-David now uses one new 1024×1536 illustration made from the supplied design.
-His face, neck, torso, hands, clothing and legs share one painted material and
-continuous textured rig. The head/torso are connected, limbs bend without
-separating cutouts, and hips/gear follow the torso through crouch and recovery.
-The cover uses the same rig. See `docs/DAVID_CHARACTER_RIG.md`.
+```
+npm ci
+npm test
+npm run build
+BROWSER_PORT=4175 npm run test:browser
+npm run package
+```
 
-Uniform scaling and pixel pivots are used. Goliath's forehead is fitted to the
-existing collider, stones retain their model centers, armour retains its drop
-regions, and maze-wall texture is clipped within original geometry.
-`docs/VISUAL_ASSETS_V1_PROGRESS.md` records per-level keep/enhance/replace choices.
-Source art is unchanged; masks, crops and layers are implemented in rendering code.
-
-## New timer/facing validation
-
-Unit checks cover 200 connected maze seeds, two start openings, six route choices,
-three detours with depth ≥3 and 18–26-step reachable solutions. Thirty seeded
-four-sheep model routes finish within 27 active seconds under the new deadline.
-The shared timer tests cover pause/freeze, untimed mode, zero clamping and smooth
-green/orange/red interpolation. Browser QA uses a real sheep lift and left/right
-keyboard/touch inputs, retains the side while idle or moving vertically, and
-captures both carry directions. It exercises each activity’s 30-second expiry,
-clean retry, bar thresholds, pause and all five untimed Free Play activities.
-The actual lion catch after zero remains separately tested.
-
-The clock pauses for instruction cards, menus and committed completion animations.
-Shots released before the deadline finish their real ballistic flight. These are
-explicit timing rules, not automatic wins or modified projectile physics.
-
-## Offline evidence and limits
-
-`dist/index.html` embeds classic JavaScript, CSS and gameplay artwork. There are
-no runtime module imports, CDNs, accounts, external fonts or asset fetches.
-Networking-disabled runtime checks exercise the self-contained HTML. The actual
-service-worker check separately caches the hosted game, disconnects networking,
-reloads, completes a real maze offline and tests new-tab offline relaunch. Partial
-cache failure never claims readiness; retry and controlled updates preserve
-keepsakes. File mode skips PWA registration; installation requires HTTPS.
-
-The final direct `file://` launch was attempted with networking disabled. Managed
-Chromium blocks it with `ERR_BLOCKED_BY_ADMINISTRATOR`: **blocked, not passed**.
-No browser policy was changed. Direct disk launch still requires rehearsal on the
-recipient's computer. The offline HTTP test does not certify that launch method.
-
-## Actual-game visual evidence
-
-`qa/baseline-v1/` contains five pre-art screenshots; `qa/david-before/` records
-the prior mixed-material David. Current representative
-screenshots are packaged with JSON results in `Davids_Big_Adventure_QA.zip`:
-
-| Evidence | Files |
-| --- | --- |
-| Facing and new maze/countdown states | `84-carry-facing-right.png` through `89-maze-timeout-retry.png` |
-| New cohesive David across cover, gait, carry, phone, kneel and throw | `75-david-cohesive-cover.png` through `83-david-cohesive-release.png` |
-| Integrated title and five activities | `67-v1-title.png` through `72-v1-sling.png` |
-| Forehead / fixed launch overlay and genuine reaction | `73-v1-forehead-release-alignment.png`, `74-v1-goliath-reaction.png` |
-| Basket carry, shared support, receiver ownership | `63-food-carried-walk.png` through `65-brother-holds-basket.png` |
-| Armour dressed, tumble, removal and recovery | `10-armor-dressed.png` through `13-armor-recovered.png` |
-| Kneeling pickup / sheep lift and carry | `26b-brook-pickup.png`, `48-sheep-lift.png`, `49-sheep-carried.png` |
-| Phone touch and cached offline play | `55-phone-maze-celebration.png` through `62-phone-brook.png` |
-| Language and instruction layouts | `33-english.png`, `34-arabic.png`, `51-colourful-instructions.png` |
-
-These are captures from the running game, not the asset inspector. The alignment
-image adds a temporary read-only SVG overlay; ordinary screenshots contain no
-geometry debug marks. Full animation sequences are exercised by the tests;
-single screenshots only show moments. Additional evidence remains in `qa/`.
-
-## Unfinished acceptance work
-
-- Physical iPhone/iPad Safari and Android Chrome, Home Screen installation,
-  notch/safe-area behavior and sustained device performance need hardware tests.
-  WebKit installation was blocked by HTTP 403 on the official mirrors; Safari
-  execution was not performed. Chromium emulation does not certify Safari.
-- Direct Windows/macOS disk launch is unverified because of the cloud browser's
-  policy block. Target-laptop fullscreen and speaker testing remain.
-- Supervised child usability/difficulty/timing sessions have not been conducted.
-  Native-speaker Arabic review, human art/animation approval and narration quality
-  remain acceptance tasks. No child observations or platform results are invented.
-- One damaged meadow background and missing optional FX are explicitly retained
-  as fallback decisions, not represented as completed supplied artwork.
-
-## Preview and deliverables
-
-Use Node 22.12+; run `npm ci`, then `npm run dev` and open the printed address
-(default localhost:5173). For the tested production version: `npm run build`,
-then `npm run preview -- --port 4173`. `npm run package` regenerates offline,
-web, editable-source and focused screenshot/QA ZIPs. The web package can be hosted
-on any static HTTPS host; see `docs/MOBILE_PWA.md`. No site was published here.
+The browser runner defaults to port 4174; override BROWSER_PORT if occupied.
+It uses two workers (BROWSER_WORKERS=1 for sequential runs). Do not run duplicate
+suites concurrently. npm run preview -- --port 4173 previews the production game;
+GAME_URL=http://localhost:4173/ node scripts/audio-brook-check.mjs runs the focused
+sound/touch check. Extract the complete offline ZIP before opening index.html.

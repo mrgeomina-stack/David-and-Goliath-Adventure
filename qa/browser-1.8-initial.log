@@ -1,0 +1,40 @@
+
+> davids-big-adventure@1.8.0 test:browser
+> node scripts/browser-test.mjs
+
+MAZE PASS: real keyboard route, wall rejection, handover, success; zero browser errors.
+ARMOR PASS: wrong-zone reset, 3/4 gating, real drag of all four, staged 6.5s collapse/removal/recovery.
+SLING PASS: low and high misses, ideal collision, pause during flight, victory.
+SHEEP + BROOK PASS: four individual carries, keyboard/touch lifts, pen scoring, distant pickup rejection, jagged rejection, five unique pickups.
+UI + OFFLINE PASS: production HTML runs with networking disabled and no external gameplay-asset requests; 1920/1024 scaled touch, EN/AR, sound unlock/mute, focus cancel, pointer release outside.
+FULL STORY PASS: {"seconds":85.682,"mode":"Easy; automation used solver route and read-only position feedback; not human/classroom timing","errors":[]}
+VISUAL + TOUCH PASS: {"frames":120,"seconds":1.9832000000000007,"estimatedFps":60.00403388463088}
+file:///workspace/David-and-Goliath-Adventure/scripts/premium-check.mjs:53
+  if (!(await state()).narration) throw Error("Voice toggle failed");
+                                        ^
+
+Error: Voice toggle failed
+    at file:///workspace/David-and-Goliath-Adventure/scripts/premium-check.mjs:53:41
+
+Node.js v24.19.0
+COUNTDOWN PASS: warnings, paused time, real lion catch, four-sheep retry, untimed label.
+MOBILE PASS: phone/tablet bounds, native touch maze and armour, multi-touch rescue, rotation and sling.
+PWA PASS: partial-cache failure and retry, install manifest, scoped cache, real offline play and offline relaunch.
+FOOD PASS: real maze, continuous handover, transfer and transition; direct file blocked.
+V1 ART PASS: 64 decoded candidates, five real scenes, original rig, forehead alignment, actual projectile and hit reaction.
+CHARACTER PASS: unified painted rig in cover, movement, actual sheep carry, phone, kneel, pickup and ballistic throw.
+DIRECTION + MAZE + TIMER PASS: real carry facing, start forks, colour bar, per-activity expiry/retry, pause and untimed Free Play.
+file:///workspace/David-and-Goliath-Adventure/scripts/browser-test.mjs:50
+    throw Error(
+          ^
+
+Error: Browser checks failed: premium-check
+    at file:///workspace/David-and-Goliath-Adventure/scripts/browser-test.mjs:50:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.19.0
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

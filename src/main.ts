@@ -21,11 +21,21 @@ import {
 import { Sound } from "./audio";
 import { Journal, CHAPTERS, emblem } from "./journal";
 import { Narrator } from "./narration";
+import { encounterStory } from "./encounter-story";
 import mapUrl from "./assets/journey-map.png";
 const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const sound = new Sound();
-const narrator = new Narrator();
+const narrator = new Narrator({
+  play: (url) => {
+    void sound.voice(url);
+  },
+  stop: () => sound.stopVoice(),
+});
+narrator.enabled = true;
+// Safari/Chrome can populate installed voices after the first user gesture.
+if (narrator.available)
+  speechSynthesis.addEventListener("voiceschanged", () => sync());
 const pwa = new AdventurePwa(() => {
   if (world.ready) sync();
 });
@@ -275,22 +285,39 @@ function sync() {
     ).join("");
   }
   if (world.paused || title) heldDirections.clear();
-  if (world.paused || title) narrator.stop();
+  if (world.paused || title) narrator.reset();
   else
     narrator.speak(
-      `${world.run}:${world.phase}:${world.mission}:${lang}:${world.failed}`,
+      `${world.run}:${world.phase}:${world.heard}:${world.mission}:${lang}:${world.failed}`,
       world.failed
         ? "Let’s try again. You can do it."
         : success
           ? copy[`${world.mission}Success` as CopyKey][1]
-          : copy[world.mission][1],
+          : encounter
+            ? encounterStory[world.heard ? "challenge" : "approach"].en
+            : world.mission === "armor"
+              ? encounterStory.saul.en
+              : copy[world.mission][1],
       world.failed
         ? "يلا نجرّب تاني. إنت تقدر."
         : success
           ? copy[`${world.mission}Success` as CopyKey][0]
-          : copy[world.mission][0],
+          : encounter
+            ? encounterStory[world.heard ? "challenge" : "approach"].ar
+            : world.mission === "armor"
+              ? encounterStory.saul.ar
+              : copy[world.mission][0],
       lang,
       sound.muted,
+      !world.failed && !success
+        ? encounter
+          ? world.heard
+            ? "challenge"
+            : "approach"
+          : world.mission === "armor"
+            ? "saul"
+            : undefined
+        : undefined,
     );
   $<HTMLButtonElement>("start").disabled = !world.ready;
   $<HTMLButtonElement>("practice-toggle").disabled = !world.ready;
@@ -383,7 +410,9 @@ function sync() {
   $("directions").hidden =
     !encounter && !["maze", "sheep"].includes(world.mission);
   $("action").hidden =
-    encounter || !["sheep", "brook", "sling"].includes(world.mission);
+    !encounter && !["sheep", "brook", "sling"].includes(world.mission);
+  $<HTMLButtonElement>("action").disabled =
+    encounter && (!world.heard || world.encounterX >= 290);
   $("input-controls").hidden = success;
   const instruction = instructions[world.mission];
   const legend =
@@ -404,16 +433,20 @@ function sync() {
         : `${instruction[1]}<br>${instruction[2]}`;
   if (encounter)
     $("instruction").textContent = world.heard
-      ? bilingual("← Return to Saul’s tent", "ارجع لخيمة شاول ←")
-      : bilingual("Walk closer to hear Goliath →", "قرّب عشان تسمع جليات ←");
+      ? bilingual(
+          "← Return to Saul. Press Speak / SPACE to offer your help.",
+          "ارجع لشاول واضغط تكلم لتعرض المساعدة ←",
+        )
+      : bilingual("Walk closer to hear Goliath →", "امش يمينًا لتسمع جليات");
   const action: CopyKey =
     world.mission === "sheep"
       ? "call"
       : world.mission === "brook"
         ? "scoop"
         : "charge";
-  $("action").textContent =
-    world.mission === "sheep" && world.sheep.carried
+  $("action").textContent = encounter
+    ? bilingual("Speak to Saul", "تكلم مع شاول")
+    : world.mission === "sheep" && world.sheep.carried
       ? bilingual("To the pen", "للحظيرة")
       : label(action, lang);
   $("hint").textContent = "✧ " + label("hint", lang);
@@ -567,8 +600,8 @@ $("narration").onclick = () => {
   )
     toast(
       bilingual(
-        "No installed local voice for this language. Captions are always available.",
-        "مفيش صوت محلي للغة دي. الكلام المكتوب موجود دايمًا.",
+        "No installed voice. The Goliath story uses bundled speech; other activities have captions.",
+        "لا يوجد صوت محلي. قصة جليات لها صوت مرفق، وباقي الأنشطة لها نص مكتوب.",
       ),
     );
 };
@@ -632,6 +665,7 @@ $("restart").onclick = () =>
           close();
           world.clearInput();
           world.phase = "title";
+          sound.stopSamples();
           sync();
         },
       },
@@ -821,8 +855,10 @@ if (new URL(location.href).searchParams.has("qa"))
         language: lang,
         muted: sound.muted,
         audioState: sound.context?.state,
+        audioEvents: { ...sound.events },
+        sampleDurations: sound.sampleDurations,
         failed: world.failed,
-        ring: { x: world.brook.ring, y: 335 + world.brook.row * 145 },
+        ring: { x: world.brook.ring, y: world.brook.ringY },
         gear: GEAR,
       }),
     },

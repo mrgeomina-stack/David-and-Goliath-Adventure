@@ -6,6 +6,11 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [];
+// Exercise the bundled offline narrator on a device with no installed voices.
+await page.addInitScript(() => {
+  if (window.speechSynthesis) speechSynthesis.getVoices = () => [];
+});
+const completions = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
 await page.waitForSelector('#stage[data-ready="true"]');
@@ -48,6 +53,10 @@ async function complete() {
     const s = window.adventureQA.snapshot();
     return s.phase === "success" && s.successTime >= 4;
   });
+  const snapshot = await state();
+  completions.push({ mission: snapshot.mission, ...snapshot.audioEvents });
+  if (snapshot.audioEvents.complete !== completions.length)
+    throw Error("Missing or repeated completion recording");
   await page.click("#continue");
 }
 const started = Date.now();
@@ -64,6 +73,10 @@ for (let i = 0; i < 4; i++) {
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
   if (i < 3) await moveTo(450, 498);
 }
+if ((await state()).audioEvents.sheep !== 4)
+  throw Error("Sheep recording did not play once per successful lift");
+if (!((await state()).audioEvents.roar >= 1))
+  throw Error("Missing periodic lion growl");
 await complete();
 if ((await state()).mission !== "maze") throw Error("Expected maze");
 let prev = 0;
@@ -86,12 +99,20 @@ for (const n of (await state()).mazePath.slice(1)) {
 await complete();
 if ((await state()).phase !== "encounter")
   throw Error("Missing interactive encounter");
-await page.screenshot({ path: "qa/28-encounter-start.png" });
+await page.screenshot({ path: "qa/90-encounter-purpose.png" });
 await key("ArrowRight", 2400);
 if (!(await state()).heard) throw Error("Cannot hear giant");
-await page.screenshot({ path: "qa/29-encounter-heard.png" });
+await page.screenshot({ path: "qa/91-encounter-challenge.png" });
+await page.keyboard.press("Space");
+if ((await state()).phase !== "encounter")
+  throw Error("Distant Saul interaction worked");
 await key("ArrowLeft", 2300);
+if ((await state()).mission !== "maze")
+  throw Error("Saul conversation skipped");
+await page.keyboard.press("Space");
 if ((await state()).mission !== "armor") throw Error("Saul not reached");
+await page.waitForTimeout(250);
+await page.screenshot({ path: "qa/92-saul-armour-story.png" });
 for (const [a, b] of [
   [
     [220, 280],
@@ -136,7 +157,7 @@ while ((await state()).stoneCount < 5) {
   } else await page.waitForTimeout(40);
   if (attempts++ > 600) throw Error("Timing pickups unreachable");
 }
-await page.screenshot({ path: "qa/30-brook-timing-complete.png" });
+await page.screenshot({ path: "qa/93-brook-random-collection.png" });
 await complete();
 if ((await state()).mission !== "sling") throw Error("Expected sling");
 await key("Space", 1000);
@@ -145,11 +166,16 @@ if ((await state()).shot !== "hit") throw Error("Final physics miss");
 await complete();
 if ((await state()).phase !== "victory") throw Error("No final victory");
 await page.screenshot({ path: "qa/31-story-victory.png" });
+if (((await state()).audioEvents.voice ?? 0) < 3)
+  throw Error("Bundled approach, Goliath and Saul narration did not start");
 if (errors.length) throw Error(errors.join("\n"));
 const result = {
   seconds: (Date.now() - started) / 1000,
   mode: "Easy; automation used solver route and read-only position feedback; not human/classroom timing",
   errors,
+  completions,
+  audio: (await state()).audioEvents,
+  recordings: (await state()).sampleDurations,
 };
 writeFileSync("qa/story-result.json", JSON.stringify(result, null, 2));
 console.log("FULL STORY PASS:", JSON.stringify(result));

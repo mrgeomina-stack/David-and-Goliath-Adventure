@@ -1,0 +1,20 @@
+premium-check 0
+story-check 0
+ui-offline-check 0
+mobile-check 0
+node:fs:622
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open 'dist/index.html'
+    at Object.openSync (node:fs:622:18)
+    at readFileSync (node:fs:488:35)
+    at file:///tmp/adventure-final-checks.mjs:19:120
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'dist/index.html'
+}
+
+Node.js v24.19.0

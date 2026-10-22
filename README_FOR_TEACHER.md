@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.7.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
+Version 1.8.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
@@ -21,9 +21,9 @@ account, installation or internet. Rehearse on your classroom laptop first.
 | --- | --- |
 | 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four. |
 | 2. Maze | Follow real corridors using arrows / WASD, finger swipes or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
-| Goliath’s challenge | Walk right to hear the giant, then return left to Saul’s tent. |
+| Goliath’s challenge | Walk right to hear the giant. David trusts God and volunteers to help: return left to Saul’s tent, then press SPACE / Speak. Spoken guidance is on initially. |
 | 3. Armour | Drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
-| 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone. Collect exactly five; jagged rocks do not count. |
+| 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone. The circle moves faster along shuffled routes over scattered stones. Collect exactly five; jagged rocks do not count. |
 | 5. Sling | Hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
 
 **Teacher controls:** Continue appears after each success animation. **Pause** / ESC
@@ -54,3 +54,5 @@ on an approved local server. See `TEST_REPORT.md` for evidence and limitations.
 **Voice:** The toolbar Voice button enables optional narration in the selected language (English for bilingual mode). Only installed local voices are selected. If none is available, a notice appears and captions remain. Sound off also stops narration. Narration quality and Arabic pronunciation depend on the installed device voice and should be checked before class.
 
 **Child playtesting:** The teacher help menu includes an observation guide. The full printable worksheet is in `docs/CHILD_PLAYTEST.md`. No supervised sessions with children have been conducted by this development agent. Automated checks cover inputs, bounds, real completion, rewards, timer behavior and offline operation; they do not measure child comprehension or comfort.
+
+**New sound:** Successful sheep lifts play your sheep recording. The lion gives occasional gentle growls. Your victory recording plays once after each completed mission. Voice starts on; English/Arabic Goliath and Saul guidance has bundled synthetic fallback speech when a local voice is unavailable. Sound mutes all audio; Voice controls speech separately. See [audio and encounter notes](docs/AUDIO_AND_ENCOUNTER.md).

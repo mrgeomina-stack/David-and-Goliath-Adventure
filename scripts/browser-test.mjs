@@ -3,7 +3,8 @@ import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 mkdirSync("qa", { recursive: true });
 const server = distServer();
-await new Promise((resolve) => server.listen(4174, "127.0.0.1", resolve));
+const port = Number(process.env.BROWSER_PORT || 4174);
+await new Promise((resolve) => server.listen(port, "127.0.0.1", resolve));
 const scripts = [
   "maze-check",
   "armor-check",
@@ -20,6 +21,7 @@ const scripts = [
   "v1-integration-check",
   "character-check",
   "direction-maze-timer-check",
+  "audio-brook-check",
 ];
 const results = [];
 let cursor = 0;
@@ -35,7 +37,7 @@ async function worker() {
     const code = await new Promise((resolve) => {
       const child = spawn(process.execPath, [`scripts/${script}.mjs`], {
         stdio: "inherit",
-        env: { ...process.env, GAME_URL: "http://localhost:4174/" },
+        env: { ...process.env, GAME_URL: `http://localhost:${port}/` },
       });
       child.on("error", () => resolve(1));
       child.on("exit", (code) => resolve(code ?? 1));
