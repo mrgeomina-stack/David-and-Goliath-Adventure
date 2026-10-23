@@ -4,6 +4,13 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Celebration and giant landing fix · 1.9.1
+
+The sheep celebration now features David and his rescued flock without the extra
+adult figure. Goliath's genuine defeat has a layered ground-impact thud and earth
+rumble at the landing frame; the victory track follows it. Everything is generated
+locally and works offline. Pause, mute, misses and replay retain their behavior.
+
 ## Playful game UI · 1.9.0
 
 A reusable vector/CSS design system brings raised coral action buttons, teal

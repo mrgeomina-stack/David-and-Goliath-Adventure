@@ -99,6 +99,56 @@ export class Sound {
     if (this.samples.has(name)) start();
     else void this.loading?.then(start);
   }
+  private giantImpact() {
+    if (!this.context || this.muted || this.paused) return;
+    const c = this.context;
+    let buffer = this.samples.get("impact");
+    if (!buffer) {
+      // Layer body weight, an earthy contact crack and settling debris. Harmonics
+      // above the bass keep the impact audible on tablet/phone speakers, too.
+      buffer = c.createBuffer(1, Math.ceil(c.sampleRate * 1.9), c.sampleRate);
+      const data = buffer.getChannelData(0);
+      let seed = 937,
+        earth = 0,
+        dust = 0;
+      for (let i = 0; i < data.length; i++) {
+        const t = i / c.sampleRate;
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        const noise = (seed / 4294967296) * 2 - 1;
+        earth +=
+          (1 - Math.exp((-2 * Math.PI * 420) / c.sampleRate)) * (noise - earth);
+        dust +=
+          (1 - Math.exp((-2 * Math.PI * 1800) / c.sampleRate)) * (noise - dust);
+        const phase =
+          2 * Math.PI * (42 * t + 68 * 0.075 * (1 - Math.exp(-t / 0.075)));
+        const attack = Math.min(1, t / 0.006);
+        const body =
+          (Math.sin(phase) +
+            0.32 * Math.sin(phase * 2) +
+            0.16 * Math.sin(phase * 3)) *
+          Math.exp(-t * 5);
+        const crack = dust * Math.exp(-t * 24);
+        const rumble =
+          earth * Math.exp(-t * 2.8) * (0.75 + 0.25 * Math.cos(t * 37));
+        const debris =
+          (dust - earth) * Math.exp(-t * 4.5) * Math.sin(t * 53) ** 2;
+        const fade = Math.min(1, (1.9 - t) / 0.15);
+        data[i] =
+          Math.tanh(body * 0.85 + crack * 1.6 + rumble * 1.3 + debris * 0.35) *
+          attack *
+          fade *
+          0.72;
+      }
+      this.samples.set("impact", buffer);
+    }
+    const source = c.createBufferSource();
+    source.buffer = buffer;
+    source.connect(c.destination);
+    this.sources.add(source);
+    source.onended = () => this.sources.delete(source);
+    this.events.impact = (this.events.impact ?? 0) + 1;
+    source.start();
+  }
   lion(dt: number, active: boolean) {
     if (!active || this.muted || !this.context) return;
     this.roarWait -= dt;
@@ -283,6 +333,10 @@ export class Sound {
     o.stop(t + length + 0.01);
   }
   play(name: string) {
+    if (name === "impact") {
+      this.giantImpact();
+      return;
+    }
     if (name === "sheep" || name === "complete") {
       this.sample(name);
       return;

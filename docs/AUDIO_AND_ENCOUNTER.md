@@ -1,3 +1,19 @@
+# Giant landing update · 1.9.1
+
+`src/audio.ts` synthesizes a cached 1.9-second impact: a descending bass/body tone,
+upper harmonics for small speakers, a filtered contact crack, earth rumble and
+settling debris. A short attack and bounded waveform avoid clipping. It uses the
+same tracked-source cancellation and AudioContext pause/mute policy as recordings.
+No downloaded audio or internet connection is required.
+
+`src/world.ts` triggers impact once when success simulation time crosses 1.0s.
+With the supplied defeat artwork, ground contact starts at
+0.25 + (0.94 / 2.02) × 1.6 ≈ 0.995s. Victory starts at 1.65s, leaving the first
+impact clear. Only a real forehead collision enters this sequence. Misses never
+trigger it, pauses freeze it, retry resets timing, and unmuting cannot replay an
+old impact. The extra adult drawn behind David after sheep rescue was removed;
+the next chapter's editable Jesse/food transition caption remains.
+
 # Audio and Goliath encounter · 1.8.0
 
 The uploaded Victory sound.mp3 is kept byte-for-byte as src/assets/audio/victory.mp3.

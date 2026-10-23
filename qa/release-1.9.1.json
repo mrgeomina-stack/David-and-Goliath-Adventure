@@ -1,0 +1,12 @@
+{
+  "version": "1.9.1",
+  "baseline": "c60ab7493580750cb633d708375e64c50b365ff8",
+  "unitTests": 44,
+  "targetedBrowserChecks": [
+    "landing-check",
+    "remaining-check",
+    "ui-offline-check"
+  ],
+  "htmlSha256": "7d21311b8e643aaa39e35e8c2301027abeedd4f06e150ee4b60d17557d3f107b",
+  "fullRegressionBaseline": "1.9.0 (17 scripts), not rerun in this patch"
+}

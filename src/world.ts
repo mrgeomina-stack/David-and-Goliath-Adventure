@@ -417,7 +417,8 @@ export class World extends Phaser.Scene {
     this.successTime = 0;
     this.deliveryCheered = false;
     this.clearInput();
-    if (this.mission !== "maze") this.hooks.sound.play("complete");
+    if (this.mission !== "maze" && this.mission !== "sling")
+      this.hooks.sound.play("complete");
     this.hooks.changed();
   }
   continue() {
@@ -528,11 +529,16 @@ export class World extends Phaser.Scene {
             this.hooks.sound.tone(330, 0.15, 0, "triangle");
       }
       if (this.phase === "success") {
+        const previous = this.successTime;
         this.successTime += dt;
+        // The supplied final ground-contact frame starts at ~1.0s (see drawSling).
+        // Crossing once in simulation time keeps landing silent on misses and frozen on pause.
+        if (this.mission === "sling" && previous < 1 && this.successTime >= 1)
+          this.hooks.sound.play("impact");
         if (
-          this.mission === "maze" &&
+          (this.mission === "maze" || this.mission === "sling") &&
           !this.deliveryCheered &&
-          this.successTime >= 2.55
+          this.successTime >= (this.mission === "maze" ? 2.55 : 1.65)
         ) {
           this.deliveryCheered = true;
           this.hooks.sound.play("complete");
@@ -1323,13 +1329,6 @@ export class World extends Phaser.Scene {
     }
     if (this.hintTime > 0) A.text(c, "←", 386, 500, 38, "#fff6bb");
     if (this.phase === "success") {
-      if (this.successTime > 1)
-        A.person(c, 355, 409, 0.7, {
-          mature: true,
-          beard: true,
-          tunic: "#a87c52",
-          headcloth: "#857647",
-        });
       A.burst(c, this.successTime, 350, 355);
     }
   }

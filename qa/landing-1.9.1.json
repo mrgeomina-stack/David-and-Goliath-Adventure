@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "offline": true,
+  "checks": [
+    "weak/strong misses silent",
+    "impact waits for landing",
+    "pause freezes landing",
+    "one impact per hit",
+    "victory follows impact",
+    "new run resets",
+    "mute suppresses impact and victory",
+    "unmute does not replay"
+  ],
+  "errors": []
+}
