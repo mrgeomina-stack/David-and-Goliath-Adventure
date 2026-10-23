@@ -279,12 +279,13 @@ export class SheepModel {
   get carried() {
     return this.carriedIndex === null ? null : this.sheep[this.carriedIndex];
   }
-  pickup() {
+  pickup(requestedIndex?: number) {
     if (this.carried || this.caughtIndex !== null || this.complete)
       return false;
     let index = -1,
       best = 90;
     this.sheep.forEach((s, i) => {
+      if (requestedIndex !== undefined && i !== requestedIndex) return;
       const d = distance(s, this.david);
       if (!s.saved && !s.caught && d < best) {
         best = d;

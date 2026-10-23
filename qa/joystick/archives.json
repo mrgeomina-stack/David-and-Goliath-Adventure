@@ -1,0 +1,15 @@
+{
+  "Davids_Big_Adventure_Cloudflare_Pages.zip": {
+    "bytes": 71953936,
+    "sha256": "c3c8f918053acff4a1a4e9c987d5b6dfb6b59aeecf7341f520e956fe88fb59b9",
+    "entries": 141,
+    "crcVerified": true,
+    "largestAssetBytes": 3884313
+  },
+  "Davids_Big_Adventure_Offline.zip": {
+    "bytes": 83414223,
+    "sha256": "cfe067cc4779985f8a222c74a0ee5149382fac6fa294049aaa5e1a3a54489930",
+    "entries": 21,
+    "crcVerified": true
+  }
+}

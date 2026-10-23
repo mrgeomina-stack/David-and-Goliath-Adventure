@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { chromium } from "@playwright/test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { mkdirSync } from "node:fs";
@@ -117,14 +118,14 @@ try {
   await tap("#practice-toggle");
   await tap('[data-mission="maze"]');
   await page.waitForTimeout(2700);
+  const stick = await touchStick(page);
   let previous = 0;
   for (const next of await page.evaluate(() =>
     window.adventureQA.snapshot().mazePath.slice(1),
   )) {
     const dx = (next % 9) - (previous % 9),
       dy = Math.floor(next / 9) - Math.floor(previous / 9);
-    const b = await page.locator(`[data-dir="${dx},${dy}"]`).boundingBox();
-    await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
+    await stick.steer({ x: dx, y: dy }, 50);
     await page.waitForTimeout(240);
     previous = next;
   }

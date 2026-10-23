@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { chromium } from "@playwright/test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { distServer } from "./dist-server.mjs";
@@ -28,6 +29,7 @@ try {
     isMobile: true,
   });
   let page = await context.newPage();
+  const stick = await touchStick(page);
   const tap = async (selector) => {
     const b = await page.locator(selector).boundingBox();
     await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
@@ -93,8 +95,7 @@ try {
   )) {
     const dx = (next % 9) - (previous % 9),
       dy = Math.floor(next / 9) - Math.floor(previous / 9);
-    const b = await page.locator(`[data-dir="${dx},${dy}"]`).boundingBox();
-    await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
+    await stick.steer({ x: dx, y: dy }, 45);
     await page.waitForTimeout(240);
     previous = next;
   }

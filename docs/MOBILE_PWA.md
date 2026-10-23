@@ -14,20 +14,21 @@ Turn the device sideways. Portrait phones offer a rotation reminder and pause an
 active game; returning to landscape resumes it. Continuing in portrait is optional,
 but landscape provides more room. Tablets may remain in portrait with letterboxing.
 
-- Sheep and giant encounter: hold the large direction arrows. Tap Lift sheep near
-  a sheep; another finger can keep holding a direction. The timer uses 30
-  seconds in Easy/Normal. Free Play is untimed.
-- Maze: swipe once per corridor step, or tap/hold the direction arrows. Walls and
-  the real delivery goal work exactly as before.
-- Armour: drag a piece with one finger and release over David's matching body part.
-  Tap-piece/tap-body remains available. Capture keeps the drag attached outside the
-  canvas; cancellation returns it safely. Small body targets gain finger tolerance
-  without accepting a helmet at the waist or changing the underlying rules.
-- Brook: tap a smooth stone or tap Scoop **while the moving ring overlaps it**.
-  Early or late input misses; the ring never pauses.
-  Touch targets expand only when needed. Jagged rocks still do not count.
-- Sling: hold the action button to charge and lift the finger to throw. Cancelled
-  gestures do not throw. Power and actual collision determine the outcome.
+All five activities share the **right-side concentric-circle joystick**. Drag
+its gold inner circle and release to centre it; contextual action buttons sit
+above it. See [the full joystick guide](JOYSTICK_CONTROLS.md).
+
+- Sheep: steer David, tap a nearby sheep once to lift it, then steer through the
+  pen entrance. The 30-second challenge and untimed Free Play remain unchanged.
+- Maze/return to Saul: steer through the real corridors or toward Saul. Keyboard
+  arrows/WASD and maze swipes still work.
+- Armour: steer the hand, Pick a piece, steer it onto the correct body part and
+  Place it. Direct finger dragging and tap-piece/tap-body also work.
+- Brook: steer the hand and Scoop, or tap a smooth stone, **while the moving ring
+  overlaps it**. Early/late attempts miss; the ring never pauses.
+- Sling: pull and hold the circle, then release to throw. The action button and
+  SPACE also work. Cancelled gestures do not throw. Actual collision determines
+  the outcome.
 
 All navigation, colourful instructions, celebrations, music and optional local
 narration remain available. Audio unlocks from a gesture; missing installed voices

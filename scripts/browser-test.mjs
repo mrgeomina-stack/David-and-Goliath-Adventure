@@ -16,6 +16,7 @@ const scripts = [
   "timeout-check",
   "premium-check",
   "mobile-check",
+  "joystick-check",
   "pwa-check",
   "food-check",
   "v1-integration-check",

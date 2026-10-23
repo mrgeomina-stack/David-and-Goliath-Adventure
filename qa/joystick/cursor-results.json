@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checked": [
+    "transparent target reticle",
+    "offset hand leaves stone and timing ring visible",
+    "native joystick steering and genuine timed stone pickup"
+  ],
+  "errors": []
+}

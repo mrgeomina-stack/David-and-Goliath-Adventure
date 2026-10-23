@@ -12,7 +12,10 @@ export const copy = {
   maze: ["وصّل الأكل لإخوات داود!", "Find your way to David’s brothers."],
   armor: ["اسحب كل قطعة لمكانها على داود.", "Drag each piece onto David."],
   brook: ["اختار خمس حجارة ملساء!", "Collect five smooth stones."],
-  sling: ["دوس مطوّل… وسيب عشان ترمي!", "Hold SPACE… release to throw!"],
+  sling: [
+    "امسك الدائرة… وسيب عشان ترمي!",
+    "Hold the circle… release to throw!",
+  ],
   sheepSuccess: ["داود حمى خرافه!", "David protected his sheep!"],
   mazeSuccess: ["وصلت الأكل! شاطر!", "A special delivery, made with love!"],
   armorSuccess: ["الدرع ده مش مناسب ليا!", "This armor isn’t right for me!"],
@@ -67,24 +70,24 @@ export function label(key: CopyKey, lang: Language) {
 
 export const teacherHelp: [string, string][] = [
   [
-    "١ · الخراف: حرّك داود بالأسهم. SPACE يشيل خروف قريب. أنقذ الأربعة من فتحة الحظيرة قبل انتهاء الوقت، وبعدين أنقذ خروف خامس من الأسد.",
-    "1 · Sheep: Move with arrows / WASD. SPACE lifts one nearby sheep. Run through the right pen opening to set it down. Save all four before the 30-second countdown ends, then rescue a fifth lamb from the lion. Free Play has no deadline.",
+    "١ · الخراف: حرّك داود بالدائرة أو الأسهم. المس خروف قريب أو اضغط SPACE لشيله. أنقذ الأربعة من فتحة الحظيرة قبل انتهاء الوقت، وبعدين أنقذ خروف خامس من الأسد.",
+    "1 · Sheep: Move with the circle or arrows / WASD. Tap a nearby sheep or press SPACE to lift it. Run through the right pen opening to set it down. Save all four before the 30-second countdown ends, then rescue a fifth lamb from the lion. Free Play has no deadline.",
   ],
   [
-    "٢ · المتاهة: الأسهم أو الأزرار الكبيرة. المساعدة بتنوّر الخطوة الجاية بس.",
-    "2 · Maze: Arrows / WASD or the big arrow buttons. Hint shows one next step.",
+    "٢ · المتاهة: الدائرة أو الأسهم. المساعدة بتنوّر الخطوة الجاية بس.",
+    "2 · Maze: Steer with the circle or arrows / WASD. Hint shows one next step.",
   ],
   [
     "٣ · الدرع: اسحب القطعة أو المسها وبعدين المس رأس أو صدر أو وسط داود.",
-    "3 · Armour: Drag a piece, or tap it then David’s head, chest or hip.",
+    "3 · Armour: Steer the hand and Pick / Place, drag a piece, or tap it then David’s head, chest or hip.",
   ],
   [
     "٤ · الجدول: اضغط SPACE أو المس حجر أملس لما الدايرة المتحركة تعدّي عليه.",
-    "4 · Brook: Press SPACE or tap a smooth stone as the moving ring passes it.",
+    "4 · Brook: Steer the hand and Scoop, press SPACE, or tap a smooth stone as the moving ring passes it.",
   ],
   [
     "٥ · المقلاع: دوس مطوّل على SPACE أو الزر وسيب عشان ترمي. جرّب تاني لو الرمية ما أصابتش.",
-    "5 · Sling: Hold SPACE / the button, then release. Retry freely after a miss.",
+    "5 · Sling: Pull and hold the circle, or hold SPACE / the button, then release. Retry freely after a miss.",
   ],
   [
     "ست فرق، كل فريق خمس أطفال: شجّعوا وعدّوا وساعدوا. بدّلوا طفل واحد بيلعب عند كل مهمة. خمس دقايق مش كفاية لكل الثلاثين طفل يمسكوا الأزرار. اللعب الحر بيدي وقت أطول.",
@@ -104,7 +107,7 @@ export const missionHints: Record<string, [string, string]> = {
   ],
   sheep: [
     "قرّب واضغط SPACE عشان تشيل خروف. اجري لفتحة الحظيرة على اليمين.",
-    "Get close and press SPACE to lift one sheep. Run through the opening on the right; David sets it down automatically.",
+    "Get close and tap the sheep or press SPACE to lift it. Run through the opening on the right; David sets it down automatically.",
   ],
   brook: [
     "اختار حجر مدوّر وأملس. المسه أو اضغط SPACE بس لما الدايرة المتحركة تعدّي عليه.",

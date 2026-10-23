@@ -4,6 +4,14 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Right-side touch joystick
+
+Every activity now has a two-circle thumb joystick and contextual action buttons
+on the right. Steer David through the meadow/maze, tap a nearby sheep once to lift
+it, steer a hand for armour/stone selection, or pull/hold/release for the sling.
+Existing keyboard controls, direct armour dragging, stone timing, animations and
+collision rules remain intact. See [controls and tests](docs/JOYSTICK_CONTROLS.md).
+
 ## Mobile/tablet and Cloudflare Pages Free
 
 Build the hosted game with `npm run build:pages` and deploy **pages-dist/**.

@@ -1,0 +1,48 @@
+{
+  "engine": "Chromium with native emulated touch events; not physical Safari",
+  "viewports": [
+    {
+      "width": 568,
+      "height": 320
+    },
+    {
+      "width": 667,
+      "height": 375
+    },
+    {
+      "width": 844,
+      "height": 390
+    },
+    {
+      "width": 915,
+      "height": 412
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "width": 1366,
+      "height": 1024
+    }
+  ],
+  "checks": [
+    "44px finger controls",
+    "chapter navigation",
+    "swipe and joystick maze",
+    "phone celebration",
+    "actual armour finger drags",
+    "wrong zone and cancellation",
+    "armour collapse",
+    "two-finger movement and pickup",
+    "carried sheep delivery",
+    "portrait pause and landscape resume",
+    "finger sling charge/release and real hit",
+    "finger brook taps reject jagged rocks and collect five unique stones"
+  ],
+  "errors": []
+}

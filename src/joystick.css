@@ -1,0 +1,148 @@
+/* One consistent, captured-thumb control across all five activities. */
+#bottom,
+.compact #bottom {
+  padding-right: 270px;
+}
+#input-controls,
+.compact #input-controls {
+  --stick-size: 150px;
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: var(--stick-size);
+  pointer-events: auto;
+}
+#joystick {
+  position: relative;
+  width: var(--stick-size);
+  height: var(--stick-size);
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 3px solid #ffe9a8;
+  background: radial-gradient(circle at 45% 35%, #8bcdc78a, #1f686ccc 70%);
+  box-shadow:
+    inset 0 3px 9px #fff8,
+    inset 0 -5px 12px #123d4477,
+    0 5px 0 #143f4699,
+    0 8px 18px #0d353d55;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+#joystick::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px solid #fff4;
+  border-radius: 50%;
+  pointer-events: none;
+}
+#joystick-knob {
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff4c4;
+  background: radial-gradient(circle at 40% 25%, #fff2be, #efb94d 72%, #d89230);
+  box-shadow:
+    inset 0 3px 0 #fffa,
+    0 4px 0 #865e32,
+    0 6px 12px #133e4670;
+  color: #25656a;
+  font-size: 28px;
+  transform: translate(var(--stick-x, 0px), var(--stick-y, 0px));
+  transition: transform 130ms ease-out;
+  pointer-events: none;
+}
+#joystick[data-active="true"] {
+  cursor: grabbing;
+}
+#joystick[data-active="true"] #joystick-knob {
+  transition: none;
+}
+#joystick[aria-disabled="true"] {
+  opacity: 0.55;
+}
+#joystick-label {
+  position: absolute;
+  bottom: 7px;
+  left: 0;
+  width: 100%;
+  font-size: 10px;
+  font-weight: 900;
+  color: #fff5d1;
+  text-align: center;
+  pointer-events: none;
+  text-shadow: 0 1px 2px #153b44;
+}
+#input-controls #action {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 52px;
+}
+#hint {
+  position: absolute;
+  right: 184px;
+  bottom: 14px;
+  width: 75px;
+  font-size: 13px;
+  padding: 7px;
+}
+.compact #bottom {
+  padding-right: calc(178px / var(--game-scale));
+}
+.compact #hint {
+  right: calc(120px / var(--game-scale));
+  bottom: calc(2px / var(--game-scale));
+  width: calc(50px / var(--game-scale));
+}
+.compact #input-controls {
+  --stick-size: calc(104px / var(--game-scale));
+  right: calc(8px / var(--game-scale));
+  bottom: calc(7px / var(--game-scale));
+  gap: calc(8px / var(--game-scale));
+}
+.compact #joystick {
+  border-width: calc(2px / var(--game-scale));
+}
+.compact #joystick-knob {
+  font-size: calc(23px / var(--game-scale));
+  border-width: calc(2px / var(--game-scale));
+}
+.compact #joystick-label {
+  font-size: calc(10px / var(--game-scale));
+  bottom: calc(5px / var(--game-scale));
+}
+.compact #input-controls #action {
+  min-height: calc(44px / var(--game-scale));
+}
+/* Leave David's existing kneeling/stone-stowing animation unobstructed. */
+#input-controls[data-activity="brook"] {
+  bottom: 390px;
+}
+#input-controls[data-activity="brook"] #action {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 44px;
+  width: 135px;
+}
+.compact #input-controls[data-activity="brook"] {
+  --stick-size: calc(100px / var(--game-scale));
+  bottom: calc(720px - 192px / var(--game-scale));
+}
+.compact #input-controls[data-activity="brook"] #action {
+  right: calc(100% + 8px / var(--game-scale));
+  top: calc(24px / var(--game-scale));
+  width: calc(84px / var(--game-scale));
+}
+@media (prefers-reduced-motion: reduce) {
+  #joystick-knob {
+    transition: none;
+  }
+}

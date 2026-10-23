@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -17,6 +18,7 @@ try {
   await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
   await page.waitForSelector('#stage[data-ready="true"]');
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
+  const stick = await touchStick(page);
   async function bounds() {
     const stage = await page.locator("#stage").boundingBox();
     for (const id of ["start", "practice-toggle", "difficulty"]) {
@@ -59,9 +61,7 @@ try {
     const next = route[i],
       dx = (next % 9) - (previous % 9),
       dy = Math.floor(next / 9) - Math.floor(previous / 9);
-    const button = page.locator(`[data-dir="${dx},${dy}"]`);
-    const b = await button.boundingBox();
-    await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
+    await stick.steer({ x: dx, y: dy }, 45);
     await page.waitForTimeout(230);
     if ((await state()).cell !== next)
       throw Error("Brief scaled touch failed at step " + i);

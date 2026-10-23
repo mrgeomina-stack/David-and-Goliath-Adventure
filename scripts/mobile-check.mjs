@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { collectWithRing } from "./brook-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
@@ -15,6 +16,7 @@ try {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
+  const stick = await touchStick(page);
   await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
   await page.waitForSelector('#stage[data-ready="true"]');
   const tap = async (selector) => {
@@ -99,13 +101,7 @@ try {
   await tap("#practice-toggle");
   await tap('[data-mission="maze"]');
   await page.waitForTimeout(2700);
-  for (const selector of [
-    '[data-dir="1,0"]',
-    '[data-dir="0,1"]',
-    "#hint",
-    "#pause",
-    "#install",
-  ]) {
+  for (const selector of ["#joystick-knob", "#hint", "#pause", "#install"]) {
     const b = await page.locator(selector).boundingBox();
     if (b.width < 43.5 || b.height < 43.5)
       throw Error(selector + " smaller than finger target");
@@ -119,10 +115,7 @@ try {
     if (i === 1) {
       const a = await logical(600, 340);
       await drag(a, { x: a.x + dx * 45, y: a.y + dy * 45 });
-    } else
-      await page.touchscreen.tap(
-        ...Object.values(await center(`[data-dir="${dx},${dy}"]`)),
-      );
+    } else await stick.steer({ x: dx, y: dy }, 45);
     await page.waitForTimeout(240);
     if ((await state()).cell !== next)
       throw Error("Finger maze step failed " + i);
@@ -180,29 +173,29 @@ try {
   await tap('[data-mission="sheep"]');
   await page.waitForTimeout(2700);
   const moveTo = async (x, y) => {
-    for (let i = 0; i < 140; i++) {
-      const d = (await state()).david,
-        dx = x - d.x,
-        dy = y - d.y;
-      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-      const direction =
-        Math.abs(dx) > Math.abs(dy) ? [Math.sign(dx), 0] : [0, Math.sign(dy)];
-      const p = await center(`[data-dir="${direction.join(",")}"]`);
-      await dispatch("touchStart", [p]);
+    await stick.start();
+    for (let i = 0; i < 240; i++) {
+      const s = await state(),
+        d = s.david;
+      const dx = x - d.x,
+        dy = y - d.y,
+        length = Math.hypot(dx, dy);
+      if (length < 12) {
+        await stick.end();
+        return;
+      }
+      await stick.move({ x: dx / length, y: dy / length });
       await page.waitForTimeout(
         Math.min(
-          160,
+          45,
           Math.max(
-            25,
-            (Math.max(Math.abs(dx), Math.abs(dy)) /
-              ((await state()).carriedIndex === null ? 245 : 290)) *
-              1000,
+            10,
+            (length / (s.carriedIndex === null ? 245 : 290)) * 1000 - 10,
           ),
         ),
       );
-      await dispatch("touchEnd", []);
     }
-    await page.screenshot({ path: "qa/mobile-route-failure.png" });
+    await stick.end();
     throw Error(
       "Touch rescue route blocked at " +
         [x, y] +
@@ -212,17 +205,11 @@ try {
   };
   const sheep = (await state()).sheep[0];
   await moveTo(sheep.x - 35, sheep.y);
-  const arrow = await center('[data-dir="-1,0"]'),
-    action = await center("#action");
-  await dispatch("touchStart", [{ ...arrow, id: 1 }]);
-  await dispatch("touchStart", [
-    { ...arrow, id: 1 },
-    { ...action, id: 2 },
-  ]);
-  await page.waitForTimeout(100);
-  await dispatch("touchEnd", [{ ...arrow, id: 1 }]);
+  const nearby = (await state()).sheep[0];
+  await stick.start();
+  await stick.tapWhileHeld(await logical(nearby.x, nearby.y - 22));
   await page.waitForTimeout(600);
-  await dispatch("touchEnd", []);
+  await stick.end();
   if ((await state()).carriedIndex === null)
     throw Error("Multi-finger pickup failed");
   await moveTo(430, 498);
@@ -285,7 +272,7 @@ try {
         checks: [
           "44px finger controls",
           "chapter navigation",
-          "swipe and touch-arrow maze",
+          "swipe and joystick maze",
           "phone celebration",
           "actual armour finger drags",
           "wrong zone and cancellation",

@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 import { bootOfflineBuild } from "./offline-build.mjs";
@@ -20,6 +21,7 @@ try {
   await bootOfflineBuild(page, context);
   await page.waitForSelector('#stage[data-ready="true"]');
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
+  const stick = await touchStick(page);
   // First landing gesture can be anywhere; audio must not need a mission start.
   await page.locator(".brand").click();
   await page.waitForFunction(
@@ -62,7 +64,7 @@ try {
   await page.selectOption("#difficulty", "free");
   await click("#start");
   await page.waitForTimeout(2700);
-  await click('[data-dir="1,0"]', "touch");
+  await stick.steer({ x: 1, y: 0 }, 45);
   await click("#action", "touch");
   await click("#pause");
   if ((await state()).audioState !== "suspended")

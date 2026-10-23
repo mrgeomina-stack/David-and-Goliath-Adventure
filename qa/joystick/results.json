@@ -1,0 +1,46 @@
+{
+  "engine": "Chromium, native emulated touch (not physical Safari)",
+  "sizes": [
+    {
+      "width": 568,
+      "height": 320
+    },
+    {
+      "width": 667,
+      "height": 375
+    },
+    {
+      "width": 844,
+      "height": 390
+    },
+    {
+      "width": 915,
+      "height": 412
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "width": 1366,
+      "height": 1024
+    }
+  ],
+  "checks": [
+    "right-side concentric joystick, >=44px knob",
+    "nearby sheep single tap and physical pen delivery",
+    "independent simultaneous fingers",
+    "pointer cancellation and pause reset",
+    "real maze completion",
+    "direct finger armour drag retained",
+    "joystick cursor wrong/correct armour placement and collapse",
+    "five unique timed brook stones",
+    "cancelled sling never fires",
+    "joystick pull/hold/release actual hit"
+  ],
+  "errors": []
+}

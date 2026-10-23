@@ -1,3 +1,4 @@
+import { touchStick } from "./joystick-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -14,6 +15,7 @@ try {
   page.on("pageerror", (e) => errors.push(e.message));
   const url = (process.env.GAME_URL || "http://localhost:4173/") + "?qa";
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
+  const stick = await touchStick(page);
   async function open(mission, free = false) {
     await page.goto(url);
     await page.waitForSelector("#stage[data-ready=true]");
@@ -68,11 +70,7 @@ try {
   await page.waitForTimeout(100);
   if ((await state()).facing !== -1)
     throw Error("Vertical movement forgot lateral facing");
-  const arrow = await page.locator('[data-dir="1,0"]').boundingBox();
-  await page.touchscreen.tap(
-    arrow.x + arrow.width / 2,
-    arrow.y + arrow.height / 2,
-  );
+  await stick.steer({ x: 1, y: 0 }, 45);
   await page.waitForTimeout(100);
   if ((await state()).facing !== 1)
     throw Error("Touch direction did not turn character");

@@ -15,7 +15,8 @@
     "build:pages": "tsc --noEmit && vite build --mode pages && node scripts/pages-build.mjs",
     "preview:pages": "vite preview --host 0.0.0.0 --outDir pages-dist",
     "test:pages": "node scripts/pages-check.mjs",
-    "package:pages": "npm run build:pages && python3 scripts/package-pages.py"
+    "package:pages": "npm run build:pages && python3 scripts/package-pages.py",
+    "package:offline": "npm run build && python3 scripts/package-offline.py"
   },
   "dependencies": {
     "phaser": "3.90.0"

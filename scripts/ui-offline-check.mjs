@@ -103,7 +103,11 @@ if (
 )
   throw Error("Focus loss failed to cancel charge");
 await page.click("#modal-actions button:first-child");
-await page.mouse.move(160, 680);
+const actionBox = await page.locator("#action").boundingBox();
+await page.mouse.move(
+  actionBox.x + actionBox.width / 2,
+  actionBox.y + actionBox.height / 2,
+);
 await page.mouse.down();
 await page.waitForTimeout(1000);
 await page.mouse.move(400, 600);

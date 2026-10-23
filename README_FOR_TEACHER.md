@@ -6,11 +6,12 @@ The supplied music loops quietly after the first tap or click, with automatic vo
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
-(Android), then turn the device sideways. Use the large direction/action buttons,
-swipe the maze, drag armour with a finger and tap stones as the ring passes. Sheep carrying supports
+(Android), then turn the device sideways. Use the right-side two-circle joystick and action buttons,
+tap a nearby sheep once to lift it, drag armour with a finger or steer the hand,
+and select stones as the ring passes. Sheep carrying supports
 two fingers. Portrait rotation pauses a phone game safely. Use Safari Share → Add
 to Home Screen, Chrome Install app, or the ＋ toolbar button. Open the installed app
-online and wait for **Book → Offline ready** before going offline. See
+online, choose **Book → Save for offline play**, then wait for **Offline ready**. See
 [mobile/PWA instructions](docs/MOBILE_PWA.md). The Web ZIP needs an HTTPS static host;
 the downloaded ZIP itself is not an installable game address.
 
@@ -20,12 +21,12 @@ account, installation or internet. Rehearse on your classroom laptop first.
 
 | Mission | Controls and goal |
 | --- | --- |
-| 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four before the timer expires, then rescue a fifth lamb in the lion encounter. |
-| 2. Maze | Follow real corridors using arrows / WASD, finger swipes or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
+| 1. Sheep | The joystick or arrows / WASD move David. Get close and tap a sheep once, or press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four before the timer expires, then rescue a fifth lamb in the lion encounter. |
+| 2. Maze | Follow real corridors using arrows / WASD, finger swipes or the joystick. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
 | Goliath’s challenge | Watch Goliath stomp, laugh and challenge the army. Then guide David left to Saul’s tent and press SPACE / Speak to volunteer. Spoken guidance is on initially. |
-| 3. Armour | Drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
-| 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone while the ring passes it. The circle moves continuously without pausing over scattered stones. Collect exactly five; jagged rocks do not count. |
-| 5. Sling | Hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
+| 3. Armour | Use the joystick hand and Pick / Place, or drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
+| 4. Brook | Steer the hand and **Scoop**, or press SPACE when the moving ring reaches a smooth stone, or tap a smooth stone while the ring passes it. The circle moves continuously without pausing over scattered stones. Collect exactly five; jagged rocks do not count. |
+| 5. Sling | Pull and hold the circle, or hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
 
 **Teacher controls:** Continue appears after each success animation. **Pause** / ESC
 freezes play and offers mission replay; losing focus pauses safely. **Restart** asks
@@ -58,7 +59,7 @@ on an approved local server. See `TEST_REPORT.md` for evidence and limitations.
 
 **New sound:** Successful sheep lifts play your sheep recording. The lion gives occasional gentle growls. Your victory recording plays once after each completed mission. Voice starts on; English/Arabic Goliath and Saul guidance has bundled synthetic fallback speech when a local voice is unavailable. Sound mutes all audio; Voice controls speech separately. See [audio and encounter notes](docs/AUDIO_AND_ENCOUNTER.md).
 
-**New interface:** Coral buttons are the main actions; teal controls are secondary actions. Framed blue instruction cards and gold chapter badges share the same visual style. Teacher help scrolls inside its card while Resume and guide buttons stay visible. Arabic and English have separate reading blocks; both fonts are included offline. Gameplay and controls are unchanged.
+**New interface:** Coral buttons are the main actions; teal controls are secondary actions. Framed blue instruction cards and gold chapter badges share the same visual style. Teacher help scrolls inside its card while Resume and guide buttons stay visible. Arabic and English have separate reading blocks; both fonts are included offline. The touch joystick is documented in [the controls guide](docs/JOYSTICK_CONTROLS.md).
 
 
 **Lion encounter:** Deliver four sheep normally. An additional fifth lamb's rescue has two

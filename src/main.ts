@@ -8,11 +8,13 @@ import { giantForehead } from "./art";
 import { deliveryAt } from "./food";
 import { AdventurePwa } from "./pwa";
 import { bindPress } from "./touch";
+import { bindJoystick } from "./joystick";
 import { fittedScale, compactLayout, ensureCanvasSupport } from "./mobile";
 ensureCanvasSupport();
 import "./style.css";
 import "./ui-theme.css";
 import "./interlude.css";
+import "./joystick.css";
 import { World } from "./world";
 import { ORDER, path, GEAR, type Mission, type Point } from "./model";
 import {
@@ -52,7 +54,8 @@ try {
   localStore = window.localStorage;
 } catch {}
 const journal = new Journal(localStore);
-const heldDirections = new Map<HTMLElement, Point>();
+let resetJoystick = () => {};
+let joystickContext = "";
 let mapCache = "",
   mapWasPaused = false,
   mapReturn: HTMLElement | null = null;
@@ -160,29 +163,29 @@ $("portrait-continue").onclick = () => {
 resize();
 const instructions: Record<Mission, [string, string, string]> = {
   sheep: [
-    "↑ ↓ ← →  +  SPACE",
-    "SPACE يشيل خروف • اجري للحظيرة",
-    "SPACE to lift • Run to the pen",
+    "STEER  +  TAP",
+    "حرّك الدائرة • قرّب والمس الخروف لشيله • ارجع للحظيرة",
+    "Drag the circle to walk • Tap a nearby sheep to lift • Carry it into the pen",
   ],
   maze: [
     "↑ ↓ ← →",
-    "امشي في الممرات لحد إخوات داود.",
-    "Arrow keys / WASD • Touch arrows to explore",
+    "اسحب الدائرة واستكشف الممرات لحد إخوات داود.",
+    "Drag the circle to explore • Arrow keys / WASD also work",
   ],
   armor: [
     "DRAG → DROP",
-    "اسحب، أو المس القطعة وبعدين مكانها.",
-    "Drag pieces • Or tap a piece, then David",
+    "حرّك اليد بالدائرة واختار القطعة ثم حطها على داود، أو اسحبها بإصبعك.",
+    "Drag pieces • Or steer the hand and tap Pick / Place",
   ],
   brook: [
     "SPACE  /  TAP",
-    "اضغط مسافة أو المس لما الدايرة المتحركة تعدّي فوق حجر أملس.",
-    "SPACE / Tap when the moving ring reaches a smooth stone",
+    "حرّك اليد لحجر أملس واضغط اغرف لما الدائرة تعدّي عليه، أو المس الحجر.",
+    "Steer the hand to a smooth stone • Scoop as the ring passes • Or tap the stone",
   ],
   sling: [
     "HOLD  →  RELEASE",
-    "دوس مطوّل… وبعدين سيب عشان ترمي!",
-    "Hold SPACE or the button • Release to throw",
+    "اسحب الدائرة واستنى… وبعدين سيب عشان ترمي!",
+    "Pull and hold the circle • Release to throw • SPACE also works",
   ],
 };
 function bilingual(en: string, ar: string) {
@@ -311,7 +314,7 @@ function sync() {
         `<div class="keepsake ${journal.completed.has(ch.mission) ? "collected" : ""}" aria-label="${bilingual(ch.gift[0], ch.gift[1])}: ${journal.completed.has(ch.mission) ? "earned" : "not yet earned"}">${emblem(ch.giftIcon)}<span>${readingPair(ch.gift[0], ch.gift[1])}</span>${journal.completed.has(ch.mission) ? "<b>✓</b>" : "<b>·</b>"}</div>`,
     ).join("");
   }
-  if (world.paused || title) heldDirections.clear();
+  if (world.paused || title) resetJoystick();
   if (world.paused || title) narrator.reset();
   else if (world.phase === "interlude" && world.interlude) {
     const story = world.interlude;
@@ -473,19 +476,52 @@ function sync() {
   $("countdown-fill").style.transform =
     `scaleX(${Math.max(0, (remaining ?? 30) / 30)})`;
   clock.setAttribute("aria-label", `Activity time remaining: ${stamp}`);
-  $("directions").hidden =
-    !encounter && !["maze", "sheep"].includes(world.mission);
+  const controlLocked =
+    world.paused ||
+    world.failed ||
+    !["play", "encounter"].includes(world.phase) ||
+    (!encounter &&
+      (lionActive ||
+        (world.mission === "armor" && world.armor.fallTime >= 0) ||
+        (world.mission === "sling" && world.sling.state !== "ready")));
+  const controlContext = `${world.phase}:${world.mission}:${controlLocked}:${lionActive}`;
+  if (controlContext !== joystickContext) {
+    joystickContext = controlContext;
+    resetJoystick();
+  }
+  $("joystick").hidden = lionActive;
+  $("joystick-label").hidden = lionActive;
+  $("joystick").setAttribute("aria-disabled", String(controlLocked));
+  $("joystick-label").textContent = bilingual(
+    world.mission === "sling" && !encounter
+      ? "Hold · release"
+      : ["armor", "brook"].includes(world.mission) && !encounter
+        ? "Hand"
+        : "Move",
+    world.mission === "sling" && !encounter
+      ? "امسك · سيب"
+      : ["armor", "brook"].includes(world.mission) && !encounter
+        ? "اليد"
+        : "حرّك",
+  );
   $("action").hidden =
-    !encounter && !["sheep", "brook", "sling"].includes(world.mission);
+    !encounter && !["sheep", "armor", "brook", "sling"].includes(world.mission);
   $<HTMLButtonElement>("action").disabled =
-    encounter && (!world.heard || world.encounterX >= 290);
-  $("input-controls").hidden = success;
+    world.paused ||
+    world.failed ||
+    (encounter && (!world.heard || world.encounterX >= 290)) ||
+    (!encounter &&
+      world.mission === "armor" &&
+      (!world.controlCursor || world.armor.fallTime >= 0)) ||
+    (!encounter && world.mission === "sling" && world.sling.state !== "ready");
+  $("input-controls").hidden = success || world.failed;
+  $("input-controls").dataset.activity = encounter ? "walk" : world.mission;
   const instruction = instructions[world.mission];
   const legend =
     lang === "ar"
       ? {
-          sheep: "الأسهم + شيل",
-          maze: "↑ ↓ ← →",
+          sheep: "حرّك الدائرة والمس الخروف",
+          maze: "اسحب الدائرة",
           armor: "اسحب → حط",
           brook: "SPACE / المس",
           sling: "دوس → سيب",
@@ -515,6 +551,10 @@ function sync() {
     : world.mission === "sheep" && world.sheep.carried
       ? bilingual("To the pen", "للحظيرة")
       : label(action, lang);
+  if (!encounter && world.mission === "armor")
+    $("action").textContent = world.selected
+      ? bilingual("Place piece", "حط القطعة")
+      : bilingual("Pick piece", "اختار قطعة");
   if (lionActive) {
     const [en, ar] = lionLines[world.lionEncounter.stage];
     $("objective-ar").textContent = "احمِ الخروف · ١ صموئيل ١٧:٣٤–٣٧";
@@ -530,7 +570,6 @@ function sync() {
             : bilingual("Watch", "شاهد");
     $<HTMLButtonElement>("action").disabled =
       !world.lionEncounter.timing && world.lionEncounter.stage !== "retry";
-    $("directions").hidden = true;
   }
   $("hint").textContent = "✧ " + label("hint", lang);
   $("hint").hidden = success || encounter || lionActive;
@@ -595,7 +634,7 @@ function sync() {
     world.phase !== "play" || world.tutorialTime <= 0 || world.paused;
   if (!$("tutorial").hidden)
     $("tutorial").innerHTML =
-      `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "en" ? "ltr" : "rtl"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${readingPair("Move or press an arrow to begin", "حرّك داود أو اضغط سهم عشان تبدأ")}</small></div>`;
+      `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "en" ? "ltr" : "rtl"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${readingPair("Drag the circle to begin", "اسحب الدائرة عشان تبدأ")}</small></div>`;
   if (!$("message").hidden) {
     const icon = world.failed && !world.timedOut ? "sheep" : chapter.icon;
     if ($("message-emblem").dataset.icon !== icon) {
@@ -835,40 +874,21 @@ $("story-replay").onclick = () => {
   world.retry();
 };
 $("hint").onclick = () => world.hint();
-function directionVector() {
-  let x = 0,
-    y = 0;
-  for (const d of heldDirections.values()) {
-    x += d.x;
-    y += d.y;
-  }
-  const length = Math.hypot(x, y);
-  return length ? { x: x / length, y: y / length } : { x: 0, y: 0 };
-}
-for (const b of document.querySelectorAll<HTMLButtonElement>("[data-dir]")) {
-  const [x, y] = b.dataset.dir!.split(",").map(Number);
-  bindPress(
-    b,
-    () => {
-      sound.unlock();
-      if (!world.paused) {
-        heldDirections.set(b, { x, y });
-        world.pressDirection(directionVector());
-      }
-    },
-    () => {
-      heldDirections.delete(b);
-      world.stepDir = directionVector();
-    },
-  );
-}
+resetJoystick = bindJoystick(
+  $("joystick"),
+  (dir) => {
+    if (dir.x || dir.y) sound.unlock();
+    world.steer(dir);
+  },
+  (cancelled) => world.releaseSteering(cancelled),
+);
 bindPress(
   $("action"),
   () => {
     sound.unlock();
-    world.action(true);
+    world.cursorAction(true);
   },
-  () => world.action(false),
+  () => world.cursorAction(false),
   () => world.clearInput(),
 );
 window.addEventListener("keydown", (e) => {
@@ -894,7 +914,7 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
 });
 function loseFocus() {
-  heldDirections.clear();
+  resetJoystick();
   if (world.phase !== "title" && !world.paused) pause();
   else world.clearInput();
 }
@@ -969,6 +989,9 @@ if (new URL(location.href).searchParams.has("qa"))
         stoneCount: world.brook.count,
         shot: world.sling.state,
         charge: world.sling.charge,
+        controlCursor: world.controlCursor,
+        selectedGear: world.selected,
+        stickDirection: world.stickDir,
         stone: world.sling.stone,
         successTime: world.successTime,
         encounterX: world.encounterX,

@@ -102,6 +102,8 @@ export class World extends Phaser.Scene {
   seed = 17;
   run = 0;
   stepDir: Point = { x: 0, y: 0 };
+  stickDir: Point = { x: 0, y: 0 };
+  controlCursor: Point | null = null;
   held = new Set<string>();
   bumpTime = 0;
   bumpDir: Point = { x: 0, y: 0 };
@@ -227,6 +229,7 @@ export class World extends Phaser.Scene {
     });
     bindCanvasGestures(this.game.canvas, {
       down: (p, touch) => {
+        this.controlCursor = null;
         this.fingerGesture = touch;
         this.pointerDown(p);
       },
@@ -279,6 +282,8 @@ export class World extends Phaser.Scene {
   clearInput() {
     this.held.clear();
     this.stepDir = { x: 0, y: 0 };
+    this.stickDir = { x: 0, y: 0 };
+    this.controlCursor = null;
     this.drag = null;
     this.gearTween = null;
     this.selected = null;
@@ -312,7 +317,55 @@ export class World extends Phaser.Scene {
       this.bumpDir = dir;
     }
   }
-  action(down: boolean) {
+  steer(dir: Point) {
+    if (
+      this.paused ||
+      this.failed ||
+      (this.phase !== "play" && this.phase !== "encounter")
+    )
+      return;
+    const wasMoving = this.stickDir.x || this.stickDir.y;
+    this.stickDir = dir;
+    if (!dir.x && !dir.y) return;
+    this.tutorialTime = 0;
+    if (this.phase === "encounter" || this.mission === "sheep") {
+      if (dir.x) this.facing = dir.x < 0 ? -1 : 1;
+    } else if (this.mission === "maze") {
+      if (!wasMoving && this.moveWait <= 0) this.stepMaze(dir);
+    } else if (this.mission === "armor" || this.mission === "brook") {
+      this.controlCursor ??=
+        this.mission === "armor"
+          ? { ...trays.helmet }
+          : { x: this.brook.ring, y: this.brook.ringY };
+    } else if (this.mission === "sling" && !wasMoving) this.action(true);
+  }
+  releaseSteering(cancelled: boolean) {
+    this.stickDir = { x: 0, y: 0 };
+    if (this.mission === "sling") {
+      if (cancelled) this.sling.cancel();
+      else this.action(false);
+    }
+  }
+  cursorAction(down: boolean) {
+    if (
+      this.paused ||
+      this.failed ||
+      (this.phase !== "play" && this.phase !== "encounter")
+    )
+      return;
+    if (down && this.controlCursor && this.mission === "armor") {
+      this.fingerGesture = true;
+      if (this.selected) {
+        const item = this.selected;
+        this.selected = null;
+        this.drag = null;
+        this.drop(item, this.controlCursor);
+      } else this.pointerDown(this.controlCursor);
+    } else if (down && this.controlCursor && this.mission === "brook") {
+      this.pointerDown(this.controlCursor);
+    } else this.action(down);
+  }
+  action(down: boolean, sheepIndex?: number) {
     if (this.phase === "interlude") {
       if (down && !this.paused) this.continue();
       return;
@@ -352,7 +405,7 @@ export class World extends Phaser.Scene {
     }
     if (!down) return;
     if (this.mission === "sheep") {
-      const picked = this.sheep.pickup();
+      const picked = this.sheep.pickup(sheepIndex);
       this.hooks.sound.play(picked ? "sheep" : "wall");
       if (picked)
         this.effects.burst(
@@ -370,6 +423,23 @@ export class World extends Phaser.Scene {
     if (this.mission === "sheep" && this.lionEncounter.active) {
       this.action(true);
       return;
+    }
+    if (this.mission === "sheep") {
+      const radius = Math.max(
+        55,
+        24 / (this.game.canvas.getBoundingClientRect().width / 1280),
+      );
+      const target = this.sheep.sheep
+        .map((sheep, index) => ({ sheep, index }))
+        .filter(
+          ({ sheep }) =>
+            !sheep.saved &&
+            !sheep.caught &&
+            !sheep.carried &&
+            distance(p, { x: sheep.x, y: sheep.y - 22 }) < radius,
+        )
+        .sort((a, b) => distance(a.sheep, p) - distance(b.sheep, p))[0];
+      if (target) this.action(true, target.index);
     }
     if (this.mission === "brook") {
       let target = p;
@@ -549,8 +619,14 @@ export class World extends Phaser.Scene {
     return this.mission === "maze" ? 4 : this.mission === "sling" ? 3 : 2.5;
   }
   get dir() {
-    let x = this.stepDir.x || (this.mission === "sheep" ? this.padDir.x : 0),
-      y = this.stepDir.y || (this.mission === "sheep" ? this.padDir.y : 0);
+    let x =
+        this.stickDir.x ||
+        this.stepDir.x ||
+        (this.mission === "sheep" ? this.padDir.x : 0),
+      y =
+        this.stickDir.y ||
+        this.stepDir.y ||
+        (this.mission === "sheep" ? this.padDir.y : 0);
     if (this.held.has("ArrowLeft") || this.held.has("KeyA")) x = -1;
     if (this.held.has("ArrowRight") || this.held.has("KeyD")) x = 1;
     if (this.held.has("ArrowUp") || this.held.has("KeyW")) y = -1;
@@ -593,6 +669,19 @@ export class World extends Phaser.Scene {
     }
     const dt = Math.min(delta / 1000, 0.05);
     if (!this.paused) {
+      if (this.phase === "play" && !this.failed && this.controlCursor) {
+        this.controlCursor.x = clamp(
+          this.controlCursor.x + this.stickDir.x * 430 * dt,
+          75,
+          1120,
+        );
+        this.controlCursor.y = clamp(
+          this.controlCursor.y + this.stickDir.y * 430 * dt,
+          175,
+          590,
+        );
+        if (this.drag) this.drag.p = { ...this.controlCursor };
+      }
       this.clock += dt;
       this.effects.update(dt);
       if (this.phase === "interlude" && this.interlude) {
@@ -890,6 +979,31 @@ export class World extends Phaser.Scene {
       drawLionPrompt(c, this.lionEncounter, this.lang);
     if (this.phase === "success") cinematicFrame(c, this.successTime);
     A.vignette(c);
+    if (
+      this.controlCursor &&
+      this.phase === "play" &&
+      !this.failed &&
+      !(this.mission === "armor" && this.armor.fallTime >= 0)
+    ) {
+      const scale = this.game.canvas.getBoundingClientRect().width / 1280;
+      const { x, y } = this.controlCursor;
+      c.save();
+      // Keep the target and the moving collection ring visible beneath the hand.
+      c.fillStyle = "#fff8dfdd";
+      c.strokeStyle = "#fff8df";
+      c.lineWidth = 4 / scale;
+      c.beginPath();
+      c.arc(x, y, 12 / scale, 0, Math.PI * 2);
+      c.stroke();
+      c.strokeStyle = "#247c7b";
+      c.lineWidth = 2 / scale;
+      c.stroke();
+      c.font = `${25 / scale}px sans-serif`;
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      c.fillText("✋", x + 22 / scale, y - 22 / scale);
+      c.restore();
+    }
     if (this.debug) {
       c.strokeStyle = "#ff55bb";
       c.lineWidth = 2;

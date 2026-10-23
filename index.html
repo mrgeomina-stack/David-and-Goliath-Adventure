@@ -142,16 +142,20 @@
         </section>
         <div id="bottom" hidden>
           <div id="input-controls">
-            <div id="directions">
-              <button data-dir="0,-1" aria-label="Move up">↑</button
-              ><button data-dir="-1,0" aria-label="Move left">←</button
-              ><button data-dir="0,1" aria-label="Move down">↓</button
-              ><button data-dir="1,0" aria-label="Move right">→</button>
-            </div>
             <button
               id="action"
               class="primary ui-button ui-button--primary"
             ></button>
+            <div
+              id="joystick"
+              role="group"
+              aria-label="Drag the inner circle to steer"
+              aria-describedby="joystick-label"
+              data-active="false"
+            >
+              <span id="joystick-knob" aria-hidden="true"><span>✦</span></span>
+            </div>
+            <span id="joystick-label">Drag to move</span>
           </div>
           <div id="instruction"></div>
           <button id="hint">✧ Hint</button>
