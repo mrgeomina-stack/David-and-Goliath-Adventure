@@ -12,6 +12,7 @@ import { fittedScale, compactLayout, ensureCanvasSupport } from "./mobile";
 ensureCanvasSupport();
 import "./style.css";
 import "./ui-theme.css";
+import "./interlude.css";
 import { World } from "./world";
 import { ORDER, path, GEAR, type Mission, type Point } from "./model";
 import {
@@ -26,6 +27,7 @@ import { bindButtonSounds } from "./ui-audio";
 import { Journal, CHAPTERS, emblem } from "./journal";
 import { Narrator } from "./narration";
 import { encounterStory } from "./encounter-story";
+import { interludeSpeech } from "./interlude";
 import mapUrl from "./assets/journey-map.png";
 const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
   document.getElementById(id) as T;
@@ -302,7 +304,19 @@ function sync() {
   }
   if (world.paused || title) heldDirections.clear();
   if (world.paused || title) narrator.reset();
-  else
+  else if (world.phase === "interlude" && world.interlude) {
+    const story = world.interlude;
+    if (story.voiceReady)
+      narrator.speak(
+        `${world.run}:story:${story.id}:${lang}`,
+        interludeSpeech[story.id].en,
+        interludeSpeech[story.id].ar,
+        lang,
+        sound.muted,
+        story.id,
+      );
+    else narrator.reset();
+  } else
     narrator.speak(
       `${world.run}:${world.phase}:${world.heard}:${world.mission}:${lang}:${world.failed}`,
       world.failed
@@ -339,8 +353,34 @@ function sync() {
   $<HTMLButtonElement>("practice-toggle").disabled = !world.ready;
   $("title").hidden = !title;
   $("title-note").hidden = !title;
-  $("mission").hidden = title || victory;
-  $("bottom").hidden = title || victory;
+  $("mission").hidden = title || victory || world.phase === "interlude";
+  $("bottom").hidden = title || victory || world.phase === "interlude";
+  $("story-interlude").hidden = world.phase !== "interlude";
+  if (world.phase === "interlude" && world.interlude) {
+    const story = world.interlude;
+    $("story-label").textContent =
+      bilingual(
+        story.id === "jesse" ? "A FATHER’S REQUEST" : "THE GIANT’S CHALLENGE",
+        story.id === "jesse" ? "طلب الأب" : "تحدّي العملاق",
+      ) +
+      " · " +
+      story.reference.replace(/ /g, "\u00a0");
+    $("story-en").textContent = story.caption[0];
+    $("story-ar").textContent = story.caption[1];
+    $("story-en").hidden = lang === "ar";
+    $("story-ar").hidden = lang === "en";
+    $("story-progress").textContent = [0, 1, 2, 3]
+      .map((i) => (i <= story.beat ? "●" : "○"))
+      .join("  ");
+    $("story-replay").textContent = bilingual("↻ Replay", "↻ إعادة");
+    $("story-next").textContent = !story.ready
+      ? bilingual("Watch the story…", "شاهد الحكاية…")
+      : story.id === "jesse"
+        ? bilingual("Deliver the food →", "وصّل الطعام ←")
+        : bilingual("Return to Saul →", "ارجع لشاول ←");
+    $<HTMLButtonElement>("story-next").disabled = !story.ready || world.paused;
+    $<HTMLButtonElement>("story-replay").disabled = world.paused;
+  }
   $("pause").hidden = title;
   $("message").hidden = !(
     (success && world.successTime >= world.payoffDuration) ||
@@ -775,6 +815,16 @@ $("continue").onclick = () => {
   }
   world.continue();
 };
+$("story-next").onclick = () => {
+  sound.unlock();
+  world.continue();
+  $("stage").tabIndex = -1;
+  $("stage").focus({ preventScroll: true });
+};
+$("story-replay").onclick = () => {
+  narrator.reset();
+  world.retry();
+};
 $("hint").onclick = () => world.hint();
 function directionVector() {
   let x = 0,
@@ -866,6 +916,16 @@ if (new URL(location.href).searchParams.has("qa"))
         music: sound.music,
         musicState: sound.musicState,
         phase: world.phase,
+        interlude: world.interlude
+          ? {
+              id: world.interlude.id,
+              time: world.interlude.time,
+              ready: world.interlude.ready,
+              beat: world.interlude.beat,
+              caption: world.interlude.caption,
+              voiceReady: world.interlude.voiceReady,
+            }
+          : null,
         titleScene:
           world.phase === "title"
             ? {

@@ -1,4 +1,6 @@
 import { LionEncounter } from "./lion-encounter";
+import { StoryInterlude } from "./interlude";
+import { interludeAssets, drawInterlude } from "./interlude-view";
 import { drawLionActors, drawLionPrompt } from "./lion-encounter-view";
 import { TITLE_DAVID, titleFlockAt } from "./title-flock";
 import { ActivityTimer, ACTIVITY_SECONDS } from "./activity-timer";
@@ -45,7 +47,13 @@ import { MAZE, cover, motes, mazeBackdrop } from "./scenery";
 export { MAZE } from "./scenery";
 import { missionHints, type Language } from "./strings";
 import type { Sound } from "./audio";
-export type Phase = "title" | "play" | "success" | "encounter" | "victory";
+export type Phase =
+  | "title"
+  | "play"
+  | "success"
+  | "encounter"
+  | "interlude"
+  | "victory";
 export interface Hooks {
   changed: () => void;
   toast: (s: string) => void;
@@ -70,6 +78,7 @@ export class World extends Phaser.Scene {
   armor = new ArmorModel();
   sheep = new SheepModel();
   lionEncounter = new LionEncounter();
+  interlude: StoryInterlude | null = null;
   private gamepadDown = false;
   private padDir: Point = { x: 0, y: 0 };
   brook = new BrookModel();
@@ -131,6 +140,7 @@ export class World extends Phaser.Scene {
       animals: animalsUrl,
       props: propsUrl,
       cast: castUrl,
+      ...interludeAssets,
     }))
       this.load.image(key, url);
   }
@@ -228,6 +238,7 @@ export class World extends Phaser.Scene {
     this.hooks.changed();
   }
   start(mission: Mission = "sheep", practice = false) {
+    this.interlude = null;
     this.clearInput();
     this.hooks.sound.stopSamples();
     this.mission = mission;
@@ -290,6 +301,10 @@ export class World extends Phaser.Scene {
     }
   }
   action(down: boolean) {
+    if (this.phase === "interlude") {
+      if (down && !this.paused) this.continue();
+      return;
+    }
     if (this.phase === "encounter") {
       if (
         down &&
@@ -446,22 +461,41 @@ export class World extends Phaser.Scene {
     this.hooks.changed();
   }
   continue() {
+    if (this.paused) return;
+    if (this.phase === "interlude" && this.interlude?.ready) {
+      const id = this.interlude.id;
+      this.interlude = null;
+      if (id === "jesse") this.start("maze");
+      else {
+        this.hooks.sound.stopSamples();
+        this.phase = "encounter";
+        this.activityTimer = new ActivityTimer(
+          this.free ? null : ACTIVITY_SECONDS,
+        );
+        this.encounterX = 670;
+        this.facing = -1;
+        this.heard = true;
+        this.heardTime = 0;
+        this.clearInput();
+        this.hooks.changed();
+      }
+      return;
+    }
     if (this.phase === "encounter" && this.heard && this.encounterX < 290) {
       this.start("armor", this.practice);
       return;
     }
     if (this.phase !== "success" || this.successTime < this.payoffDuration)
       return;
-    if (this.mission === "maze" && !this.practice) {
+    if (
+      (this.mission === "sheep" || this.mission === "maze") &&
+      !this.practice
+    ) {
       this.hooks.sound.stopSamples();
-      this.phase = "encounter";
-      this.activityTimer = new ActivityTimer(
-        this.free ? null : ACTIVITY_SECONDS,
+      this.phase = "interlude";
+      this.interlude = new StoryInterlude(
+        this.mission === "sheep" ? "jesse" : "goliath",
       );
-      this.facing = 1;
-      this.encounterX = 210;
-      this.heard = false;
-      this.heardTime = 0;
       this.clearInput();
       this.hooks.changed();
       return;
@@ -480,7 +514,12 @@ export class World extends Phaser.Scene {
     this.start(ORDER[ORDER.indexOf(this.mission) + 1]);
   }
   retry() {
-    if (this.phase === "encounter") {
+    if (this.phase === "interlude" && this.interlude) {
+      this.hooks.sound.stopSamples();
+      this.interlude = new StoryInterlude(this.interlude.id);
+      this.clearInput();
+      this.hooks.changed();
+    } else if (this.phase === "encounter") {
       this.failed = false;
       this.timedOut = false;
       this.encounterX = 210;
@@ -544,6 +583,9 @@ export class World extends Phaser.Scene {
     if (!this.paused) {
       this.clock += dt;
       this.effects.update(dt);
+      if (this.phase === "interlude" && this.interlude) {
+        for (const cue of this.interlude.update(dt)) this.hooks.sound.play(cue);
+      }
       if (
         this.clock - this.lastDust > 0.22 &&
         (this.dir.x || this.dir.y) &&
@@ -766,6 +808,15 @@ export class World extends Phaser.Scene {
     const c = this.c;
     if (!c) return;
     c.clearRect(0, 0, 1280, 720);
+    if (this.phase === "interlude" && this.interlude) {
+      drawInterlude(
+        c,
+        this.interlude,
+        (key) => this.textures.get(key).getSourceImage() as HTMLImageElement,
+      );
+      this.texture.refresh();
+      return;
+    }
     A.setArtTime(this.clock);
     c.save();
     const cinematic =

@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "id": "jesse",
+  "seconds": 17.00767000000004,
+  "caption": [
+    "David sets off with food, kindness and courage.",
+    "انطلق داود بالطعام، بقلب محب وشجاع."
+  ],
+  "audio": {
+    "pop": 10,
+    "background": 1,
+    "sheep": 5,
+    "roar": 5,
+    "staff": 1,
+    "complete": 1,
+    "voice": 6
+  },
+  "activityRemaining": 3.501079999999913,
+  "earlySkipBlocked": true,
+  "replayAndPause": true,
+  "phoneBounds": true
+}

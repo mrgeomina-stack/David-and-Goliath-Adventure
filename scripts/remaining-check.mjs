@@ -93,6 +93,10 @@ await page.waitForTimeout(2800);
 await page.screenshot({ path: "qa/24-sheep-success.png" });
 if ((await state()).phase !== "success") throw Error("Sheep not won");
 await page.click("#continue");
+if ((await state()).interlude?.id !== "jesse")
+  throw Error("Missing Jesse story");
+await page.waitForFunction(() => window.adventureQA.snapshot().interlude.ready);
+await page.click("#story-next");
 if ((await state()).mission !== "maze") throw Error("Story order incorrect");
 await page.click("#restart");
 await page.click("#modal-actions button:nth-child(2)");

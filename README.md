@@ -4,6 +4,23 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Animated story interludes · 1.12.0
+
+The full adventure now includes two story moments using the supplied reference
+illustrations. After the sheep celebration, Jesse gives David food and sends him
+to check on his brothers (1 Samuel 17:17–20). After the maze's actual food delivery,
+Goliath stomps, laughs and challenges the army. David then returns to Saul to
+volunteer; the old extra walk-right/listen step is no longer repeated.
+
+Jesse's scene has four directed poses, subtle connected basket/hands motion and
+camera movement. Goliath has one continuous painted mesh with alternating foot
+lifts, synchronized ground contacts/dust, breathing and laughter movement, plus
+original reference close-ups. Local stomp/laughter effects and bundled English/
+Arabic narration work offline. Captions remain editable text. Both scenes freeze
+activity timers, offer local Replay and require Continue/SPACE after the story.
+The landing UI and all five activities retain their established design and rules.
+See [story implementation and artwork provenance](docs/STORY_INTERLUDES.md).
+
 ## Fifth-lamb rescue, moving stone target and new effects · 1.11.0
 
 Rescue all four regular sheep within the existing 30-second countdown, then save

@@ -156,6 +156,23 @@
           <div id="instruction"></div>
           <button id="hint">✧ Hint</button>
         </div>
+        <section id="story-interlude" aria-label="Story interlude" hidden>
+          <div id="story-label" class="eyebrow"></div>
+          <div class="story-caption ui-panel">
+            <div class="story-reading" aria-live="polite" aria-atomic="true">
+              <p id="story-ar" dir="rtl" lang="ar"></p>
+              <p id="story-en" dir="ltr" lang="en"></p>
+            </div>
+            <div class="story-actions">
+              <span id="story-progress" aria-hidden="true"></span>
+              <button
+                id="story-next"
+                class="primary ui-button ui-button--primary"
+              ></button>
+              <button id="story-replay" class="ui-button"></button>
+            </div>
+          </div>
+        </section>
         <div id="message" class="ui-panel" hidden>
           <div id="message-emblem" aria-hidden="true"></div>
           <div class="eyebrow" id="message-tag">A LITTLE MOMENT OF COURAGE</div>

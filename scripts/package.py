@@ -15,27 +15,25 @@ with ZipFile(root / 'Davids_Big_Adventure_Web.zip', 'w', ZIP_DEFLATED) as archiv
     for file in web_files:
         archive.write(file, str(file.relative_to(root / 'dist')))
     archive.write(root / 'docs/MOBILE_PWA.md', 'MOBILE_PWA.md')
-    for name in ['TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
+    for name in ['TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/STORY_INTERLUDES.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
         archive.write(root / name, name)
 with ZipFile(root / 'Davids_Big_Adventure_Offline.zip', 'w', ZIP_DEFLATED) as archive:
     for file in web_files:
         archive.write(file, str(file.relative_to(root / 'dist')))
-    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/CHILD_PLAYTEST.md', 'docs/MOBILE_PWA.md', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
+    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/CHILD_PLAYTEST.md', 'docs/MOBILE_PWA.md', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/STORY_INTERLUDES.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
         archive.write(root / name, name)
 # Keep the playable download small; detailed QA evidence is a separate archive.
 with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(root / 'TEST_REPORT.md', 'TEST_REPORT.md')
     archive.write(root / 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/AUDIO_AND_ENCOUNTER.md')
     archive.write(root / 'docs/UI_DESIGN_SYSTEM.md', 'docs/UI_DESIGN_SYSTEM.md')
+    archive.write(root / 'docs/STORY_INTERLUDES.md', 'docs/STORY_INTERLUDES.md')
     # Focused integrated-game evidence keeps this download below large-file limits.
-    evidence_prefixes = ('10-', '11-', '12-', '13-', '26b-', '33-', '34-', '48-',
-                         '49-', '51-', '55-', '56-', '57-', '58-', '59-', '61-',
-                         '62-', '63-', '64-', '65-', '67-', '68-', '69-', '70-',
-                         '71-', '72-', '73-', '74-', '75-', '76-', '77-', '78-', '79-',
-                         '80-', '81-', '82-', '83-', '84-', '85-', '86-', '87-', '88-', '89-', '90-', '91-', '92-', '93-', '94-', '95-', '96-', '97-', '98-', '99-')
+    evidence_prefixes = ('10-', '11-', '12-', '13-', '48-', '49-', '63-', '64-',
+                         '65-', '90-', '91-', '92-', '93-', '94-', '95-', '98-',
+                         '99-', '100-')
     for file in sorted((root / 'qa').rglob('*')):
         if file.is_file() and (file.suffix in ('.json', '.log') or
-                              'baseline-v1' in file.parts or 'david-before' in file.parts or
                               file.name.startswith(evidence_prefixes)):
             archive.write(file, str(file.relative_to(root)))
     archive.write(root / 'docs/VISUAL_ASSETS_V1_PROGRESS.md', 'INTEGRATION_NOTES.md')

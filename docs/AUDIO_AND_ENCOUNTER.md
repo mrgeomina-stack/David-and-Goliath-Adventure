@@ -1,3 +1,14 @@
+# Story interlude audio · 1.12.0
+
+Two timed 0.78s stomp effects and one 2.5s low mocking laugh accompany Goliath’s
+solo interlude. They use tracked, cached local buffers; pause, mute and scene
+cancellation apply, and the background loop ducks. The challenge narration starts
+at seven seconds, after the laughter. Jesse’s request and Goliath’s challenge
+have new bundled English/Arabic fallback MP3s, with installed local voices preferred.
+The existing five victory tracks, sheep/roar recordings, armour crash, sling whoosh
+and genuine giant-fall impact retain their hooks. Interludes never award another
+victory or restart the music loop. See STORY_INTERLUDES.md for timing and provenance.
+
 # Release and armour impact effects · 1.11.0
 
 The existing real projectile-release hook now plays a cached 0.48-second filtered

@@ -4,7 +4,13 @@ import challengeen from "./assets/audio/challenge-en.mp3";
 import challengear from "./assets/audio/challenge-ar.mp3";
 import saulen from "./assets/audio/saul-en.mp3";
 import saular from "./assets/audio/saul-ar.mp3";
+import jesseen from "./assets/audio/interlude-jesse-en.mp3";
+import jessear from "./assets/audio/interlude-jesse-ar.mp3";
+import gianten from "./assets/audio/interlude-goliath-en.mp3";
+import giantar from "./assets/audio/interlude-goliath-ar.mp3";
 const bundled = {
+  jesse: { en: jesseen, ar: jessear },
+  goliath: { en: gianten, ar: giantar },
   approach: { en: approachen, ar: approachar },
   challenge: { en: challengeen, ar: challengear },
   saul: { en: saulen, ar: saular },

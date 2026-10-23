@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.11.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
+Version 1.12.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 The supplied music loops quietly after the first tap or click, with automatic volume reduction during voice guidance. UI buttons have soft pop feedback; global mute silences all audio. Pause also pauses the music.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
@@ -22,7 +22,7 @@ account, installation or internet. Rehearse on your classroom laptop first.
 | --- | --- |
 | 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four before the timer expires, then rescue a fifth lamb in the lion encounter. |
 | 2. Maze | Follow real corridors using arrows / WASD, finger swipes or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
-| Goliath’s challenge | Walk right to hear the giant. David trusts God and volunteers to help: return left to Saul’s tent, then press SPACE / Speak. Spoken guidance is on initially. |
+| Goliath’s challenge | Watch Goliath stomp, laugh and challenge the army. Then guide David left to Saul’s tent and press SPACE / Speak to volunteer. Spoken guidance is on initially. |
 | 3. Armour | Drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
 | 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone while the ring passes it. The circle moves continuously without pausing over scattered stones. Collect exactly five; jagged rocks do not count. |
 | 5. Sling | Hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
@@ -70,3 +70,17 @@ four safe sheep remain in the pen. Holding a button cannot clear both challenges
 A standard controller's left stick or D-pad moves David during normal rescues.
 The story is a gentle dramatization inspired by 1 Samuel 17:34–37; the lion is
 defeated and retreats without blood or graphic injury. All text stays editable.
+
+
+**New story scenes:** After the sheep celebration, Continue opens Jesse’s food
+handover. Watch the request, handover and farewell, then choose **Deliver the food**
+or press SPACE. After the maze delivery, Continue opens Goliath’s solo challenge.
+The two stomps and low boastful laugh precede his spoken challenge. Choose
+**Return to Saul** or press SPACE, then guide David left to the tent and Speak.
+Each scene has **Replay**, English/Arabic captions, bundled fallback narration,
+pause and mute. The scenes never use the 30-second gameplay allowance or award
+extra keepsakes/victory tracks. The first Continue becomes available after 17
+seconds; the giant scene allows 22 seconds so the longer Arabic guidance can
+finish. Waiting longer is fine. Practice chapters keep their direct return to the
+book/title, without forcing story scenes. Scene artwork follows the supplied
+illustrations; small motion and camera shake respect reduced-motion preferences.

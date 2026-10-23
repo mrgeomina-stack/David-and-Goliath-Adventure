@@ -438,7 +438,64 @@ export class Sound {
     if (name === "armorCrash") this.featureSound(1.55);
     this.sample(name);
   }
+  private storyEffect(name: "stomp" | "giantLaugh") {
+    if (!this.context || this.muted || this.paused) return;
+    const c = this.context;
+    const duration = name === "stomp" ? 0.78 : 2.5;
+    if (!this.samples.has(name)) {
+      const buffer = c.createBuffer(
+        1,
+        Math.ceil(c.sampleRate * duration),
+        c.sampleRate,
+      );
+      const data = buffer.getChannelData(0);
+      let seed = 147,
+        low = 0,
+        phase = 0;
+      for (let i = 0; i < data.length; i++) {
+        const t = i / c.sampleRate;
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        const noise = seed / 2147483648 - 1;
+        low += 0.13 * (noise - low);
+        let v = 0;
+        if (name === "stomp") {
+          const envelope = Math.min(1, t / 0.008) * Math.exp(-t * 7);
+          v =
+            (Math.sin(2 * Math.PI * (52 * t + 1.4 * (1 - Math.exp(-t * 25)))) *
+              0.8 +
+              low * 1.7) *
+            envelope;
+        } else {
+          // Seven voiced “ha” pulses: low, boastful character laughter, not a shriek.
+          const syllable = Math.floor(t / 0.34),
+            u = t % 0.34;
+          if (syllable < 7 && u < 0.28) {
+            const f0 = 108 - (26 * u) / 0.28 + Math.sin(syllable * 1.8) * 8;
+            phase += (2 * Math.PI * f0) / c.sampleRate;
+            const envelope = Math.sin((Math.PI * u) / 0.28) ** 1.5;
+            for (let h = 1; h <= 24; h++) {
+              const f = h * f0;
+              const formant =
+                0.12 +
+                1.8 * Math.exp(-(((f - 580) / 180) ** 2)) +
+                Math.exp(-(((f - 1150) / 240) ** 2));
+              v += (Math.sin(phase * h) * formant) / h;
+            }
+            v = (v * 0.6 + low * 0.18) * envelope;
+          }
+        }
+        data[i] = Math.tanh(v) * 0.68 * Math.min(1, (duration - t) / 0.04);
+      }
+      this.samples.set(name, buffer);
+    }
+    this.featureSound(duration);
+    this.sample(name);
+  }
   play(name: string) {
+    if (name === "stomp" || name === "giantLaugh") {
+      this.storyEffect(name);
+      return;
+    }
     if (name === "launch" || name === "armorCrash") {
       this.animatedEffect(name);
       return;

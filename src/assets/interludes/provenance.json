@@ -1,0 +1,62 @@
+[
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_06 PM-1.png",
+    "asset": "src/assets/interludes/jesse-welcome.png",
+    "sha256": "7d56145bf3e26fc09a36ad64db7fadce470c9bbae75bdafb4d4e74e17fade7d8",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_07 PM-2.png",
+    "asset": "src/assets/interludes/jesse-handover.png",
+    "sha256": "bac3e5140a3ba2a3e7b7d59c010de7906e16a97615ffffba63c61ca168a8d606",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_08 PM-3.png",
+    "asset": "src/assets/interludes/jesse-close.png",
+    "sha256": "62cf6e961a89aad387e03c0223ccd02e81f1c35dac0c3657b8c6bae6e98d6e5f",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_09 PM-4.png",
+    "asset": "src/assets/interludes/jesse-farewell.png",
+    "sha256": "e1549ce8614899bb396fbca6e76260d27856007a87b33eb21fde88b308991650",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_10 PM-5.png",
+    "asset": "src/assets/interludes/goliath-stomp-wide.png",
+    "sha256": "17d2fedba62d1956e15d6e93e6a4d1f03ec379f99f65de5c1a1df22975e9e3d2",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_12 PM-6.png",
+    "asset": "src/assets/interludes/goliath-stomp.png",
+    "sha256": "5d2d7b6f57f4daf175dbf363064e7da2e870fd954802312cc8f9ac1e5b6a02ef",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_13 PM-7.png",
+    "asset": "src/assets/interludes/goliath-laugh.png",
+    "sha256": "02330a8b28046c7c6a8276b98be0e571f6beb0ffd3eb96bbf9d4be0fe9a45c62",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "source": "ChatGPT Image Oct 23, 2026, 03_55_15 PM-8.png",
+    "asset": "src/assets/interludes/goliath-challenge.png",
+    "sha256": "ce75c909536b01af4c12f3dd30ef439abc53c410a2317fe29ff3cc39e996a242",
+    "role": "Supplied reference/key-pose illustration; not an approved sprite sequence"
+  },
+  {
+    "asset": "src/assets/interludes/goliath-actor.png",
+    "sha256": "2f2b71f9d52c7dddaa6e78b1cff1aa2479a23397578eabe5ab0f166cb71d978b",
+    "role": "Transparent painted Goliath derivative generated from supplied reference 5 for continuous mesh animation",
+    "source": "User-supplied Goliath reference 5; OpenAI image editing"
+  },
+  {
+    "asset": "src/assets/interludes/valley-plate.png",
+    "sha256": "26fbce1e6a98ac2c89fed9bce265113b72d75013f892299a18aa5808d917cea4",
+    "role": "Clean background derivative generated from supplied reference 5 by removing the giant for parallax animation",
+    "source": "User-supplied Goliath reference 5; OpenAI image editing"
+  }
+]

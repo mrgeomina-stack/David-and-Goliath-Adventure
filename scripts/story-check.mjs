@@ -1,3 +1,4 @@
+import { watchStory } from "./interlude-input.mjs";
 import { playLionEncounter } from "./lion-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
@@ -5,7 +6,10 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
 });
-const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+const page = await browser.newPage({
+  viewport: { width: 1280, height: 720 },
+  hasTouch: true,
+});
 const errors = [];
 // Exercise the bundled offline narrator on a device with no installed voices.
 await page.addInitScript(() => {
@@ -15,6 +19,8 @@ const completions = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto((process.env.GAME_URL || "http://localhost:5173/") + "?qa");
 await page.waitForSelector('#stage[data-ready="true"]');
+await page.evaluate(() => document.fonts.ready);
+await page.context().setOffline(true);
 const state = () => page.evaluate(() => window.adventureQA.snapshot());
 async function key(code, ms) {
   await page.keyboard.down(code);
@@ -90,6 +96,7 @@ if ((await state()).audioEvents.sheep !== 5)
 if (!((await state()).audioEvents.roar >= 1))
   throw Error("Missing periodic lion growl");
 await complete();
+await watchStory(page, "jesse");
 if ((await state()).mission !== "maze") throw Error("Expected maze");
 let prev = 0;
 for (const n of (await state()).mazePath.slice(1)) {
@@ -109,11 +116,12 @@ for (const n of (await state()).mazePath.slice(1)) {
   prev = n;
 }
 await complete();
+await watchStory(page, "goliath");
 if ((await state()).phase !== "encounter")
   throw Error("Missing interactive encounter");
 await page.screenshot({ path: "qa/90-encounter-purpose.png" });
-await key("ArrowRight", 2400);
-if (!(await state()).heard) throw Error("Cannot hear giant");
+if (!(await state()).heard || (await state()).encounterX < 660)
+  throw Error("Giant story did not hand over to the return-to-Saul step");
 await page.screenshot({ path: "qa/91-encounter-challenge.png" });
 await page.keyboard.press("Space");
 if ((await state()).phase !== "encounter")
@@ -182,6 +190,7 @@ if (((await state()).audioEvents.voice ?? 0) < 3)
   throw Error("Bundled approach, Goliath and Saul narration did not start");
 if (errors.length) throw Error(errors.join("\n"));
 const result = {
+  offline: true,
   seconds: (Date.now() - started) / 1000,
   mode: "Easy; automation used solver route and read-only position feedback; not human/classroom timing",
   errors,

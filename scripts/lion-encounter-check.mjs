@@ -205,11 +205,17 @@ try {
   await page.waitForTimeout(2800);
   await page.screenshot({ path: "qa/99-lion-victory.png" });
   await page.click("#continue");
+  if ((await state()).interlude?.id !== "jesse")
+    throw Error("Missing father/food story after sheep victory");
+  await page.waitForFunction(
+    () => window.adventureQA.snapshot().interlude.ready,
+  );
+  await page.click("#story-next");
   if ((await state()).mission !== "maze")
     throw Error("Next-level transition broken");
   if (errors.length) throw Error(errors.join("\n"));
   writeFileSync(
-    "qa/lion-encounter-1.11.0.json",
+    "qa/lion-encounter-1.12.0.json",
     JSON.stringify(
       {
         passed: true,

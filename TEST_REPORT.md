@@ -1,78 +1,75 @@
-# David’s Big Adventure — fifth lamb, continuous ring and effects · 1.11.0
+# David’s Big Adventure — animated story interludes · 1.12.0
 
-23 October 2026. Baseline `7fc009020ab233143005e6c8442f4d05c4e9af91`.
+23 October 2026. Baseline `f2f7d0a2dfe92a7b0d878844796a89a1460fa473`.
 
-## Changes
+## Delivered
 
-- Four regular sheep must physically enter the pen within the existing 30-second
-  deadline. Only then does a fifth lamb appear for the existing lion mini-boss.
-  The counter changes from /4 to /5. The checkpoint freezes the countdown and
-  preserves four safe sheep through unlimited retries. Both timing successes and
-  the fifth lamb's physical return are still required. Free Play stays untimed.
-- The brook ring moves continuously at the existing 320/410 px/s, consuming the
-  remaining travel budget immediately after each waypoint. No arrival pause or
-  automatic pickup remains. SPACE and touch/mouse taps require ring proximity;
-  missed attempts leave stones available for another pass. Existing random layout,
-  shuffled routes, 58px pickup radius, 0.4s cooldown, kneeling animation and exactly
-  five unique smooth pickups are preserved. Instructions/hints remain editable in
-  English and Arabic and explain the timing rule.
-- Every actual sling release plays a 0.48-second air whoosh/string snap, including
-  misses. It replaces the generic pitched launch cue. Projectile physics and real
-  head collision are unchanged.
-- David's armour ground contact at fallTime 2.8s plays one 1.55-second body thud
-  with staggered metallic crashes/rattle. The four correct drops, struggle,
-  tumble, gear removal and recovery are unchanged. Effects are generated/cached
-  locally, share mute/pause/cancellation and require no network dependency.
+Two story-only stages connect the existing activities. After the sheep success
+celebration, Jesse gives David food, asks him to visit his brothers at the army
+camp and bring news, then waves him off (1 Samuel 17:17–20). Four supplied poses
+have directed camera motion, subtle connected basket/hands motion, drifting seeds
+and clean cuts without doubled faces. After the maze's actual basket transfer and
+celebration, Goliath appears alone in the foreground. His continuous painted mesh
+lifts alternate feet and stomps twice with synchronized thuds, ground dust and
+camera response. Low mocking laughter and torso/head movement lead into the
+challenge, with close-ups from the supplied artwork. David then returns to Saul's
+tent to volunteer; the redundant extra walk-right/hear challenge is removed.
 
-The large cover UI, nine decorative sheep, left-facing cover David, other levels,
-30-second activity timers and existing supplied music/voice/recordings are retained.
+Editable English/Arabic captions use the bundled fonts and intentional directions.
+Installed local voices remain preferred; four bundled synthetic guidance clips
+support offline play. Laughter ends before challenge guidance starts. Stories
+pause timers, preserve rewards, support pause/mute, offer local Replay and wait
+for Continue/SPACE after their animation (17s Jesse / 22s Goliath). Practice
+chapters retain direct completion behavior. Reduced motion removes camera and
+mesh movement while retaining the story. Source assets/hashes, generated
+background/cutout derivatives and audio details are in docs/STORY_INTERLUDES.md.
 
-## Validation
+All five activity models, 30-second deadlines/untimed Free Play, four-plus-fifth
+sheep flow, actual maze collisions/basket ownership, four correct armour drops,
+five unique ring-timed stones, sling trajectory/head hit and miss rules are
+preserved. The landing layout, nine wandering cover sheep and existing music,
+recordings, armour crash, sling whoosh and giant-fall impact remain intact.
 
-- **55 unit tests passed** across 10 files. New checks cover four-rescue admission,
-  one fifth lamb, five safe sheep, no waypoint dwelling or discarded travel,
-  missed off-ring taps, five unique pickups and real ring pickup reachability for
-  100 seeds within the countdown. Audio tests check non-silent finite bounded
-  waveforms, durations, reuse, cancellation, mute and pause.
+## Checks
+
+- **61 unit tests passed**, 11 files: five new story-timeline tests and one new
+  sound test, plus all previous gameplay/audio/mobile/model checks. They verify
+  shot/caption order, continue gates, two contacts/one laugh, narration separation,
+  replay isolation and finite bounded cached sounds with mute/pause/cancellation.
 - TypeScript and production/offline build passed.
-- Dedicated offline lion browser check passed: four physical deliveries, fifth
-  lamb, early miss, timeout, unlimited local retries, keyboard, touch and emulated
-  standard Gamepad, held-button protection, pause, both green windows, safe pen
-  return, five sheep recordings, one victory and transition to the maze.
-- Armour browser check passed: wrong-zone reset, 3/4 gating, four real drags,
-  no premature crash, exactly one landing crash, removal and recovery.
-- Sling browser check passed: underpowered and overpowered misses, real head hit,
-  flight pause/resume, victory, exactly three release whooshes for three throws.
-- Offline 844×390 touch check passed: Arabic fallback guidance, pause/mute,
-  supplied recording decoding, moving ring, jagged/off-ring rejection, five timed unique
-  touch pickups and one completion recording.
+- Full five-level playthrough passed offline through real controls with both
+  interludes in 136.657 seconds (automated route, not child completion time).
+  Focused story assertions cover early SPACE rejection, story replay, pause freeze,
+  English/Arabic/bilingual blocks, 844×390 phone bounds, at least 44px touch button
+  heights, unchanged activity timers, no extra victory recordings, exactly two
+  stomp sources and one laughter source, keyboard and touch continuation, and the
+  return-left/Speak transition to Saul and armour.
+- PWA check passed: incomplete cache fails honestly, retry saves all assets,
+  scoped install manifest/cache, actual offline reload and maze completion,
+  offline new-tab launch/progress persistence, non-disruptive update activation
+  and old-cache cleanup. See qa/pwa-1.12.0.log and qa/pwa-results.json.
+- Cover regression passed at desktop, short desktop, tablet and phone sizes:
+  large title/buttons, nine sheep, left-facing David, Arabic and foreground UI.
 
-- Full-story regression passed through real inputs: all five missions and story
-  bridges in 97 seconds, four timed deliveries plus fifth-lamb encounter, real
-  maze route, four armour drops, five ring-timed SPACE pickups, ballistic hit and
-  final victory. Audio-start instrumentation recorded five sheep lifts, five
-  completion recordings, one armour crash, one release whoosh, one giant landing,
-  three guidance clips and one persistent background music loop. The scripted
-  route uses simultaneous arrows within the existing movement rules; this is
-  automation timing, not a measured child completion time.
-
-See `qa/*-1.11.0.log`, `qa/lion-encounter-1.11.0.json`,
-`qa/audio-brook-results.json` and actual-game screenshots `qa/99-lion-*.png` and
-`qa/10-armor-dressed.png` through `qa/13-armor-recovered.png`.
-Previous release validation is preserved in `docs/VALIDATION_1_10_0.md`.
+See qa/unit-1.12.0.log, qa/build-1.12.0.log, qa/story-1.12.0.log,
+qa/interlude-jesse-1.12.0.json, qa/interlude-goliath-1.12.0.json and
+qa/cover-size-1.12.0.log. Actual integrated-game captures are qa/100-jesse-*.png
+and qa/100-goliath-*.png, including Arabic and phone examples. The QA ZIP contains
+curated current screenshots plus test logs; older screenshots remain in the repo
+and the separate UI Before/After ZIP. Previous report: docs/VALIDATION_1_11_0.md.
 
 ## Preview and limits
 
-Extract the offline ZIP completely and open index.html. Tap/click once to enable
-sound. For editable source use npm ci, npm run dev. Checks: npm test, npm run build;
-GAME_URL=http://localhost:4179/ node scripts/lion-encounter-check.mjs (the focused
-lion check loads the local production HTML itself); other checks accept GAME_URL.
+Extract the offline ZIP completely and open index.html. Tap/click to unlock audio.
+Source preview: npm ci, npm run dev. Validation: npm test, npm run build;
+GAME_URL=http://localhost:4179/ node scripts/story-check.mjs with a local production
+server. The full-story check disables networking after loading bundled HTML.
 
-Chromium tests use keyboard, native touch gestures and an emulated standard
-Gamepad API. Physical iOS/Android devices and a physical controller were not
-available. Direct file:// navigation is blocked by the cloud browser: offline
-checks load the self-contained production HTML from local disk over loopback,
-then disable networking before gameplay. Actual double-click launch should be
-rehearsed on the classroom device. No child playtesting or subjective listening
-on classroom speakers has been conducted; automated audio checks verify waveform
-and real source starts, not perceived loudness or sound quality on every device.
+Tests use Chromium keyboard and native touch gestures. No physical iOS/Android
+devices or physical gamepad were available. The cloud browser blocks file://;
+the bundled production HTML is loaded from disk over loopback, then tested with
+networking disabled. Actual double-click launch should be rehearsed on the target
+device. No child playtest or classroom-speaker listening session was performed.
+Fallback speech and character laughter are synthetic; audio instrumentation checks
+source starts and bounded waveforms, not voice acting or perceived quality on
+all speakers. No runtime synthesis engine or external network service is shipped.

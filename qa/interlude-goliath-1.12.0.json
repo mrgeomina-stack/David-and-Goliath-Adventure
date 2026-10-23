@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "id": "goliath",
+  "seconds": 22.00080000000015,
+  "caption": [
+    "David remembers God’s help. He will speak to Saul.",
+    "تذكر داود مساعدة الله. وقرر أن يتكلم مع شاول."
+  ],
+  "audio": {
+    "pop": 14,
+    "background": 1,
+    "sheep": 5,
+    "roar": 5,
+    "staff": 1,
+    "complete": 2,
+    "voice": 7,
+    "stomp": 2,
+    "giantLaugh": 1
+  },
+  "activityRemaining": 25.733510000000003,
+  "earlySkipBlocked": true,
+  "replayAndPause": false,
+  "phoneBounds": true
+}

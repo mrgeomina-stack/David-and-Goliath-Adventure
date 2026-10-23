@@ -1,6 +1,47 @@
 import { it, expect, vi, afterEach } from "vitest";
 import { Sound } from "../src/audio";
 afterEach(() => vi.unstubAllGlobals());
+it("story footsteps and laughter are bounded cached local effects cancelled with the scene", () => {
+  const sound = new Sound(),
+    buffers: Float32Array[] = [],
+    stop = vi.fn();
+  sound.context = {
+    sampleRate: 48000,
+    currentTime: 0,
+    destination: {},
+    createBuffer: (_channels: number, length: number) => {
+      const data = new Float32Array(length);
+      buffers.push(data);
+      return { getChannelData: () => data };
+    },
+    createBufferSource: () => ({ connect: vi.fn(), start: vi.fn(), stop }),
+    createGain: () => ({ gain: { value: 0 }, connect: vi.fn() }),
+    suspend: vi.fn(),
+    resume: vi.fn(),
+  } as unknown as AudioContext;
+  sound.play("stomp");
+  sound.play("stomp");
+  sound.play("giantLaugh");
+  expect(buffers.map((b) => b.length)).toEqual([37440, 120000]);
+  for (const b of buffers) {
+    expect(b.every(Number.isFinite)).toBe(true);
+    expect(b.reduce((m, v) => Math.max(m, Math.abs(v)), 0)).toBeLessThanOrEqual(
+      0.68,
+    );
+    expect(b.some((v) => Math.abs(v) > 0.1)).toBe(true);
+  }
+  expect(sound.events.stomp).toBe(2);
+  expect(sound.events.giantLaugh).toBe(1);
+  sound.stopSamples();
+  expect(stop).toHaveBeenCalledTimes(3);
+  sound.setMuted(true);
+  sound.play("giantLaugh");
+  sound.setMuted(false);
+  sound.pause(true);
+  sound.play("stomp");
+  expect(sound.events.stomp).toBe(2);
+  expect(sound.events.giantLaugh).toBe(1);
+});
 function audio() {
   const sound = new Sound();
   const context = {

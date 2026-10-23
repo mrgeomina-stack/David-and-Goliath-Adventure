@@ -2,6 +2,8 @@
 // npm install --prefix /tmp/adventure-voice @echogarden/espeak-ng-emscripten@0.3.5
 // ESPEAK_MODULE=/tmp/adventure-voice/node_modules/@echogarden/espeak-ng-emscripten/espeak-ng.js node scripts/generate-encounter-voice.mjs
 import { encounterStory } from "../src/encounter-story.ts";
+import { interludeSpeech } from "../src/interlude.ts";
+const interludes = process.argv.includes("--interludes");
 import { writeFileSync, unlinkSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
@@ -10,7 +12,9 @@ const { default: create } = await import(
 );
 const module = await create();
 const voice = new module.eSpeakNGWorker();
-for (const [stage, lines] of Object.entries(encounterStory))
+for (const [stage, lines] of Object.entries(
+  interludes ? interludeSpeech : encounterStory,
+))
   for (const language of ["en", "ar"]) {
     voice.set_voice(language === "en" ? "en-us" : "ar");
     voice.set_rate(145);
@@ -47,7 +51,7 @@ for (const [stage, lines] of Object.entries(encounterStory))
       "libmp3lame",
       "-b:a",
       "64k",
-      `src/assets/audio/${stage}-${language}.mp3`,
+      `src/assets/audio/${interludes ? "interlude-" : ""}${stage}-${language}.mp3`,
     ]);
     unlinkSync(wav);
   }

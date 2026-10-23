@@ -1,0 +1,106 @@
+/* Story overlays use the shared game-card/button tokens; all copy stays editable. */
+#story-interlude {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+#story-label {
+  position: absolute;
+  top: 88px;
+  right: 28px;
+  max-width: 450px;
+  padding: 10px 18px;
+  border: 2px solid #ffedaf;
+  border-radius: 22px;
+  color: #fff6d3;
+  background: linear-gradient(135deg, #155f6bef, #173e50e8);
+  box-shadow: 0 4px 0 #143c4c88;
+  font-size: 14px;
+}
+.story-caption {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: center;
+  gap: 22px;
+  padding: 14px 22px;
+  pointer-events: auto;
+}
+.story-reading p {
+  margin: 3px 0;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--ui-ink);
+}
+#story-ar {
+  font-family: "Adventure Arabic", var(--ui-font);
+  font-size: 27px;
+  text-align: right;
+}
+#story-en {
+  font-size: 23px;
+  text-align: left;
+}
+.story-actions {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 7px;
+  justify-items: stretch;
+}
+#story-progress {
+  grid-column: 1 / -1;
+  color: #d8a132;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: 5px;
+}
+#story-next {
+  min-height: 52px;
+  padding: 9px 12px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+#story-replay {
+  min-height: 44px;
+  padding: 5px 9px;
+  font-size: 15px;
+}
+/* Logical game pixels scale with the existing landscape tablet/phone viewport. */
+.compact .story-caption {
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  gap: 16px;
+  padding: 11px 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(450px, 0.85fr);
+}
+.compact #story-label {
+  top: 86px;
+  right: 18px;
+  max-width: 450px;
+  font-size: calc(10px / var(--game-scale));
+}
+.compact .story-actions {
+  grid-template-columns: 1.25fr 1fr;
+  gap: calc(5px / var(--game-scale));
+}
+.compact #story-progress {
+  grid-column: 1 / -1;
+  font-size: calc(10px / var(--game-scale));
+}
+.compact #story-ar {
+  font-size: calc(18px / var(--game-scale));
+}
+.compact #story-en {
+  font-size: calc(16px / var(--game-scale));
+}
+.compact #story-next,
+.compact #story-replay {
+  min-height: calc(44px / var(--game-scale));
+  font-size: calc(13px / var(--game-scale));
+  padding: calc(5px / var(--game-scale));
+}
