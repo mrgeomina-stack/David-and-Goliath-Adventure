@@ -1,3 +1,4 @@
+import { playLionEncounter } from "./lion-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -22,7 +23,11 @@ async function key(code, ms) {
 }
 async function moveTo(x, y) {
   for (let i = 0; i < 90; i++) {
-    if ((await state()).phase === "success") return;
+    if (
+      (await state()).phase === "success" ||
+      (await state()).lionEncounter.stage !== "idle"
+    )
+      return;
     const d = (await state()).david,
       dx = x - d.x,
       dy = y - d.y;
@@ -64,7 +69,7 @@ async function complete() {
 const started = Date.now();
 await page.click("#start");
 await page.waitForTimeout(2600);
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 3; i++) {
   const s = (await state()).sheep[i];
   await moveTo(s.x - 30, s.y);
   await page.keyboard.press("Space");
@@ -73,8 +78,9 @@ for (let i = 0; i < 4; i++) {
   await moveTo(225, 498);
   await page.waitForTimeout(460);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
-  if (i < 3) await moveTo(450, 498);
+  if (i < 2) await moveTo(450, 498);
 }
+await playLionEncounter(page);
 if ((await state()).audioEvents.sheep !== 4)
   throw Error("Sheep recording did not play once per successful lift");
 if (!((await state()).audioEvents.roar >= 1))

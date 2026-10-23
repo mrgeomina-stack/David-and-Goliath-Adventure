@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.9.3: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
+Version 1.10.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 The supplied music loops quietly after the first tap or click, with automatic volume reduction during voice guidance. UI buttons have soft pop feedback; global mute silences all audio. Pause also pauses the music.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
@@ -59,3 +59,14 @@ on an approved local server. See `TEST_REPORT.md` for evidence and limitations.
 **New sound:** Successful sheep lifts play your sheep recording. The lion gives occasional gentle growls. Your victory recording plays once after each completed mission. Voice starts on; English/Arabic Goliath and Saul guidance has bundled synthetic fallback speech when a local voice is unavailable. Sound mutes all audio; Voice controls speech separately. See [audio and encounter notes](docs/AUDIO_AND_ENCOUNTER.md).
 
 **New interface:** Coral buttons are the main actions; teal controls are secondary actions. Framed blue instruction cards and gold chapter badges share the same visual style. Teacher help scrolls inside its card while Resume and guide buttons stay visible. Arabic and English have separate reading blocks; both fonts are included offline. Gameplay and controls are unchanged.
+
+
+**Lion encounter:** Deliver three sheep normally. The fourth lamb's rescue has two
+large green timing windows. Press SPACE, tap the action button/the playfield, or
+press the standard gamepad south button (A/Cross) while the marker is green. On
+Easy the green window lasts 2.1 seconds; Normal allows 1.7 seconds. Misses offer
+unlimited retries of that part. The rescue timer pauses at this checkpoint, and
+three safe sheep remain in the pen. Holding a button cannot clear both challenges.
+A standard controller's left stick or D-pad moves David during normal rescues.
+The story is a gentle dramatization inspired by 1 Samuel 17:34–37; the lion is
+defeated and retreats without blood or graphic injury. All text stays editable.

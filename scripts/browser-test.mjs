@@ -26,6 +26,8 @@ const scripts = [
   "landing-check",
   "music-ui-check",
   "title-flock-check",
+  "lion-encounter-check",
+  "cover-size-check",
 ];
 const results = [];
 let cursor = 0;

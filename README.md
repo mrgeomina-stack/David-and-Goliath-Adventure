@@ -4,6 +4,22 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Protect the Sheep encounter + large landing UI · 1.10.0
+
+After three physical sheep deliveries, the remaining lamb wanders away and is
+seized by the lion. Two forgiving, genuinely interactive timing challenges let
+David rescue it and defend with his staff, before he carries it through the pen
+entrance. Early or missed timing can be retried locally without losing the three
+safe sheep. Keyboard SPACE, on-screen touch/click, and standard gamepad A/Cross are
+supported. The uploaded lion roar replaces the generated growl and occasionally
+plays during rescues, with no overlapping roar recordings.
+
+The large landing-page title, reading text, selector and buttons have been restored.
+Desktop and large-tablet windows keep the large cover even when browser chrome
+reduces available height; the nine sheep walk behind the DOM buttons. Phone
+controls retain their compact touch layout. This supersedes the smaller desktop
+cover spacing in 1.9.3. Other mission mechanics are unchanged.
+
 ## Living cover flock · 1.9.3
 
 Nine larger sheep casually walk around the left-facing David on the landing page.

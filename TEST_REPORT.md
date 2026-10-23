@@ -1,47 +1,70 @@
-# David’s Big Adventure — living cover flock · 1.9.3
+# David’s Big Adventure — sheep mini-boss and large cover · 1.10.0
 
-23 October 2026. Baseline `2174d40f3ff5bba52b586f98dc4b3255b97ff590`.
-The cover now has nine larger wandering sheep, with the supplied walking frames,
-individual paths, gentle footfall bob, soft turns, ground shadows and dynamic depth
-sorting around David. David and his staff face left. Desktop title spacing leaves
-room for the flock while retaining all labels and actions. No new engine, CDN,
-bitmap art or runtime dependency was added; rendering uses the existing Phaser/
-Canvas pipeline. Sheep keep the same appearance when stopping to idle.
+23 October 2026. Baseline `7e36d240a147795d3d714a6d7a03403940c910d3`.
+This update adds the requested lion encounter to Protect the Sheep and restores
+the large landing-page typography and controls. The nine wandering cover sheep
+remain behind the buttons and David still faces left. Desktop-sized windows no
+longer receive tiny cover typography just because browser bars reduce height.
 
-## Verification
+## Encounter
 
-- TypeScript and production/offline build passed.
-- 48 unit tests passed. Two new tests cover 120 seconds of bounds, clear space,
-  nine actors, minimum turning width, continuous movement, both walking directions,
-  depth transitions and left-facing David.
-- Cover browser check passed with networking disabled, nine moving actors,
-  correct depth layers, left-facing David, a single background loop, reachable
-  actions at desktop/tablet/phone sizes, and four rescue sheep on mission entry.
-  Desktop/phone captures and the large Arabic-only heading were reviewed after softening turn widths and
-  clearing the menu from the meadow. A fresh recording captures this final build.
-- Music/UI regression passed: quiet loop, narration ducking, music/global mute,
-  exactly one pop for mouse/touch/keyboard controls, paused menus and disabled states.
-- Actual-browser results are recorded in `qa/title-flock-1.9.3.log` and
-  `qa/title-flock-1.9.3.json`, with music/UI regression in
-  `qa/music-ui-1.9.3.log`.
-- Actual-game cover captures: `qa/98-title-flock-desktop.png`, walking capture,
-  Arabic-only cover, and 1180×820, 844×390 and 667×375 tablet/phone captures. Motion preview:
-  `qa/98-title-flock-motion.webm` (recorded from the actual game, not a mockup).
-- Game models, maze, collision rules, timers, rescue count, difficulty, progression
-  and sound design are unchanged. Cover-to-rescue navigation checks that only four
-  gameplay sheep spawn, and the existing offline music remains active.
-- Previous all-five-level, audio, PWA and offline-relaunch checks are retained as
-  1.9.2 baseline evidence in `docs/VALIDATION_1_9_2.md`; not claimed as rerun here.
+Three sheep are rescued through the existing lift/carry/pen controls. The remaining
+lamb wanders, is seized, and David approaches with a smoothly eased 12% camera
+zoom. Two real timing challenges require separate successful inputs: rescue, then
+staff defense. Easy offers 2.1 seconds of green time; Normal offers 1.7 seconds in
+a 4.2-second attempt. Early input or expiry gives unlimited local retries. The
+second checkpoint retains the rescued lamb. A held input cannot pass both stages.
 
-## Preview and limits
+The scripted return follows the existing open pen entrance; sheep four scores only
+after the lamb is placed at its own pen position. Victory plays once, followed by
+the normal maze transition. The rescue countdown pauses when three sheep are safe;
+there is no countdown penalty while learning the encounter. Free Play remains
+untimed overall. Keyboard SPACE, a large touch button/playfield tap, and standard
+Gamepad south button (A/Cross) act; the left stick/D-pad move during herding.
 
-Extract the offline ZIP and open index.html. Tap or click to start the music.
-Editable source: npm ci, npm run dev. Validation: npm test, npm run build.
-Run `node scripts/title-flock-check.mjs` for the cover check; set
-`RECORD_TITLE_VIDEO=1` to record it (requires Playwright's FFmpeg, or a configured
-system FFmpeg). The supplied animation artwork remains editable via the manifest.
+The supplied `Lion roar sfx.mp3` is preserved byte-for-byte under
+`src/assets/audio/lion-roar.mp3` and embedded in offline HTML. Roars are spaced
+apart and cannot overlap each other. A soft staff contact cue, timing chime, sheep
+recording and victory recording support the scene. Pause/mute remain effective.
+The defeat uses the supplied retreat artwork with a non-graphic recoil. Editable
+English/Arabic captions cite 1 Samuel 17:34–37 as the inspiration, not a literal
+illustration of every detail. David keeps the existing unified rig and scale.
 
-Chromium automation is available here. Physical Safari/iOS and Android hardware
-have not been tested. Browser policy blocks direct file:// navigation, so the
-production HTML is loaded from local disk over loopback and networking disabled
-before interactions. No external host is allowed during this check.
+## Results
+
+- TypeScript + production/offline build passed.
+- **52 unit tests passed** (10 files). New tests cover checkpoint admission,
+  countdown preservation, 25 local early retries, expiry, second-stage checkpoint,
+  two required successes, real fence-safe return coordinates, final pen placement,
+  green-window lengths and smooth camera bounds.
+- Dedicated offline lion browser check passed: three real deliveries, early miss,
+  timeout, retries, pause, keyboard, touch and emulated standard Gamepad input,
+  held-button protection, both challenges, physical return, four saved sheep,
+  four sheep recordings, uploaded roar playback, one victory and maze transition.
+- Cover check passed at 1280×720, 1366×650, 1180×820 and 844×390: large desktop
+  reference typography, large reachable buttons over the sheep, nine cover sheep,
+  left-facing David, and Arabic. See `qa/cover-size-1.10.0.json`.
+- **Full-story regression passed:** all five missions and story bridges completed
+  through actual inputs in approximately 95 seconds. Exactly five victory
+  recordings, one background loop, four sheep calls, the supplied roar, one staff
+  contact cue, three bundled guidance clips and the final giant impact were heard
+  by the audio-start instrumentation. See `qa/story-1.10.0.log` and
+  `qa/story-result.json`.
+- Actual-game evidence: `qa/99-lion-*.png` and `qa/99-cover-restored-*.png`.
+
+Game models and mechanics for maze, armour, brook and sling are unchanged. Shared
+Canvas camera transforms are applied only during this sheep encounter; shared
+sound changes add only the supplied roar/staff cue. UI input and focus handling
+are scoped to sheep, and the cover-only layout correction does not resize other
+activities. Previous validation is retained under `docs/VALIDATION_1_9_3.md`.
+
+## Limits and preview
+
+Browser tests use Chromium with keyboard, native touchscreen gestures and an
+emulated standard Gamepad API. A physical controller and physical Safari/iOS or
+Android hardware were not available. Browser policy blocks direct file://
+navigation; self-contained production HTML is streamed from local disk over
+loopback, then networking disabled before all encounter/cover interactions.
+Extract the offline ZIP, open index.html and tap/click to enable audio. Editable
+source: npm ci, npm run dev. Checks: npm test, npm run build;
+node scripts/lion-encounter-check.mjs; node scripts/cover-size-check.mjs.

@@ -1,3 +1,4 @@
+import { lionLines } from "./lion-encounter-view";
 import { TITLE_DAVID, titleFlockAt } from "./title-flock";
 import { countdownHue } from "./activity-timer";
 import { heroRigInfo } from "./hero";
@@ -116,6 +117,10 @@ function resize() {
   $("stage").style.transform = `scale(${scale})`;
   mobile = compactLayout(availableWidth, availableHeight);
   document.documentElement.classList.toggle("compact", mobile);
+  document.documentElement.classList.toggle(
+    "cover-large",
+    availableWidth >= 1000 && availableHeight >= 540,
+  );
   document.documentElement.classList.toggle(
     "phone-portrait",
     width < 600 && height > width,
@@ -373,7 +378,8 @@ function sync() {
           ? `${world.brook.count} / 5`
           : `${lang === "ar" ? "المهمة" : "MISSION"} ${ORDER.indexOf(world.mission) + 1} / 5`;
   const clock = $("sheep-clock");
-  clock.hidden = !["play", "encounter"].includes(world.phase);
+  const lionActive = world.mission === "sheep" && world.lionEncounter.active;
+  clock.hidden = !["play", "encounter"].includes(world.phase) || lionActive;
   const remaining = world.activityRemaining;
   const seconds = remaining === null ? null : Math.ceil(remaining);
   const stamp =
@@ -460,8 +466,25 @@ function sync() {
     : world.mission === "sheep" && world.sheep.carried
       ? bilingual("To the pen", "للحظيرة")
       : label(action, lang);
+  if (lionActive) {
+    const [en, ar] = lionLines[world.lionEncounter.stage];
+    $("objective-ar").textContent = "احمِ الخروف · ١ صموئيل ١٧:٣٤–٣٧";
+    $("objective-en").textContent = "Rescue the lamb · 1 Samuel 17:34–37";
+    $("instruction").textContent = bilingual(en, ar);
+    $("action").textContent =
+      world.lionEncounter.stage === "retry"
+        ? bilingual("Try again", "جرّب تاني")
+        : world.lionEncounter.stage === "rescue"
+          ? bilingual("Rescue!", "أنقذ!")
+          : world.lionEncounter.stage === "defend"
+            ? bilingual("Defend!", "احمِ!")
+            : bilingual("Watch", "شاهد");
+    $<HTMLButtonElement>("action").disabled =
+      !world.lionEncounter.timing && world.lionEncounter.stage !== "retry";
+    $("directions").hidden = true;
+  }
   $("hint").textContent = "✧ " + label("hint", lang);
-  $("hint").hidden = success || encounter;
+  $("hint").hidden = success || encounter || lionActive;
   const miss =
     world.failed || (world.mission === "sling" && world.sling.state === "miss");
   if (!$("message").hidden) {
@@ -563,6 +586,10 @@ function close() {
   modalOpen = false;
   $("modal-backdrop").hidden = true;
   world.setPaused(false);
+  if (world.mission === "sheep" && world.phase === "play") {
+    $("stage").tabIndex = -1;
+    $("stage").focus({ preventScroll: true });
+  }
 }
 function pause() {
   if (world.phase === "title") return;
@@ -854,6 +881,7 @@ if (new URL(location.href).searchParams.has("qa"))
         equipped: [...world.armor.equipped],
         fallTime: world.armor.fallTime,
         sheep: world.sheep.sheep,
+        lionEncounter: world.lionEncounter.snapshot(),
         carriedIndex: world.sheep.carriedIndex,
         liftProgress: world.sheep.liftProgress,
         sheepRemaining: world.sheep.remaining,

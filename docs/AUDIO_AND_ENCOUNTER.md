@@ -1,3 +1,14 @@
+# Lion mini-boss audio · 1.10.0
+
+The newly supplied lion MP3 is kept unchanged at `src/assets/audio/lion-roar.mp3`
+and bundled in HTML. It replaces the procedural growl only in Protect the Sheep:
+first at five active seconds, then at irregular 7–10 second intervals, with special
+cues at the seize/turn stages. A currently playing roar blocks overlapping roars.
+Music ducks for the roar; staff contact uses a soft wooden cue rather than the
+armour clang. The last lamb's actual lift plays the sheep recording; only final
+pen placement triggers the level's victory recording. Retry does not replay the
+whole level. See TEST_REPORT.md for timing/control details.
+
 # Background music and UI feedback · 1.9.2
 
 The supplied `magnific-buttons-and-pins.mp3` is preserved byte-for-byte under

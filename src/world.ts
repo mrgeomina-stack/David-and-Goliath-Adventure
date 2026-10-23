@@ -1,3 +1,5 @@
+import { LionEncounter } from "./lion-encounter";
+import { drawLionActors, drawLionPrompt } from "./lion-encounter-view";
 import { TITLE_DAVID, titleFlockAt } from "./title-flock";
 import { ActivityTimer, ACTIVITY_SECONDS } from "./activity-timer";
 import Phaser from "phaser";
@@ -67,6 +69,9 @@ export class World extends Phaser.Scene {
   maze = new MazeModel();
   armor = new ArmorModel();
   sheep = new SheepModel();
+  lionEncounter = new LionEncounter();
+  private gamepadDown = false;
+  private padDir: Point = { x: 0, y: 0 };
   brook = new BrookModel();
   sling = new SlingModel();
   lang: Language = "both";
@@ -242,6 +247,7 @@ export class World extends Phaser.Scene {
     this.maze = new MazeModel(this.seed + this.run * 41);
     this.armor = new ArmorModel();
     this.sheep = new SheepModel(this.run, this.free ? null : ACTIVITY_SECONDS);
+    this.lionEncounter = new LionEncounter(this.easy);
     this.brook = new BrookModel(this.run);
     this.sling = new SlingModel();
     this.paused = false;
@@ -298,6 +304,19 @@ export class World extends Phaser.Scene {
     }
     if (this.paused || this.failed || this.phase !== "play") return;
     this.tutorialTime = 0;
+    if (this.mission === "sheep" && this.lionEncounter.active) {
+      if (down) {
+        const result = this.lionEncounter.press();
+        if (result) {
+          this.hooks.sound.play(
+            result === "miss" ? "wall" : result === "hit" ? "win" : "call",
+          );
+          this.clearInput();
+          this.hooks.changed();
+        }
+      }
+      return;
+    }
     if (this.mission === "sling") {
       if (down) this.sling.hold();
       else {
@@ -321,6 +340,10 @@ export class World extends Phaser.Scene {
   pointerDown(p: Point) {
     if (this.paused || this.failed || this.phase !== "play") return;
     this.tutorialTime = 0;
+    if (this.mission === "sheep" && this.lionEncounter.active) {
+      this.action(true);
+      return;
+    }
     if (this.mission === "brook") {
       let target = p;
       if (this.fingerGesture) {
@@ -475,8 +498,8 @@ export class World extends Phaser.Scene {
     return this.mission === "maze" ? 4 : this.mission === "sling" ? 3 : 2.5;
   }
   get dir() {
-    let x = this.stepDir.x,
-      y = this.stepDir.y;
+    let x = this.stepDir.x || (this.mission === "sheep" ? this.padDir.x : 0),
+      y = this.stepDir.y || (this.mission === "sheep" ? this.padDir.y : 0);
     if (this.held.has("ArrowLeft") || this.held.has("KeyA")) x = -1;
     if (this.held.has("ArrowRight") || this.held.has("KeyD")) x = 1;
     if (this.held.has("ArrowUp") || this.held.has("KeyW")) y = -1;
@@ -485,6 +508,38 @@ export class World extends Phaser.Scene {
     return l ? { x: x / l, y: y / l } : { x: 0, y: 0 };
   }
   update(_time: number, delta: number) {
+    // Standard Gamepad mapping: left stick/D-pad move, south button (A/Cross) acts.
+    // Edge detection prevents a held button from clearing both timing challenges.
+    if (this.mission === "sheep" && this.phase === "play") {
+      let pad: Gamepad | null | undefined;
+      try {
+        pad = navigator.getGamepads?.().find((p) => p?.connected);
+      } catch {
+        /* Keyboard/touch remain available if the host disallows gamepads. */
+      }
+      const button = !!pad?.buttons[0]?.pressed;
+      this.padDir = {
+        x: pad?.buttons[14]?.pressed
+          ? -1
+          : pad?.buttons[15]?.pressed
+            ? 1
+            : Math.abs(pad?.axes[0] || 0) > 0.25
+              ? pad!.axes[0]
+              : 0,
+        y: pad?.buttons[12]?.pressed
+          ? -1
+          : pad?.buttons[13]?.pressed
+            ? 1
+            : Math.abs(pad?.axes[1] || 0) > 0.25
+              ? pad!.axes[1]
+              : 0,
+      };
+      if (button && !this.gamepadDown) this.action(true);
+      this.gamepadDown = button;
+    } else {
+      this.padDir = { x: 0, y: 0 };
+      this.gamepadDown = false;
+    }
     const dt = Math.min(delta / 1000, 0.05);
     if (!this.paused) {
       this.clock += dt;
@@ -581,27 +636,65 @@ export class World extends Phaser.Scene {
           if (this.armor.complete) this.finish();
         }
         if (this.mission === "sheep") {
-          const count = this.sheep.count;
-          const beforeTime = this.sheep.remaining;
-          this.sheep.update(this.tutorialTime > 0 ? 0 : dt, dir);
-          for (const threshold of [20, 10, 5])
+          if (this.lionEncounter.active) {
+            const before = this.lionEncounter.stage;
+            const previousTime = this.lionEncounter.time;
+            this.lionEncounter.update(dt, this.sheep);
             if (
-              beforeTime !== null &&
-              beforeTime > threshold &&
-              this.sheep.remaining !== null &&
-              this.sheep.remaining <= threshold
+              this.lionEncounter.timing &&
+              previousTime < this.lionEncounter.window.start &&
+              this.lionEncounter.time >= this.lionEncounter.window.start
             )
-              this.hooks.sound.tone(330, 0.15, 0, "triangle");
-          if (this.sheep.count > count) {
-            this.effects.burst(230, 460, "spark", 20);
-            this.hooks.sound.play("win");
-            this.hooks.changed();
-          }
-          if (this.sheep.complete) this.finish();
-          else if (this.sheep.caughtIndex !== null) {
-            this.failed = true;
-            this.clearInput();
-            this.hooks.changed();
+              this.hooks.sound.tone(660, 0.15, 0, "triangle");
+            if (
+              before === "rush" &&
+              previousTime < 0.95 &&
+              this.lionEncounter.time >= 0.95
+            )
+              this.hooks.sound.play("sheep");
+            if (
+              before === "guard" &&
+              previousTime < 0.5 &&
+              this.lionEncounter.time >= 0.5
+            ) {
+              this.hooks.sound.play("staff");
+              this.effects.burst(963, 435, "spark", 12);
+            }
+            if (before !== this.lionEncounter.stage) {
+              if (["seize", "defend"].includes(this.lionEncounter.stage))
+                this.hooks.sound.play("roar");
+              this.hooks.changed();
+            }
+            if (this.lionEncounter.stage === "done") this.finish();
+          } else {
+            const count = this.sheep.count;
+            const beforeTime = this.sheep.remaining;
+            this.sheep.update(this.tutorialTime > 0 ? 0 : dt, dir);
+            for (const threshold of [20, 10, 5])
+              if (
+                beforeTime !== null &&
+                beforeTime > threshold &&
+                this.sheep.remaining !== null &&
+                this.sheep.remaining <= threshold
+              )
+                this.hooks.sound.tone(330, 0.15, 0, "triangle");
+            if (this.sheep.count > count) {
+              this.effects.burst(230, 460, "spark", 20);
+              this.hooks.sound.play("win");
+              this.hooks.changed();
+            }
+            if (
+              this.sheep.count === 3 &&
+              this.lionEncounter.start(this.sheep)
+            ) {
+              this.clearInput();
+              this.hooks.changed();
+            } else if (this.sheep.complete) this.finish();
+            else if (this.sheep.caughtIndex !== null) {
+              this.failed = true;
+              this.clearInput();
+              this.hooks.changed();
+            }
           }
         }
         if (this.mission === "brook") {
@@ -652,6 +745,7 @@ export class World extends Phaser.Scene {
     this.hooks.sound.lion(
       dt,
       this.mission === "sheep" &&
+        !this.lionEncounter.active &&
         this.phase === "play" &&
         !this.paused &&
         !this.failed &&
@@ -673,6 +767,16 @@ export class World extends Phaser.Scene {
     if (!c) return;
     c.clearRect(0, 0, 1280, 720);
     A.setArtTime(this.clock);
+    c.save();
+    const cinematic =
+      this.mission === "sheep" && this.phase === "play"
+        ? this.lionEncounter.camera
+        : 0;
+    if (cinematic > 0) {
+      c.translate(760, 445);
+      c.scale(1 + cinematic * 0.12, 1 + cinematic * 0.12);
+      c.translate(-760, -445);
+    }
     const painted =
       this.phase === "title" ||
       (this.mission === "maze" &&
@@ -714,6 +818,9 @@ export class World extends Phaser.Scene {
     else this.drawSling(c);
     if (this.phase !== "title") depth(c, this.clock, this.mission, true);
     this.effects.draw(c);
+    c.restore();
+    if (this.mission === "sheep" && this.lionEncounter.active)
+      drawLionPrompt(c, this.lionEncounter, this.lang);
     if (this.phase === "success") cinematicFrame(c, this.successTime);
     A.vignette(c);
     if (this.debug) {
@@ -1293,56 +1400,60 @@ export class World extends Phaser.Scene {
       }
       if (s.startled > 0) A.text(c, "!", s.x, s.y - 70, 25, "#fff4c6");
     }
-    A.lion(
-      c,
-      this.sheep.lion.x,
-      this.sheep.lion.y,
-      1.1,
-      this.clock,
-      this.sheep.hunting,
-    );
-    A.person(c, this.sheep.david.x, this.sheep.david.y, 1, {
-      facing: this.facing,
-      walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
-      arm: this.phase === "success" ? 1 : 0,
-      carry: this.sheep.carried ? this.sheep.liftProgress : undefined,
-      sit: this.sheep.carried ? (1 - this.sheep.liftProgress) * 0.7 : 0,
-    });
-    const heldSheep = this.sheep.carried;
-    if (heldSheep) {
-      const d = this.sheep.david,
-        f = this.sheep.liftProgress;
-      const eased = f * f * (3 - 2 * f),
-        drop = this.sheep.placing;
-      const target = { x: d.x, y: d.y - 66 };
-      const pen = this.sheep.penSpot(this.sheep.carriedIndex!);
-      const sx = drop
-        ? lerp(target.x, pen.x, drop)
-        : lerp(this.sheep.pickupFrom.x, target.x, eased);
-      const sy = drop
-        ? lerp(target.y, pen.y, drop)
-        : lerp(this.sheep.pickupFrom.y, target.y, eased) -
-          Math.sin(f * Math.PI) * 12;
-      A.sheep(
+    if (this.lionEncounter.started) {
+      drawLionActors(c, this.lionEncounter, this.clock);
+    } else {
+      A.lion(
         c,
-        sx,
-        sy,
-        0.83,
-        Math.sin(this.clock * 6) * (f < 1 ? 0.65 : 0.08),
-        true,
-        this.sheep.carriedIndex!,
+        this.sheep.lion.x,
+        this.sheep.lion.y,
+        1.1,
+        this.clock,
+        this.sheep.hunting,
       );
-      // Painted hands from the same character material visibly support the fleece.
-      for (const side of [-1, 1])
-        drawHeroHand(
+      A.person(c, this.sheep.david.x, this.sheep.david.y, 1, {
+        facing: this.facing,
+        walk: this.dir.x || this.dir.y ? Math.sin(this.clock * 14) : 0,
+        arm: this.phase === "success" ? 1 : 0,
+        carry: this.sheep.carried ? this.sheep.liftProgress : undefined,
+        sit: this.sheep.carried ? (1 - this.sheep.liftProgress) * 0.7 : 0,
+      });
+      const heldSheep = this.sheep.carried;
+      if (heldSheep) {
+        const d = this.sheep.david,
+          f = this.sheep.liftProgress;
+        const eased = f * f * (3 - 2 * f),
+          drop = this.sheep.placing;
+        const target = { x: d.x, y: d.y - 66 };
+        const pen = this.sheep.penSpot(this.sheep.carriedIndex!);
+        const sx = drop
+          ? lerp(target.x, pen.x, drop)
+          : lerp(this.sheep.pickupFrom.x, target.x, eased);
+        const sy = drop
+          ? lerp(target.y, pen.y, drop)
+          : lerp(this.sheep.pickupFrom.y, target.y, eased) -
+            Math.sin(f * Math.PI) * 12;
+        A.sheep(
           c,
-          d.x + side * 30,
-          d.y - lerp(44, 74, f),
-          1,
-          side * this.facing,
+          sx,
+          sy,
+          0.83,
+          Math.sin(this.clock * 6) * (f < 1 ? 0.65 : 0.08),
+          true,
+          this.sheep.carriedIndex!,
         );
+        // Painted hands from the same character material visibly support the fleece.
+        for (const side of [-1, 1])
+          drawHeroHand(
+            c,
+            d.x + side * 30,
+            d.y - lerp(44, 74, f),
+            1,
+            side * this.facing,
+          );
+      }
     }
-    if (this.sheep.caughtIndex !== null) {
+    if (this.sheep.caughtIndex !== null && !this.lionEncounter.started) {
       A.sheep(c, this.sheep.lion.x - 35, this.sheep.lion.y + 6, 0.85, 0);
       A.text(
         c,

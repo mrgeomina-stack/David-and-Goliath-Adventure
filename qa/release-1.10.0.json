@@ -1,0 +1,20 @@
+{
+  "version": "1.10.0",
+  "baseline": "7e36d240a147795d3d714a6d7a03403940c910d3",
+  "unitTests": 52,
+  "passedBrowserChecks": [
+    "lion-encounter-check",
+    "cover-size-check",
+    "story-check"
+  ],
+  "scope": [
+    "Protect the Sheep mini-boss and supplied lion roar",
+    "Restore large landing UI per follow-up"
+  ],
+  "otherModelsUnchanged": true,
+  "htmlSha256": "0beb5f72bda51d85345540ad066812b61540a786028a043f626ce3ebee682e20",
+  "roarSha256": "9b2933d05d4ecec3e766c6c9e2057448651a9635440ccb4351020c71da137a17",
+  "physicalControllerTested": false,
+  "gamepadApiEmulated": true,
+  "fullStorySeconds": 94.764
+}

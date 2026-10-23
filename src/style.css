@@ -1364,7 +1364,7 @@ select {
   font-size: calc(10px / var(--game-scale));
   padding: calc(3px / var(--game-scale));
 }
-.compact .title-card {
+.compact:not(.cover-large) .title-card {
   top: calc(53px / var(--game-scale));
   left: calc(14px / var(--game-scale));
   width: 58%;
@@ -1372,43 +1372,43 @@ select {
   overflow: auto;
   padding: 0 6px 8px 0;
 }
-.compact .title-card .eyebrow,
-.compact .title-card p,
-.compact .title-card small,
-.compact #title-note {
+.compact:not(.cover-large) .title-card .eyebrow,
+.compact:not(.cover-large) .title-card p,
+.compact:not(.cover-large) .title-card small,
+.compact:not(.cover-large) #title-note {
   display: none;
 }
-.compact .arabic-title,
-body.lang-ar.compact .arabic-title {
+.compact:not(.cover-large) .arabic-title,
+body.lang-ar.compact:not(.cover-large) .arabic-title {
   font-size: calc(17px / var(--game-scale));
   margin: 0 0 calc(3px / var(--game-scale));
 }
-.compact h1 {
+.compact:not(.cover-large) h1 {
   font-size: calc(28px / var(--game-scale));
   letter-spacing: -1px;
   margin: calc(4px / var(--game-scale)) 0 calc(8px / var(--game-scale));
 }
-.compact h1 em {
+.compact:not(.cover-large) h1 em {
   font-size: calc(27px / var(--game-scale));
   letter-spacing: -1px;
 }
-.compact .title-spark {
+.compact:not(.cover-large) .title-spark {
   display: none;
 }
-.compact .settings {
+.compact:not(.cover-large) .settings {
   margin-bottom: calc(6px / var(--game-scale));
 }
-.compact .settings label {
+.compact:not(.cover-large) .settings label {
   font-size: 0;
 }
-.compact .settings select {
+.compact:not(.cover-large) .settings select {
   min-height: calc(44px / var(--game-scale));
   font-size: calc(16px / var(--game-scale));
   width: 100%;
   padding: calc(4px / var(--game-scale));
 }
-.compact #start,
-.compact #practice-toggle {
+.compact:not(.cover-large) #start,
+.compact:not(.cover-large) #practice-toggle {
   min-height: calc(44px / var(--game-scale));
   font-size: calc(13px / var(--game-scale));
   padding: calc(6px / var(--game-scale)) calc(10px / var(--game-scale));

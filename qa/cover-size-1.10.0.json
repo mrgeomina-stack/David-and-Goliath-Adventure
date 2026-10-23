@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "width": 1280,
+      "height": 720,
+      "titlePixels": 73,
+      "large": true
+    },
+    {
+      "width": 1366,
+      "height": 650,
+      "titlePixels": 65.90277777777779,
+      "large": true
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "titlePixels": 67.296875,
+      "large": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "titlePixels": 27.999995833333333,
+      "large": false
+    }
+  ],
+  "checks": [
+    "reference desktop typography restored",
+    "short desktop keeps large cover",
+    "tablet and phone bounds",
+    "large clickable CTAs above wandering sheep",
+    "nine sheep and left-facing David retained",
+    "Arabic cover"
+  ],
+  "errors": []
+}

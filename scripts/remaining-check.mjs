@@ -1,3 +1,4 @@
+import { playLionEncounter } from "./lion-input.mjs";
 import { chromium } from "@playwright/test";
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
@@ -23,7 +24,8 @@ await page.screenshot({ path: "qa/22-sheep-distant-call.png" });
 async function moveTo(x, y) {
   for (let i = 0; i < 140; i++) {
     const current = await state();
-    if (current.phase === "success") return;
+    if (current.phase === "success" || current.lionEncounter.stage !== "idle")
+      return;
     if (current.failed) throw Error("Rescue expired during route");
     const dx = x - current.david.x,
       dy = y - current.david.y;
@@ -55,7 +57,7 @@ async function moveTo(x, y) {
   }
   throw Error("Rescue route blocked");
 }
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 3; i++) {
   let s = (await state()).sheep[i];
   await moveTo(s.x - 30, s.y);
   if (i === 1) {
@@ -81,10 +83,11 @@ for (let i = 0; i < 4; i++) {
   await page.waitForTimeout(460);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
   if (i === 1) await page.setViewportSize({ width: 1280, height: 720 });
-  if (i < 3) {
+  if (i < 2) {
     await moveTo(450, 498);
   }
 }
+await playLionEncounter(page);
 await page.waitForTimeout(2800);
 await page.screenshot({ path: "qa/24-sheep-success.png" });
 if ((await state()).phase !== "success") throw Error("Sheep not won");
@@ -116,6 +119,6 @@ if ((await state()).stoneCount !== 5 || (await state()).phase !== "success")
   throw Error("Brook incomplete");
 if (errors.length) throw Error(errors.join("\n"));
 console.log(
-  "SHEEP + BROOK PASS: four individual carries, keyboard/touch lifts, pen scoring, distant pickup rejection, jagged rejection, five unique pickups.",
+  "SHEEP + BROOK PASS: three individual carries, two lion timing challenges, lamb return, keyboard/touch lifts, pen scoring, distant pickup rejection, jagged rejection, five unique pickups.",
 );
 await browser.close();

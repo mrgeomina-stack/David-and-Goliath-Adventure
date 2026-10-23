@@ -1,5 +1,6 @@
 import sheepUrl from "./assets/audio/sheep.mp3";
 import victoryUrl from "./assets/audio/victory.mp3";
+import roarUrl from "./assets/audio/lion-roar.mp3";
 import musicUrl from "./assets/audio/magnific-buttons-and-pins.mp3";
 export class Sound {
   private samples = new Map<string, AudioBuffer>();
@@ -8,6 +9,7 @@ export class Sound {
   private generation = 0;
   private voiceSource: AudioBufferSourceNode | null = null;
   private voiceGeneration = 0;
+  private roarSource: AudioBufferSourceNode | null = null;
   stopVoice() {
     this.voiceGeneration++;
     this.voiceSource?.stop();
@@ -60,6 +62,7 @@ export class Sound {
     await Promise.all(
       [
         ["sheep", sheepUrl],
+        ["roar", roarUrl],
         ["complete", victoryUrl],
         ["background", musicUrl],
       ].map(async ([key, url]) => {
@@ -81,6 +84,7 @@ export class Sound {
     for (const source of this.sources) source.stop();
     this.sources.clear();
     this.roarWait = 5;
+    this.roarSource = null;
     this.featureUntil = 0;
     this.mixMusic();
   }
@@ -92,7 +96,8 @@ export class Sound {
         !buffer ||
         !this.context ||
         this.muted ||
-        generation !== this.generation
+        generation !== this.generation ||
+        (name === "roar" && this.roarSource !== null)
       )
         return;
       const source = this.context.createBufferSource();
@@ -102,9 +107,14 @@ export class Sound {
       source.connect(gain);
       gain.connect(this.context.destination);
       this.sources.add(source);
-      source.onended = () => this.sources.delete(source);
+      if (name === "roar") this.roarSource = source;
+      source.onended = () => {
+        this.sources.delete(source);
+        if (this.roarSource === source) this.roarSource = null;
+      };
       this.events[name] = (this.events[name] ?? 0) + 1;
-      if (name === "complete") this.featureSound(buffer.duration);
+      if (name === "complete" || name === "roar")
+        this.featureSound(buffer.duration);
       source.start();
     };
     if (this.samples.has(name)) start();
@@ -166,36 +176,9 @@ export class Sound {
     this.roarWait -= dt;
     if (this.roarWait > 0) return;
     this.roarWait = 7 + Math.random() * 3;
-    const c = this.context,
-      now = c.currentTime;
-    // A soft, breathy growl with a falling pitch; deliberately child-friendly.
-    const buffer = c.createBuffer(1, c.sampleRate * 1.4, c.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) {
-      const t = i / c.sampleRate,
-        envelope = Math.sin((Math.PI * t) / 1.4) ** 2;
-      data[i] =
-        envelope *
-        (0.6 *
-          Math.sin(2 * Math.PI * (105 * t - 17 * t * t)) *
-          (0.6 + 0.4 * Math.sin(t * 45)) +
-          0.3 * (Math.random() * 2 - 1));
-    }
-    const source = c.createBufferSource(),
-      filter = c.createBiquadFilter(),
-      gain = c.createGain();
-    source.buffer = buffer;
-    filter.type = "lowpass";
-    filter.frequency.value = 650;
-    gain.gain.value = 0.24;
-    source.connect(filter);
-    filter.connect(gain);
-    gain.connect(c.destination);
-    this.sources.add(source);
-    source.onended = () => this.sources.delete(source);
-    source.start(now);
-    this.events.roar = (this.events.roar ?? 0) + 1;
+    this.sample("roar");
   }
+
   context: AudioContext | null = null;
   private paused = false;
   pause(paused: boolean) {
@@ -399,11 +382,19 @@ export class Sound {
     o.stop(t + length + 0.01);
   }
   play(name: string) {
+    if (name === "staff") {
+      if (!this.context || this.muted) return;
+      this.rustle("step");
+      this.tone(145, 0.12, 0, "triangle");
+      this.tone(230, 0.07, 0.018);
+      this.events.staff = (this.events.staff ?? 0) + 1;
+      return;
+    }
     if (name === "impact") {
       this.giantImpact();
       return;
     }
-    if (name === "sheep" || name === "complete") {
+    if (name === "sheep" || name === "complete" || name === "roar") {
       this.sample(name);
       return;
     }
