@@ -1,0 +1,73 @@
+{
+  "baseline": "a1b20578dd66ce0e92dffc93aafefe30e1482fce",
+  "modifiedExistingGameFiles": [
+    "src/world.ts"
+  ],
+  "addedGameFiles": [
+    "src/goliath-defeat.ts",
+    "src/assets/goliath-defeat/forward-fall-atlas.png"
+  ],
+  "criticalUnchangedFiles": [
+    {
+      "file": "src/model.ts",
+      "unchanged": true,
+      "sha256": "63e1f0cab3a9913b63451ec2a19f78ae95b87e03a458341108346d5830e73def"
+    },
+    {
+      "file": "src/main.ts",
+      "unchanged": true,
+      "sha256": "3e6f9c3e1130422911cdcc59287639c11695e41ad46739fd67509a694fe9c565"
+    },
+    {
+      "file": "src/audio.ts",
+      "unchanged": true,
+      "sha256": "93e06f7004d5f602b881a174a0e010ff11e7f84153ab5fb9dd1f0e3283cab042"
+    },
+    {
+      "file": "src/hero.ts",
+      "unchanged": true,
+      "sha256": "05810b9a3758cd1ab4c1ac8a5e3d831cf3f83c5be979da87d13df9afd226deab"
+    },
+    {
+      "file": "src/style.css",
+      "unchanged": true,
+      "sha256": "92f9f678f3276988eee80c8a6ae0c3fbb53f2cdc307625a4e08798b1bb132c9e"
+    },
+    {
+      "file": "src/ui-theme.css",
+      "unchanged": true,
+      "sha256": "28d8e3381aaa36575ad494fcd4b239114bbe1548df36b7801187bca4acbecfc3"
+    },
+    {
+      "file": "src/interlude.ts",
+      "unchanged": true,
+      "sha256": "6541228d236e8d2b404255dbde08964be38400336d492f5af183b01e37cc5e97"
+    },
+    {
+      "file": "src/interlude-view.ts",
+      "unchanged": true,
+      "sha256": "07c25b4afb1853ef2b1ad170de7ee28b9daef7b2148ec6ca1871770a1292c96e"
+    },
+    {
+      "file": "index.html",
+      "unchanged": true,
+      "sha256": "289f7b94198abaa2adde3af0005f517fc84457940b20b8be8f0bcdfd110cbed1"
+    },
+    {
+      "file": "package.json",
+      "unchanged": true,
+      "sha256": "41008a28a8bdb7207c5471cee78f485d2218250e56f8f7cbc70ab4f23484ff47"
+    },
+    {
+      "file": "package-lock.json",
+      "unchanged": true,
+      "sha256": "c8eefcce971812cf7186572b506e8f0c0e308eaecd8b3baa714b6cd06729c6ac"
+    },
+    {
+      "file": "vite.config.ts",
+      "unchanged": true,
+      "sha256": "dc0f0b2af84636045d4b9a0fd5d4a8306d3f198a031590562a848be28d592f6e"
+    }
+  ],
+  "note": "World changes are confined to fall-asset loading, successful-hit render, impact timing, and hit flash/dust. Other World level and victory blocks are unchanged."
+}

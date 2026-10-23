@@ -1,0 +1,87 @@
+{
+  "label": "after",
+  "offline": true,
+  "frames": [
+    {
+      "at": 0.10998999999999996,
+      "shot": "hit",
+      "impact": 0,
+      "completion": 0
+    },
+    {
+      "at": 0.5349799999999999,
+      "shot": "hit",
+      "impact": 0,
+      "completion": 0
+    },
+    {
+      "at": 0.9666299999999998,
+      "shot": "hit",
+      "impact": 0,
+      "completion": 0
+    },
+    {
+      "at": 1.3832600000000002,
+      "shot": "hit",
+      "impact": 0,
+      "completion": 0
+    },
+    {
+      "at": 1.7615900000000015,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 2.2365700000000004,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 2.701559999999999,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 3.151539999999998,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 3.5831899999999974,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 3.949829999999996,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 4.398149999999994,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    },
+    {
+      "at": 4.783139999999996,
+      "shot": "hit",
+      "impact": 1,
+      "completion": 1
+    }
+  ],
+  "audio": {
+    "pop": 2,
+    "background": 1,
+    "launch": 1,
+    "impact": 1,
+    "complete": 1
+  },
+  "video": "/workspace/David-and-Goliath-Adventure/qa/goliath-fall/after/dce00bfa4339eae700a49f77ba6f01d1.webm",
+  "errors": []
+}

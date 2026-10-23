@@ -1,4 +1,10 @@
 import { LionEncounter } from "./lion-encounter";
+import {
+  configureGoliathDefeat,
+  drawGoliathDefeat,
+  GOLIATH_LANDING,
+  goliathDefeatAtlasUrl,
+} from "./goliath-defeat";
 import { StoryInterlude } from "./interlude";
 import { interludeAssets, drawInterlude } from "./interlude-view";
 import { drawLionActors, drawLionPrompt } from "./lion-encounter-view";
@@ -128,6 +134,7 @@ export class World extends Phaser.Scene {
     super("Adventure");
   }
   preload() {
+    this.load.image("goliath-forward-fall", goliathDefeatAtlasUrl);
     visualLibrary.preload(this.load);
     this.load.image("david-cohesive-rig", heroRigUrl);
     this.load.image("painted-landscape", landscapeUrl);
@@ -145,6 +152,11 @@ export class World extends Phaser.Scene {
       this.load.image(key, url);
   }
   create() {
+    configureGoliathDefeat(
+      this.textures
+        .get("goliath-forward-fall")
+        .getSourceImage() as HTMLImageElement,
+    );
     visualLibrary.configure(this.textures);
     configureHero(
       this.textures
@@ -629,9 +641,13 @@ export class World extends Phaser.Scene {
       if (this.phase === "success") {
         const previous = this.successTime;
         this.successTime += dt;
-        // The supplied final ground-contact frame starts at ~1.0s (see drawSling).
+        // Match the existing giant impact to the corrected forward ground contact.
         // Crossing once in simulation time keeps landing silent on misses and frozen on pause.
-        if (this.mission === "sling" && previous < 1 && this.successTime >= 1)
+        if (
+          this.mission === "sling" &&
+          previous < GOLIATH_LANDING &&
+          this.successTime >= GOLIATH_LANDING
+        )
           this.hooks.sound.play("impact");
         if (
           (this.mission === "maze" || this.mission === "sling") &&
@@ -1639,13 +1655,8 @@ export class World extends Phaser.Scene {
       },
     });
     const t = this.phase === "success" ? this.successTime : 0;
-    A.giant(
-      c,
-      1000 - 140 * clamp((t - 0.25) / 1.6, 0, 1),
-      590,
-      this.clock,
-      t > 0.25 ? clamp((t - 0.25) / 1.6, 0, 1) : 0,
-    );
+    if (this.phase === "success") drawGoliathDefeat(c, t);
+    else A.giant(c, 1000, 590, this.clock);
     // Forehead center (1000,259) corresponds to the visible upper face, not the whole giant.
     if (this.hintTime > 0) {
       c.strokeStyle = "#fff3bd";
@@ -1742,17 +1753,7 @@ export class World extends Phaser.Scene {
       );
     }
     if (this.phase === "success") {
-      if (t < 1) A.star(c, 1000, 259, 25, "#fff2b5", t);
-      if (t > 1)
-        for (let i = 0; i < 12; i++)
-          A.ellipse(
-            c,
-            1040 + i * 14,
-            580 - Math.sin(i) * 20,
-            25 + t * 5,
-            13,
-            "#e5c89190",
-          );
+      if (t < 0.14) A.star(c, 1000, 259, 25, "#fff2b5", t);
       A.burst(c, t, 900, 360);
     }
   }

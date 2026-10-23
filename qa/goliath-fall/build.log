@@ -1,0 +1,17 @@
+
+> davids-big-adventure@1.12.0 build
+> tsc --noEmit && vite build && node scripts/offline.mjs
+
+vite v7.3.1 building client environment for production...
+transforming...
+✓ 166 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/davids-big-adventure.css      319.57 kB │ gzip:    218.98 kB
+dist/game.js                   110,861.60 kB │ gzip: 82,078.03 kB
+✓ built in 20.43s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

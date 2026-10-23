@@ -1,0 +1,15 @@
+{
+  "baseline": "a1b20578dd66ce0e92dffc93aafefe30e1482fce",
+  "sourceArtwork": [
+    "visual-assets-v1/sprites/goliath/idle.png",
+    "visual-assets-v1/sprites/goliath/hit.png"
+  ],
+  "generation": "OpenAI image edit; only replacement forward fall / prone poses; provided ZIP could not be transferred",
+  "asset": "src/assets/goliath-defeat/forward-fall-atlas.png",
+  "sha256": "c77558446161303077a453d96a8c9d520d46f7633787058785791955d9e14c2b",
+  "offlineHtmlSha256": "ca44f82d3b7494dd294f61ab697b0a99cb2140a74a8f4e1acfa84f01352bca98",
+  "landingSeconds": 1.62,
+  "dizzySeconds": 0.6,
+  "unitTests": 64,
+  "packageVersionUnchanged": "1.12.0"
+}
