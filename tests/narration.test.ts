@@ -66,3 +66,33 @@ it("plays bundled Arabic/English encounter speech without browser voices, dedupl
   expect(stop).toHaveBeenCalledTimes(3);
   expect(play).toHaveBeenCalledTimes(2);
 });
+it("ducks music only for the current installed utterance and releases it on end or cancel", () => {
+  const utterances: { onstart: () => void; onend: () => void }[] = [];
+  vi.stubGlobal("speechSynthesis", {
+    getVoices: () => [{ localService: true, lang: "en-US" }],
+    cancel: vi.fn(),
+    speak: (u: { onstart: () => void; onend: () => void }) =>
+      utterances.push(u),
+  });
+  vi.stubGlobal(
+    "SpeechSynthesisUtterance",
+    class {
+      constructor(public text: string) {}
+    },
+  );
+  const activity = vi.fn();
+  const narrator = new Narrator({ play: vi.fn(), stop: vi.fn(), activity });
+  narrator.enabled = true;
+  narrator.speak("one", "Hello", "مرحبا", "en", false);
+  utterances[0].onstart();
+  expect(activity).toHaveBeenLastCalledWith(true);
+  narrator.speak("two", "Next", "التالي", "en", false);
+  utterances[1].onstart();
+  utterances[0].onend();
+  expect(activity).toHaveBeenLastCalledWith(true);
+  utterances[1].onend();
+  expect(activity).toHaveBeenLastCalledWith(false);
+  narrator.reset();
+  utterances[1].onstart();
+  expect(activity).toHaveBeenLastCalledWith(false);
+});

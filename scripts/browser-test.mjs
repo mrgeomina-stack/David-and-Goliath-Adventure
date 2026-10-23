@@ -23,6 +23,8 @@ const scripts = [
   "direction-maze-timer-check",
   "audio-brook-check",
   "ui-redesign-check",
+  "landing-check",
+  "music-ui-check",
 ];
 const results = [];
 let cursor = 0;

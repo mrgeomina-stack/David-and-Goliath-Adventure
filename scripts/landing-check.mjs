@@ -1,5 +1,6 @@
 import { chromium } from "@playwright/test";
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
+import { bootOfflineBuild } from "./offline-build.mjs";
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
@@ -7,25 +8,12 @@ const browser = await chromium.launch({
 try {
   const context = await browser.newContext({
     viewport: { width: 1280, height: 720 },
-    offline: true,
-  });
-  const html = readFileSync("dist/index.html", "utf8");
-  await context.route("http://offline-game.test/**", (route) => {
-    const path = new URL(route.request().url()).pathname;
-    if (path === "/manifest.webmanifest" || path.startsWith("/icons/"))
-      return route.fulfill({
-        status: 200,
-        body: readFileSync("dist" + path),
-        contentType: path.endsWith(".png")
-          ? "image/png"
-          : "application/manifest+json",
-      });
-    return route.fulfill({ status: 200, contentType: "text/html", body: html });
+    serviceWorkers: "block",
   });
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("http://offline-game.test/?qa");
+  await bootOfflineBuild(page, context);
   await page.waitForSelector('#stage[data-ready="true"]');
   const state = () => page.evaluate(() => window.adventureQA.snapshot());
   await page.click("#practice-toggle");
@@ -117,11 +105,11 @@ try {
     throw Error("Unmute replayed stale impact");
   if (errors.length) throw Error(errors.join("\n"));
   writeFileSync(
-    "qa/landing-1.9.1.json",
+    "qa/landing-results.json",
     JSON.stringify(
       {
         passed: true,
-        offline: true,
+        serviceWorkers: "block",
         checks: [
           "weak/strong misses silent",
           "impact waits for landing",

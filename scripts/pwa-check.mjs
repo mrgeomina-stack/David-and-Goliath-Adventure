@@ -17,8 +17,10 @@ const server = distServer({
       : bytes,
   fail: (path) => broken && path === "icons/icon-192.png",
 });
-await new Promise((resolve) => server.listen(4178, "127.0.0.1", resolve));
-const url = "http://127.0.0.1:4178/adventure/";
+await new Promise((resolve) =>
+  server.listen(Number(process.env.PWA_PORT || 4178), "127.0.0.1", resolve),
+);
+const url = `http://127.0.0.1:${process.env.PWA_PORT || 4178}/adventure/`;
 try {
   const context = await browser.newContext({
     viewport: { width: 844, height: 390 },

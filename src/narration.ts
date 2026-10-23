@@ -12,14 +12,21 @@ const bundled = {
 import type { Language } from "./strings";
 export class Narrator {
   constructor(
-    private playback?: { play: (url: string) => void; stop: () => void },
+    private playback?: {
+      play: (url: string) => void;
+      stop: () => void;
+      activity?: (speaking: boolean) => void;
+    },
   ) {}
   enabled = false;
   private key = "";
+  private generation = 0;
   available =
     typeof speechSynthesis !== "undefined" &&
     typeof SpeechSynthesisUtterance !== "undefined";
   stop() {
+    this.generation++;
+    this.playback?.activity?.(false);
     this.playback?.stop();
     if (this.available) speechSynthesis.cancel();
   }
@@ -76,6 +83,13 @@ export class Narrator {
     this.key = key;
     this.stop();
     utterance.voice = voice;
+    const generation = this.generation;
+    utterance.onstart = () => {
+      if (generation === this.generation) this.playback?.activity?.(true);
+    };
+    utterance.onend = utterance.onerror = () => {
+      if (generation === this.generation) this.playback?.activity?.(false);
+    };
     speechSynthesis.speak(utterance);
   }
 }

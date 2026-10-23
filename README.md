@@ -4,6 +4,15 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Background music and button audio · 1.9.2
+
+The supplied `magnific-buttons-and-pins.mp3` replaces the generated background
+melody. It loops from the first landing-page gesture across all missions and the
+final celebration at a quiet level, ducking further beneath narration and victory
+sounds. Buttons share a soft pop for mouse, touch and keyboard activation, including
+paused menus. Music and global mute controls remain independent. Audio is bundled
+for offline play. Browser autoplay rules require the first tap/click/key press.
+
 ## Celebration and giant landing fix · 1.9.1
 
 The sheep celebration now features David and his rescued flock without the extra

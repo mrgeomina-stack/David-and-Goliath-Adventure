@@ -1,3 +1,27 @@
+# Background music and UI feedback · 1.9.2
+
+The supplied `magnific-buttons-and-pins.mp3` is preserved byte-for-byte under
+`src/assets/audio/` and embedded in the offline HTML. Its decoded duration is about
+58 seconds. One AudioBufferSource loops across missions, retries, the book, and the
+final screen; mission sound cancellation does not restart it. The old procedural
+chord melody and generated bird-note accompaniment have been removed. Existing
+ambient water/wind and gameplay effects remain.
+
+Music gain is 0.14 normally, 0.035 while bundled speech or an installed local voice
+is speaking, and 0.055 during the victory recording/giant landing. Gains ease down
+and recover gently. The music toggle changes only music; global mute silences
+music, narration, effects and UI feedback. Pausing or losing focus freezes the main
+audio context, preserving the loop position. As required by Safari/Chrome, playback
+starts on the first pointer or keyboard gesture, including on the landing page.
+
+`src/ui-audio.ts` delegates button feedback for nested icons and dynamic popup
+buttons. Pointer presses pop once (including held directional/action controls);
+keyboard/assistive click activation pops once. Disabled buttons are silent. The
+90ms synthesized descending pop uses a small separate Web Audio context so it
+remains audible in pause and teacher menus, where gameplay audio is suspended.
+Global mute silences this context's gain immediately. No external sound service is
+used. Controls and gameplay are unchanged.
+
 # Giant landing update · 1.9.1
 
 `src/audio.ts` synthesizes a cached 1.9-second impact: a descending bass/body tone,

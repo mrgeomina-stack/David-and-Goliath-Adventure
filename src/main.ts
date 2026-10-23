@@ -20,6 +20,7 @@ import {
   label,
 } from "./strings";
 import { Sound } from "./audio";
+import { bindButtonSounds } from "./ui-audio";
 import { Journal, CHAPTERS, emblem } from "./journal";
 import { Narrator } from "./narration";
 import { encounterStory } from "./encounter-story";
@@ -27,11 +28,13 @@ import mapUrl from "./assets/journey-map.png";
 const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const sound = new Sound();
+bindButtonSounds(document, sound);
 const narrator = new Narrator({
   play: (url) => {
     void sound.voice(url);
   },
   stop: () => sound.stopVoice(),
+  activity: (speaking) => sound.setGuidance(speaking),
 });
 narrator.enabled = true;
 // Safari/Chrome can populate installed voices after the first user gesture.
@@ -833,6 +836,7 @@ if (new URL(location.href).searchParams.has("qa"))
         keepsakes: [...journal.completed],
         narration: narrator.enabled,
         music: sound.music,
+        musicState: sound.musicState,
         phase: world.phase,
         mission: world.mission,
         paused: world.paused,

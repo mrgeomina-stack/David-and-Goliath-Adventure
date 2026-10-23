@@ -1,5 +1,6 @@
-import { it, expect, vi } from "vitest";
+import { it, expect, vi, afterEach } from "vitest";
 import { Sound } from "../src/audio";
+afterEach(() => vi.unstubAllGlobals());
 function audio() {
   const sound = new Sound();
   const context = {
@@ -81,4 +82,72 @@ it("giant impact has bounded layered audio, reuses its buffer and stops on reset
   sound.pause(true);
   sound.play("impact");
   expect(sound.events.impact).toBe(2);
+});
+
+it("keeps one background loop across mission resets and ducks beneath speech and victory", async () => {
+  const sources: {
+    stop: ReturnType<typeof vi.fn>;
+    loop: boolean;
+    buffer: unknown;
+  }[] = [];
+  const parameter = () => ({ value: 0, setTargetAtTime: vi.fn() });
+  const context = {
+    state: "running",
+    currentTime: 0,
+    destination: {},
+    resume: vi.fn(),
+    suspend: vi.fn(),
+    decodeAudioData: async () => ({ duration: 58.04 }),
+    createBufferSource: () => {
+      const source = {
+        loop: false,
+        buffer: null as unknown,
+        stop: vi.fn(),
+        start: vi.fn(),
+        connect: vi.fn(),
+      };
+      sources.push(source);
+      return source;
+    },
+    createGain: () => ({ gain: parameter(), connect: vi.fn() }),
+  };
+  vi.stubGlobal(
+    "AudioContext",
+    class {
+      constructor() {
+        return context;
+      }
+    },
+  );
+  vi.stubGlobal("fetch", async () => ({
+    arrayBuffer: async () => new ArrayBuffer(4),
+  }));
+  const sound = new Sound();
+  sound.unlock();
+  await vi.waitFor(() => expect(sound.events.background).toBe(1));
+  const loop = sources.find((s) => s.loop)!;
+  expect(loop).toBeDefined();
+  expect(sound.musicState.targetGain).toBe(0.14);
+  await sound.voice("data:audio/mp3;base64,AAAA");
+  expect(sound.musicState.targetGain).toBe(0.035);
+  sound.stopVoice();
+  expect(sound.musicState.targetGain).toBe(0.14);
+  sound.play("complete");
+  expect(sound.musicState.targetGain).toBe(0.055);
+  sound.setGuidance(true);
+  expect(sound.musicState.targetGain).toBe(0.035);
+  sound.setMusic(false);
+  expect(sound.musicState.targetGain).toBe(0);
+  sound.setMusic(true);
+  expect(sound.musicState.targetGain).toBe(0.035);
+  sound.setGuidance(false);
+  sound.stopSamples();
+  expect(loop.stop).not.toHaveBeenCalled();
+  expect(sound.musicState.targetGain).toBe(0.14);
+  sound.setMuted(true);
+  expect(sound.musicState.targetGain).toBe(0);
+  sound.setMuted(false);
+  expect(sound.musicState.targetGain).toBe(0.14);
+  sound.unlock();
+  expect(sound.events.background).toBe(1);
 });

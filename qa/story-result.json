@@ -1,50 +1,73 @@
 {
-  "seconds": 85.932,
+  "seconds": 83.963,
   "mode": "Easy; automation used solver route and read-only position feedback; not human/classroom timing",
   "errors": [],
   "completions": [
     {
       "mission": "sheep",
+      "pop": 1,
+      "background": 1,
       "sheep": 4,
-      "roar": 4,
+      "roar": 3,
       "complete": 1
     },
     {
       "mission": "maze",
+      "pop": 2,
+      "background": 1,
       "sheep": 4,
-      "roar": 4,
+      "roar": 3,
       "complete": 2
     },
     {
       "mission": "armor",
+      "pop": 3,
+      "background": 1,
       "sheep": 4,
-      "roar": 4,
+      "roar": 3,
       "complete": 3,
       "voice": 3
     },
     {
       "mission": "brook",
+      "pop": 4,
+      "background": 1,
       "sheep": 4,
-      "roar": 4,
+      "roar": 3,
       "complete": 4,
       "voice": 3
     },
     {
       "mission": "sling",
+      "pop": 5,
+      "background": 1,
       "sheep": 4,
-      "roar": 4,
+      "roar": 3,
       "complete": 5,
-      "voice": 3
+      "voice": 3,
+      "impact": 1
     }
   ],
   "audio": {
+    "pop": 6,
+    "background": 1,
     "sheep": 4,
-    "roar": 4,
+    "roar": 3,
     "complete": 5,
-    "voice": 3
+    "voice": 3,
+    "impact": 1
   },
   "recordings": {
     "sheep": 4.365351473922902,
-    "complete": 12.06857142857143
+    "complete": 12.06857142857143,
+    "background": 58.01385487528345,
+    "impact": 1.9
+  },
+  "music": {
+    "started": true,
+    "loop": true,
+    "targetGain": 0.055,
+    "guidance": false,
+    "position": 25.296439909297042
   }
 }

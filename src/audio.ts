@@ -1,5 +1,6 @@
 import sheepUrl from "./assets/audio/sheep.mp3";
 import victoryUrl from "./assets/audio/victory.mp3";
+import musicUrl from "./assets/audio/magnific-buttons-and-pins.mp3";
 export class Sound {
   private samples = new Map<string, AudioBuffer>();
   private loading: Promise<void> | null = null;
@@ -11,6 +12,7 @@ export class Sound {
     this.voiceGeneration++;
     this.voiceSource?.stop();
     this.voiceSource = null;
+    this.mixMusic();
   }
   async voice(url: string) {
     this.stopVoice();
@@ -32,8 +34,12 @@ export class Sound {
       source.connect(gain);
       gain.connect(this.context.destination);
       this.voiceSource = source;
+      this.mixMusic();
       source.onended = () => {
-        if (this.voiceSource === source) this.voiceSource = null;
+        if (this.voiceSource === source) {
+          this.voiceSource = null;
+          this.mixMusic();
+        }
       };
       this.events.voice = (this.events.voice ?? 0) + 1;
       source.start();
@@ -55,6 +61,7 @@ export class Sound {
       [
         ["sheep", sheepUrl],
         ["complete", victoryUrl],
+        ["background", musicUrl],
       ].map(async ([key, url]) => {
         try {
           const response = await fetch(url);
@@ -62,6 +69,7 @@ export class Sound {
             await response.arrayBuffer(),
           );
           this.samples.set(key, buffer);
+          if (key === "background") this.startMusic();
         } catch (error) {
           console.warn(`Audio unavailable: ${key}`, error);
         }
@@ -73,6 +81,8 @@ export class Sound {
     for (const source of this.sources) source.stop();
     this.sources.clear();
     this.roarWait = 5;
+    this.featureUntil = 0;
+    this.mixMusic();
   }
   private sample(name: string) {
     const generation = this.generation;
@@ -94,6 +104,7 @@ export class Sound {
       this.sources.add(source);
       source.onended = () => this.sources.delete(source);
       this.events[name] = (this.events[name] ?? 0) + 1;
+      if (name === "complete") this.featureSound(buffer.duration);
       source.start();
     };
     if (this.samples.has(name)) start();
@@ -147,6 +158,7 @@ export class Sound {
     this.sources.add(source);
     source.onended = () => this.sources.delete(source);
     this.events.impact = (this.events.impact ?? 0) + 1;
+    this.featureSound(1.9);
     source.start();
   }
   lion(dt: number, active: boolean) {
@@ -196,38 +208,117 @@ export class Sound {
   }
   muted = false;
   music = true;
-  private score: GainNode | null = null;
+  private background: AudioBufferSourceNode | null = null;
+  private musicGain: GainNode | null = null;
+  private musicStartedAt = 0;
+  private guidance = false;
+  private featureUntil = 0;
+  private musicTarget = 0;
+  private uiContext: AudioContext | null = null;
+  private uiGain: GainNode | null = null;
   private air: GainNode | null = null;
   private filter: BiquadFilterNode | null = null;
-  private nextBar = 0;
-  private nextBird = 0;
-  private bar = 0;
   private walking = 0;
+  get musicState() {
+    return {
+      started: this.background !== null,
+      loop: this.background?.loop ?? false,
+      targetGain: this.musicTarget,
+      guidance: this.guidance || this.voiceSource !== null,
+      position:
+        this.context && this.background?.buffer
+          ? (this.context.currentTime - this.musicStartedAt) %
+            this.background.buffer.duration
+          : 0,
+    };
+  }
   setMusic(enabled: boolean) {
     this.music = enabled;
+    this.mixMusic();
   }
-  private note(freq: number, when: number, length: number, gain: number) {
-    if (!this.context || !this.score) return;
-    const o = this.context.createOscillator(),
-      g = this.context.createGain();
-    o.type = "triangle";
-    o.frequency.value = freq;
-    g.gain.setValueAtTime(0, when);
-    g.gain.linearRampToValueAtTime(gain, when + 0.015);
-    g.gain.exponentialRampToValueAtTime(0.0001, when + length);
-    o.connect(g);
-    g.connect(this.score);
-    o.start(when);
-    o.stop(when + length + 0.02);
+  setGuidance(active: boolean) {
+    this.guidance = active;
+    this.mixMusic();
+  }
+  private featureSound(duration: number) {
+    if (!this.context) return;
+    this.featureUntil = Math.max(
+      this.featureUntil,
+      this.context.currentTime + duration,
+    );
+    this.mixMusic();
+  }
+  private mixMusic() {
+    if (!this.context || !this.musicGain) return;
+    const target =
+      !this.music || this.muted
+        ? 0
+        : this.guidance || this.voiceSource
+          ? 0.035
+          : this.context.currentTime < this.featureUntil
+            ? 0.055
+            : 0.14;
+    if (target === this.musicTarget) return;
+    this.musicTarget = target;
+    this.musicGain.gain.setTargetAtTime(
+      target,
+      this.context.currentTime,
+      target === 0 ? 0.035 : target < 0.14 ? 0.08 : 0.45,
+    );
+  }
+  private startMusic() {
+    const buffer = this.samples.get("background");
+    if (!buffer || !this.context || this.background) return;
+    const source = this.context.createBufferSource();
+    this.musicGain = this.context.createGain();
+    this.musicGain.gain.value = 0;
+    source.buffer = buffer;
+    source.loop = true;
+    source.connect(this.musicGain);
+    this.musicGain.connect(this.context.destination);
+    this.background = source;
+    this.musicStartedAt = this.context.currentTime;
+    this.events.background = (this.events.background ?? 0) + 1;
+    this.mixMusic();
+    source.start();
+  }
+  /** UI audio remains available in pause/teacher menus; global mute still applies. */
+  pop() {
+    if (this.muted) return;
+    this.uiContext ??= new AudioContext();
+    const c = this.uiContext;
+    void c.resume();
+    if (!this.uiGain) {
+      this.uiGain = c.createGain();
+      this.uiGain.connect(c.destination);
+    }
+    this.uiGain.gain.setValueAtTime(1, c.currentTime);
+    const oscillator = c.createOscillator(),
+      gain = c.createGain(),
+      t = c.currentTime;
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(740, t);
+    oscillator.frequency.exponentialRampToValueAtTime(210, t + 0.075);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.13, t + 0.003);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.085);
+    oscillator.connect(gain);
+    gain.connect(this.uiGain);
+    oscillator.onended = () => {
+      oscillator.disconnect();
+      gain.disconnect();
+    };
+    oscillator.start(t);
+    oscillator.stop(t + 0.09);
+    this.events.pop = (this.events.pop ?? 0) + 1;
   }
   tick(mission: string, paused: boolean, moving: boolean, dt: number) {
     if (!this.context || this.muted) return;
     this.pause(paused);
     const c = this.context,
       t = c.currentTime;
-    if (!this.score) {
-      this.score = c.createGain();
-      this.score.connect(c.destination);
+    this.mixMusic();
+    if (!this.air) {
       this.air = c.createGain();
       this.filter = c.createBiquadFilter();
       this.filter.type = "lowpass";
@@ -246,7 +337,6 @@ export class Sound {
       this.air.connect(c.destination);
       noise.start();
     }
-    this.score.gain.setTargetAtTime(paused || !this.music ? 0 : 0.1, t, 0.25);
     this.air!.gain.setTargetAtTime(
       paused ? 0 : mission === "brook" ? 0.11 : 0.025,
       t,
@@ -258,30 +348,6 @@ export class Sound {
       0.6,
     );
     if (paused) return;
-    if (t >= this.nextBar) {
-      this.nextBar = t + 4.2;
-      const roots = [146.83, 130.81, 174.61, 130.81],
-        root = roots[this.bar % 4];
-      if (this.music) {
-        [1, 1.5, 2].forEach((ratio, i) =>
-          this.note(root * ratio, t + i * 0.1, 3.5, 0.12),
-        );
-        const melody = [2, 2.25, 2.5, 3, 2.5, 2.25, 2, 1.5];
-        for (let i = 0; i < 4; i++)
-          this.note(
-            root * melody[(this.bar * 3 + i) % 8],
-            t + 0.4 + i * 0.75,
-            0.7,
-            0.22,
-          );
-      }
-      this.bar++;
-    }
-    if (t >= this.nextBird && mission !== "armor") {
-      this.nextBird = t + 8 + (this.bar % 4);
-      this.note(2200, t, 0.1, 0.12);
-      this.note(2800, t + 0.15, 0.12, 0.1);
-    }
     this.walking += dt;
     if (moving && this.walking > 0.27) {
       this.walking = 0;
@@ -360,6 +426,12 @@ export class Sound {
   }
   setMuted(muted: boolean) {
     this.muted = muted;
+    if (this.uiContext && this.uiGain)
+      this.uiGain.gain.setValueAtTime(
+        muted ? 0 : 1,
+        this.uiContext.currentTime,
+      );
+    this.mixMusic();
     this.pause(this.paused);
   }
 }

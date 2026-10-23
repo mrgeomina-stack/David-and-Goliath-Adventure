@@ -1,5 +1,5 @@
 import { chromium } from "@playwright/test";
-import { readFileSync } from "node:fs";
+import { bootOfflineBuild } from "./offline-build.mjs";
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
@@ -9,24 +9,7 @@ let requests = [];
 const context = await browser.newContext({
   viewport: { width: 1280, height: 720 },
   hasTouch: true,
-  offline: true,
-});
-const html = readFileSync("dist/index.html", "utf8");
-await context.route("http://offline-game.test/**", (route) => {
-  const path = new URL(route.request().url()).pathname;
-  if (path === "/manifest.webmanifest")
-    return route.fulfill({
-      status: 200,
-      contentType: "application/manifest+json",
-      body: readFileSync("dist/manifest.webmanifest"),
-    });
-  if (/^\/icons\/[a-z0-9-]+\.png$/.test(path))
-    return route.fulfill({
-      status: 200,
-      contentType: "image/png",
-      body: readFileSync("dist" + path),
-    });
-  return route.fulfill({ status: 200, contentType: "text/html", body: html });
+  serviceWorkers: "block",
 });
 const page = await context.newPage();
 page.on("pageerror", (e) => errors.push(e.message));
@@ -39,7 +22,7 @@ page.on("request", (r) => {
   )
     requests.push(r.url());
 });
-await page.goto("http://offline-game.test/?qa");
+await bootOfflineBuild(page, context);
 await page.waitForSelector('#stage[data-ready="true"]');
 await page.waitForSelector("canvas");
 await page.evaluate(() => document.fonts.ready);

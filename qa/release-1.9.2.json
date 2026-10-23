@@ -1,0 +1,16 @@
+{
+  "version": "1.9.2",
+  "baseline": "0dd469544f8956a9f7b15030d39c7d378bdb7763",
+  "unitTests": 46,
+  "passedBrowserChecks": [
+    "story-check",
+    "music-ui-check",
+    "pwa-check",
+    "landing-check",
+    "audio-brook-check",
+    "ui-offline-check"
+  ],
+  "htmlSha256": "1da126052e923e7965ce5a8b4e11d73c86864822a45d1a0c4423c9a623571958",
+  "musicSha256": "9515c5d6c0646740a4c97956b91292a071335353ae9c891661d235dcd77d8818",
+  "musicBytesPreserved": true
+}

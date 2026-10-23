@@ -55,6 +55,8 @@ async function complete() {
   });
   const snapshot = await state();
   completions.push({ mission: snapshot.mission, ...snapshot.audioEvents });
+  if (snapshot.audioEvents.background !== 1 || !snapshot.musicState.loop)
+    throw Error("Background music restarted or lost its loop across chapters");
   if (snapshot.audioEvents.complete !== completions.length)
     throw Error("Missing or repeated completion recording");
   await page.click("#continue");
@@ -176,6 +178,7 @@ const result = {
   completions,
   audio: (await state()).audioEvents,
   recordings: (await state()).sampleDurations,
+  music: (await state()).musicState,
 };
 writeFileSync("qa/story-result.json", JSON.stringify(result, null, 2));
 console.log("FULL STORY PASS:", JSON.stringify(result));

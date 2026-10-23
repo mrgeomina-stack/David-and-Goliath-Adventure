@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "serviceWorkers": "block",
+  "music": {
+    "started": true,
+    "loop": true,
+    "targetGain": 0.14,
+    "guidance": false,
+    "position": 6.469659863945578
+  },
+  "audio": {
+    "background": 1,
+    "pop": 16,
+    "voice": 1
+  },
+  "checks": [
+    "landing first gesture",
+    "correct supplied recording",
+    "quiet loop",
+    "music toggle",
+    "mouse touch keyboard pop exactly once",
+    "held controls",
+    "paused menus",
+    "global mute",
+    "guidance duck and restore",
+    "disabled button silent",
+    "phone landscape",
+    "no duplicate music sources"
+  ],
+  "errors": []
+}
