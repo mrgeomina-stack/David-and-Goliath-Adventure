@@ -1,0 +1,13 @@
+{
+  // Keep the existing Worker identity supplied by Cloudflare Workers Builds.
+  // Do not set a new project name or switch to a Pages deployment command.
+  "compatibility_date": "2026-10-23",
+  "build": {
+    "command": "npm run build:pages"
+  },
+  "assets": {
+    // Relative to this configuration file, not the standalone desktop dist/.
+    "directory": "./pages-dist",
+    "not_found_handling": "404-page"
+  }
+}
