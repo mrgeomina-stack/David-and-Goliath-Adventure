@@ -4,6 +4,14 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Living cover flock · 1.9.3
+
+Nine larger sheep casually walk around the left-facing David on the landing page.
+The existing supplied walking artwork, smooth staggered paths, soft turning,
+ground shadows and dynamic front/back ordering keep the scene alive without a new
+animation dependency. Desktop title spacing leaves the lower meadow visible; phone
+and tablet controls retain their existing layout. The rescue still has four sheep.
+
 ## Background music and button audio · 1.9.2
 
 The supplied `magnific-buttons-and-pins.mp3` replaces the generated background

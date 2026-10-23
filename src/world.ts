@@ -1,3 +1,4 @@
+import { TITLE_DAVID, titleFlockAt } from "./title-flock";
 import { ActivityTimer, ACTIVITY_SECONDS } from "./activity-timer";
 import Phaser from "phaser";
 import {
@@ -742,11 +743,36 @@ export class World extends Phaser.Scene {
     light.addColorStop(1, "#fff4df00");
     c.fillStyle = light;
     c.fillRect(0, 88, 920, 632);
-    // Cover and gameplay use the very same painted anatomy and articulated rig.
-    A.person(c, 934, 665, 2.9, {});
-    visualLibrary.drawFeet(c, "props_staff", 1008, 665, 387);
-    A.sheep(c, 1132, 652, 1.12, Math.sin(this.clock * 2) * 0.08);
-    A.sheep(c, 708, 675, 0.82, Math.sin(this.clock * 1.7) * 0.07);
+    // Every actor shares a ground-depth order: sheep can cross David's feet
+    // from behind to in front. This cover animation never touches rescue state.
+    let davidDrawn = false;
+    const david = () => {
+      A.person(c, TITLE_DAVID.x, TITLE_DAVID.y, TITLE_DAVID.scale, {
+        facing: TITLE_DAVID.facing,
+      });
+      visualLibrary.drawFeet(c, "props_staff", 860, TITLE_DAVID.y, 387, true);
+      davidDrawn = true;
+    };
+    for (const sheep of titleFlockAt(this.clock)) {
+      if (!davidDrawn && sheep.y >= TITLE_DAVID.y) david();
+      const frame = sheep.walking
+        ? visualLibrary.animationFrame("sheep_walk", sheep.gaitTime)
+        : "animals_sheep_idle_01";
+      A.shadow(c, sheep.x, sheep.y, sheep.height * 0.38);
+      c.save();
+      c.translate(sheep.x, sheep.y);
+      c.scale(sheep.turnScale, 1);
+      visualLibrary.drawFeet(
+        c,
+        frame || "animals_sheep_idle_01",
+        0,
+        -sheep.bob,
+        sheep.height,
+        sheep.facing === -1,
+      );
+      c.restore();
+    }
+    if (!davidDrawn) david();
     motes(c, this.clock, 24);
     A.gameCard(c, 1052, 175, 163, 39, "#edbd55");
     A.text(

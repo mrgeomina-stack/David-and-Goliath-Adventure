@@ -1,3 +1,4 @@
+import { TITLE_DAVID, titleFlockAt } from "./title-flock";
 import { countdownHue } from "./activity-timer";
 import { heroRigInfo } from "./hero";
 import Phaser from "phaser";
@@ -838,6 +839,13 @@ if (new URL(location.href).searchParams.has("qa"))
         music: sound.music,
         musicState: sound.musicState,
         phase: world.phase,
+        titleScene:
+          world.phase === "title"
+            ? {
+                david: TITLE_DAVID,
+                sheep: titleFlockAt(world.clock),
+              }
+            : null,
         mission: world.mission,
         paused: world.paused,
         seed: world.maze.maze.seed,

@@ -25,6 +25,7 @@ const scripts = [
   "ui-redesign-check",
   "landing-check",
   "music-ui-check",
+  "title-flock-check",
 ];
 const results = [];
 let cursor = 0;

@@ -1,53 +1,47 @@
-# David’s Big Adventure — background music and UI sound · 1.9.2
+# David’s Big Adventure — living cover flock · 1.9.3
 
-23 October 2026. Baseline `0dd469544f8956a9f7b15030d39c7d378bdb7763`.
-The supplied music replaces the generated melody and loops quietly across the game,
-with narration/victory ducking. UI buttons now pop across mouse, touch, keyboard and
-paused menus. Gameplay, visuals, objectives, timers and collision geometry remain.
+23 October 2026. Baseline `2174d40f3ff5bba52b586f98dc4b3255b97ff590`.
+The cover now has nine larger wandering sheep, with the supplied walking frames,
+individual paths, gentle footfall bob, soft turns, ground shadows and dynamic depth
+sorting around David. David and his staff face left. Desktop title spacing leaves
+room for the flock while retaining all labels and actions. No new engine, CDN,
+bitmap art or runtime dependency was added; rendering uses the existing Phaser/
+Canvas pipeline. Sheep keep the same appearance when stopping to idle.
 
-## Validation
+## Verification
 
 - TypeScript and production/offline build passed.
-- 46 unit tests passed, including music lifetime across mission cancellation,
-  music/global mute controls, speech/victory mixing and stale local-voice callbacks.
-- **Six focused browser checks passed:**
-  - Full story: all five genuine mission wins in about 84 seconds; exactly one
-    background source throughout, five victory recordings, four sheep calls,
-    three narration clips and the giant impact. The 58-second track loops into
-    the final screen without restarting between chapters.
-  - Music/UI: correct recording decoded, first-gesture landing playback, 0.14
-    normal gain, 0.035 guidance duck/restore, independent music/global mute,
-    one pop per mouse/touch/keyboard activation, held action/directional buttons,
-    dynamic pause/teacher buttons, silent disabled buttons and phone landscape.
-  - PWA: failed-cache retry, actual service-worker offline reload, real offline
-    maze win, new offline tab, update activation and keepsake persistence.
-  - Sling: weak/strong misses, genuine collision, once-per-landing impact,
-    pause/resume, replay and mute.
-  - Arabic audio/brook: bundled offline guidance, pause/mute, touch collection,
-    jagged rejection, five unique stones and one victory recording.
-  - UI/offline: bundled bilingual fonts, scaled touch at 1920/1024, EN/AR,
-    sound unlock/mute, focus cancellation and captured sling release.
-- Evidence: `qa/story-1.9.2.log`, `qa/music-ui-1.9.2.json`,
-  `qa/pwa-1.9.2.log`, `qa/landing-1.9.2.log`, `qa/audio-brook-1.9.2.log`,
-  `qa/offline-1.9.2.log` and `qa/unit-1.9.2.log`.
-- Offline HTML tests stream the large local HTML over loopback to avoid the
-  browser-debugger's large route.fulfill/base64 payload limit, then disable
-  networking before all interactions. No external hosts are allowed. PWA tests
-  additionally verify cold offline launches from the actual saved cache.
-- The supplied MP3 is preserved byte-for-byte; SHA-256 provenance is recorded in
-  `qa/music-provenance-1.9.2.json`. All game/audio dependencies are bundled locally.
-- The earlier full 17-script regression is historical 1.9.0 evidence. This audio
-  patch uses focused checks and the full-story test; previous reports are retained
-  under `docs/VALIDATION_1_9_0.md` and `docs/VALIDATION_1_9_1.md`.
+- 48 unit tests passed. Two new tests cover 120 seconds of bounds, clear space,
+  nine actors, minimum turning width, continuous movement, both walking directions,
+  depth transitions and left-facing David.
+- Cover browser check passed with networking disabled, nine moving actors,
+  correct depth layers, left-facing David, a single background loop, reachable
+  actions at desktop/tablet/phone sizes, and four rescue sheep on mission entry.
+  Desktop/phone captures and the large Arabic-only heading were reviewed after softening turn widths and
+  clearing the menu from the meadow. A fresh recording captures this final build.
+- Music/UI regression passed: quiet loop, narration ducking, music/global mute,
+  exactly one pop for mouse/touch/keyboard controls, paused menus and disabled states.
+- Actual-browser results are recorded in `qa/title-flock-1.9.3.log` and
+  `qa/title-flock-1.9.3.json`, with music/UI regression in
+  `qa/music-ui-1.9.3.log`.
+- Actual-game cover captures: `qa/98-title-flock-desktop.png`, walking capture,
+  Arabic-only cover, and 1180×820, 844×390 and 667×375 tablet/phone captures. Motion preview:
+  `qa/98-title-flock-motion.webm` (recorded from the actual game, not a mockup).
+- Game models, maze, collision rules, timers, rescue count, difficulty, progression
+  and sound design are unchanged. Cover-to-rescue navigation checks that only four
+  gameplay sheep spawn, and the existing offline music remains active.
+- Previous all-five-level, audio, PWA and offline-relaunch checks are retained as
+  1.9.2 baseline evidence in `docs/VALIDATION_1_9_2.md`; not claimed as rerun here.
 
-## Limits and preview
+## Preview and limits
 
-Browsers need a first user gesture before audible playback. Music starts with the
-first tap, click or key press on the landing page. Pause freezes music; resume
-continues the same loop. Global mute includes button feedback.
+Extract the offline ZIP and open index.html. Tap or click to start the music.
+Editable source: npm ci, npm run dev. Validation: npm test, npm run build.
+Run `node scripts/title-flock-check.mjs` for the cover check; set
+`RECORD_TITLE_VIDEO=1` to record it (requires Playwright's FFmpeg, or a configured
+system FFmpeg). The supplied animation artwork remains editable via the manifest.
 
-Chromium browser automation is available here; physical Safari/iOS and Android
-hardware have not been tested. Managed-browser policy blocks direct file://
-navigation, so self-contained production HTML is exercised with networking disabled.
-Extract the offline ZIP before opening index.html on your computer. For editable
-source: npm ci, then npm run dev; npm test and npm run build validate the project.
+Chromium automation is available here. Physical Safari/iOS and Android hardware
+have not been tested. Browser policy blocks direct file:// navigation, so the
+production HTML is loaded from local disk over loopback and networking disabled
+before interactions. No external host is allowed during this check.

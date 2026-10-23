@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "offline": true,
+  "sheep": 9,
+  "davidFacing": "left",
+  "checks": [
+    "moving poses",
+    "depth behind and in front",
+    "correct larger proportions",
+    "music retained",
+    "desktop tablet phone controls",
+    "mission navigation",
+    "four rescue sheep unchanged"
+  ],
+  "errors": []
+}
