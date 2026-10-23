@@ -215,18 +215,27 @@ function sync() {
             "Saving adventure for offline play…",
             "بنحفظ المغامرة للعب بدون إنترنت…",
           )
-        : pwa.state === "failed"
+        : pwa.state === "available"
           ? bilingual(
-              "Not saved yet. Connect and try again.",
-              "لسه ما اتحفظتش. اتصل بالإنترنت وجرّب تاني.",
+              "Optional: save this adventure for offline play.",
+              "اختياري: احفظ المغامرة للعب بدون إنترنت.",
             )
-          : bilingual(
-              "Install from a secure hosted game link.",
-              "ثبّت اللعبة من رابط الاستضافة الآمن.",
-            );
-  $("offline-retry").hidden = pwa.state !== "failed";
+          : pwa.state === "failed"
+            ? bilingual(
+                "Not saved yet. Connect and try again.",
+                "لسه ما اتحفظتش. اتصل بالإنترنت وجرّب تاني.",
+              )
+            : bilingual(
+                "Install from a secure hosted game link.",
+                "ثبّت اللعبة من رابط الاستضافة الآمن.",
+              );
+  $("offline-retry").hidden =
+    pwa.state !== "failed" && pwa.state !== "available";
   $("pwa-update").hidden = !pwa.updateAvailable;
-  $("offline-retry").textContent = bilingual("Save again", "احفظ تاني");
+  $("offline-retry").textContent =
+    pwa.state === "available"
+      ? bilingual("Save for offline play", "احفظ للعب بدون إنترنت")
+      : bilingual("Save again", "احفظ تاني");
   $("pwa-update").textContent = bilingual("Update adventure", "حدّث المغامرة");
 
   $("stage").dataset.phase = world.phase;
@@ -774,7 +783,7 @@ $("install").onclick = async () => {
       "Keep the adventure on your Home Screen",
       "ضيف المغامرة للشاشة الرئيسية",
     ),
-    `<p>${readingPair("On iPhone or iPad: open this hosted game in Safari, tap Share, then Add to Home Screen. On Android: open it in Chrome and choose Install app or Add to Home screen.", "على آيفون أو آيباد: افتح اللعبة في سفاري واختار مشاركة ثم إضافة للشاشة الرئيسية. على أندرويد: افتحها في كروم واختار تثبيت التطبيق أو إضافة للشاشة الرئيسية.")}</p><p>${readingPair("For offline play, keep the game open online until the adventure book says Offline ready. Installation needs an HTTPS game link; a downloaded HTML file cannot install as an app.", "للعب بدون إنترنت، استنى لحد ما كتاب المغامرة يقول إنها جاهزة بدون إنترنت. التثبيت محتاج رابط HTTPS للعبة.")}</p>`,
+    `<p>${readingPair("On iPhone or iPad: open this hosted game in Safari, tap Share, then Add to Home Screen. On Android: open it in Chrome and choose Install app or Add to Home screen.", "على آيفون أو آيباد: افتح اللعبة في سفاري واختار مشاركة ثم إضافة للشاشة الرئيسية. على أندرويد: افتحها في كروم واختار تثبيت التطبيق أو إضافة للشاشة الرئيسية.")}</p><p>${readingPair("Offline play is optional and uses device storage. In the Adventure Book, choose Save for offline play, then stay online until it says Offline ready. Installation needs an HTTPS game link; a downloaded HTML file cannot install as an app.", "اللعب بدون إنترنت اختياري وبيستخدم مساحة على الجهاز. في كتاب المغامرة اختار احفظ للعب بدون إنترنت واستنى لحد ما يقول جاهزة بدون إنترنت. التثبيت محتاج رابط HTTPS للعبة.")}</p>`,
     [{ label: label("resume", lang), run: close }],
   );
 };
@@ -894,7 +903,8 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) loseFocus();
 });
 window.setInterval(sync, 100);
-if (import.meta.env.PROD) void pwa.start();
+if (import.meta.env.MODE === "pages") void pwa.restore();
+else if (import.meta.env.PROD) void pwa.start();
 // Read-only QA state. Available only when explicitly requested; never advances or mutates gameplay.
 if (new URL(location.href).searchParams.has("qa"))
   Object.defineProperty(window, "adventureQA", {

@@ -11,7 +11,11 @@
     "preview": "vite preview --host 0.0.0.0",
     "format": "prettier --write src tests scripts/*.mjs index.html vite.config.ts tsconfig.json",
     "package": "python3 scripts/package.py",
-    "test:timeout": "node scripts/timeout-check.mjs"
+    "test:timeout": "node scripts/timeout-check.mjs",
+    "build:pages": "tsc --noEmit && vite build --mode pages && node scripts/pages-build.mjs",
+    "preview:pages": "vite preview --host 0.0.0.0 --outDir pages-dist",
+    "test:pages": "node scripts/pages-check.mjs",
+    "package:pages": "npm run build:pages && python3 scripts/package-pages.py"
   },
   "dependencies": {
     "phaser": "3.90.0"

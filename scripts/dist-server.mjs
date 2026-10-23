@@ -7,13 +7,21 @@ const mime = {
   ".webmanifest": "application/manifest+json",
   ".png": "image/png",
   ".css": "text/css; charset=utf-8",
+  ".woff2": "font/woff2",
+  ".mp3": "audio/mpeg",
+  ".m4a": "audio/mp4",
+  ".wav": "audio/wav",
+  ".svg": "image/svg+xml",
+  ".json": "application/json",
+  ".webp": "image/webp",
 };
 export function distServer({
+  directory = "dist",
   prefix = "/",
   fail = () => false,
   transform = (_path, bytes) => bytes,
 } = {}) {
-  const root = resolve("dist");
+  const root = resolve(directory);
   return createServer((req, res) => {
     const pathname = decodeURIComponent(
       new URL(req.url, "http://local.test").pathname,

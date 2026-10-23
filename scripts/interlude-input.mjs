@@ -40,6 +40,11 @@ export async function watchStory(page, id) {
     );
     if (i === 2) {
       await page.setViewportSize({ width: 844, height: 390 });
+      // The browser resize event and visualViewport callback run on the next frame.
+      await page.waitForFunction(() => {
+        const stage = document.getElementById("stage").getBoundingClientRect();
+        return stage.width <= innerWidth + 1 && stage.height <= innerHeight + 1;
+      });
       // Bilingual text and both controls must remain within the phone viewport.
       for (const selector of [
         ".story-caption",
@@ -53,7 +58,12 @@ export async function watchStory(page, id) {
           box.y < 0 ||
           box.y + box.height > 391
         )
-          throw Error("Story control clipped on phone: " + selector);
+          throw Error(
+            "Story control clipped on phone: " +
+              selector +
+              " " +
+              JSON.stringify(box),
+          );
         if (selector !== ".story-caption" && box.height < 43.5)
           throw Error("Story touch control below 44px: " + selector);
       }
@@ -63,6 +73,10 @@ export async function watchStory(page, id) {
   }
   await page.waitForFunction(
     () => window.adventureQA.snapshot().interlude.ready,
+  );
+  // Timeline readiness can precede the next DOM sync by up to 100ms.
+  await page.waitForFunction(
+    () => !document.getElementById("story-next").disabled,
   );
   const after = await state();
   if (
@@ -77,6 +91,15 @@ export async function watchStory(page, id) {
     (after.audioEvents.stomp !== 2 || after.audioEvents.giantLaugh !== 1)
   )
     throw Error("Giant stomp/laughter cues missing or repeated");
+  if (id === "jesse") {
+    await page.locator("#stage").focus();
+    await page.keyboard.press("Space");
+  } else {
+    await page.locator("#story-next").tap();
+  }
+  await page.waitForFunction(
+    () => window.adventureQA.snapshot().phase !== "interlude",
+  );
   writeFileSync(
     `qa/interlude-${id}-1.12.0.json`,
     JSON.stringify(
@@ -95,13 +118,4 @@ export async function watchStory(page, id) {
       2,
     ),
   );
-  if (id === "jesse") {
-    await page.locator("#stage").focus();
-    await page.keyboard.press("Space");
-  } else {
-    const b = await page.locator("#story-next").boundingBox();
-    await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
-  }
-  if ((await state()).phase === "interlude")
-    throw Error("Ready story did not continue");
 }

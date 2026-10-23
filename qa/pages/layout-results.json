@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "width": 1280,
+      "height": 720,
+      "titlePixels": 73
+    },
+    {
+      "width": 1366,
+      "height": 650,
+      "titlePixels": 65.90277777777779
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "titlePixels": 67.296875
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "titlePixels": 27.999995833333333
+    }
+  ],
+  "checks": [
+    "large desktop cover retained",
+    "tablet/phone CTA bounds",
+    "nine sheep behind clickable buttons",
+    "Arabic cover"
+  ],
+  "errors": []
+}

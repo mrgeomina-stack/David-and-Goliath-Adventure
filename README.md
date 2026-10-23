@@ -4,6 +4,19 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Mobile/tablet and Cloudflare Pages Free
+
+Build the hosted game with `npm run build:pages` and deploy **pages-dist/**.
+The web edition keeps the existing art and mechanics, uses locally bundled files
+under Cloudflare’s 25 MiB limit, and offers optional offline saving in **Book**.
+It needs only static hosting: no paid services, backend, database or external API.
+The **Davids_Big_Adventure_Cloudflare_Pages.zip** archive contains the ready-to-upload
+folder contents. Nothing has been publicly deployed.
+
+See [step-by-step free publishing instructions](docs/CLOUDFLARE_PAGES_FREE.md),
+[mobile controls and installation](docs/MOBILE_PWA.md), and
+[measured test coverage](docs/PAGES_TEST_REPORT.md).
+
 ## Animated story interludes · 1.12.0
 
 The full adventure now includes two story moments using the supplied reference
@@ -122,7 +135,7 @@ See [integration decisions](docs/VISUAL_ASSETS_V1_PROGRESS.md) and
 [test evidence and limitations](TEST_REPORT.md).
 
 Responsive landscape play, finger gestures and offline PWA installation remain.
-Host `Davids_Big_Adventure_Web.zip` on HTTPS for phones/tablets. See
+Use `Davids_Big_Adventure_Cloudflare_Pages.zip` on Pages Free for phones/tablets. See
 [mobile and PWA instructions](docs/MOBILE_PWA.md).
 
 ## Storybook presentation
@@ -203,7 +216,7 @@ The runner uses two independent browser workers. Set `BROWSER_WORKERS=1` on smal
 in a classic script. Gameplay needs no runtime imports or CDN assets. Hosted over
 HTTPS, the included service worker saves the entire game and install icons for
 offline play. File-mode play skips PWA registration. `npm run build` regenerates
-the static web distribution; no application backend is needed.
+the standalone distribution. Use `npm run build:pages` for Cloudflare Pages; no application backend is needed.
 
 ## Source map
 

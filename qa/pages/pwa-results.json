@@ -1,0 +1,21 @@
+{
+  "scope": "/adventure/",
+  "cachedAssets": 137,
+  "checks": [
+    "no offline cache or worker until explicit opt-in",
+    "secure-context registration",
+    "failed required asset does not claim readiness",
+    "manual retry completes cache",
+    "manifest and maskable install icons",
+    "subdirectory deployment",
+    "reload offline from actual service worker",
+    "real offline maze completion",
+    "new tab offline launch",
+    "offline keepsake persistence",
+    "update waits without interrupting play",
+    "explicit update reload and old-cache cleanup",
+    "keepsake survives app update"
+  ],
+  "externalRequests": [],
+  "errors": []
+}

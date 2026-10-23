@@ -1,0 +1,164 @@
+
+> davids-big-adventure@1.12.0 build:pages
+> tsc --noEmit && vite build --mode pages && node scripts/pages-build.mjs
+
+vite v7.3.1 building client environment for pages...
+transforming...
+✓ 168 modules transformed.
+rendering chunks...
+computing gzip size...
+pages-dist/assets/success_star-DCy0YriY.png                       3.29 kB
+pages-dist/assets/button_blank-DSj4Vif6.png                       4.53 kB
+pages-dist/assets/medal-CyUvmeCL.png                              7.76 kB
+pages-dist/index.html                                             8.96 kB │ gzip:   2.80 kB
+pages-dist/assets/panel_blank-DDBEf43R.png                       10.98 kB
+pages-dist/assets/nunito-latin-BzFMHfZw.woff2                    39.13 kB
+pages-dist/assets/sheep-B5shEq7a.mp3                             53.43 kB
+pages-dist/assets/approach-en-BGB9KLHQ.mp3                       60.44 kB
+pages-dist/assets/staff-gV466r0H.png                             63.15 kB
+pages-dist/assets/approach-ar-_cO2dcJG.mp3                       74.44 kB
+pages-dist/assets/saul-en-BcGJ43NU.mp3                           74.44 kB
+pages-dist/assets/sheep_idle_03-BK3nVr4l.png                     75.34 kB
+pages-dist/assets/lion-roar-CP7qIRHk.mp3                         80.71 kB
+pages-dist/assets/interlude-jesse-en-gAz8AekP.mp3                86.14 kB
+pages-dist/assets/challenge-en-ks6bcp3c.mp3                      91.37 kB
+pages-dist/assets/win_00-C0zI1usc.png                            94.85 kB
+pages-dist/assets/thankful-B0ykSgB5.png                          95.10 kB
+pages-dist/assets/win_01-BaanIBiq.png                            95.56 kB
+pages-dist/assets/stone_02-Bmw8DsVk.png                          96.47 kB
+pages-dist/assets/interlude-goliath-en-iDIqI-sE.mp3              97.22 kB
+pages-dist/assets/sheep_hop_00-D4c38ILn.png                      97.70 kB
+pages-dist/assets/pouch_store-PFFXgt3k.png                       98.38 kB
+pages-dist/assets/challenge-ar-56_lCLfs.mp3                      99.10 kB
+pages-dist/assets/sheep_hop_01-YkIdcaux.png                      99.26 kB
+pages-dist/assets/stone_03-CGzaLeMu.png                          99.38 kB
+pages-dist/assets/saul-ar-B7Voa1Ur.mp3                           99.52 kB
+pages-dist/assets/rig_idle-AHZWBBnl.png                         100.67 kB
+pages-dist/assets/sling_charge_03-DB7z-7Nl.png                  101.22 kB
+pages-dist/assets/sling_charge_02-VDVa9BXw.png                  101.31 kB
+pages-dist/assets/sling_charge_01-I9SGKiE0.png                  101.98 kB
+pages-dist/assets/sling_charge_00-3I_ZE25C.png                  102.09 kB
+pages-dist/assets/sling_release-CyvVmim3.png                    102.72 kB
+pages-dist/assets/armor_recover-Byyw-MqU.png                    102.92 kB
+pages-dist/assets/kneel_collect_02-qGLWvLlC.png                 103.34 kB
+pages-dist/assets/kneel_collect_00-DUYMEUBq.png                 103.84 kB
+pages-dist/assets/kneel_collect_01-H-GiHbhC.png                 104.19 kB
+pages-dist/assets/sling_followthrough-DeNPCHNm.png              105.27 kB
+pages-dist/assets/dress_00-BuFbFfl0.png                         105.31 kB
+pages-dist/assets/armor_remove_02-CgR4fvEL.png                  105.49 kB
+pages-dist/assets/armor_remove_01-j8bOvwG8.png                  106.76 kB
+pages-dist/assets/stone_01-BXJ6jf6k.png                         107.40 kB
+pages-dist/assets/pen_gate-DAxc_Is7.png                         109.98 kB
+pages-dist/assets/dress_01--1TN7hGf.png                         110.52 kB
+pages-dist/assets/sheep_walk_00-BZNc1JB8.png                    111.18 kB
+pages-dist/assets/sheep_walk_02-DmT0MYip.png                    111.53 kB
+pages-dist/assets/interlude-jesse-ar-BVnc-OhK.mp3               111.64 kB
+pages-dist/assets/idle-DatgSvBV.png                             112.38 kB
+pages-dist/assets/sheep_walk_01-gIuL6gdD.png                    112.42 kB
+pages-dist/assets/interlude-goliath-ar-DEQNfGgS.mp3             112.89 kB
+pages-dist/assets/walk_01-DYC4dE9H.png                          115.28 kB
+pages-dist/assets/run_01-CQnC93qL.png                           116.89 kB
+pages-dist/assets/sheep_idle_01-Dbm5CEP-.png                    117.63 kB
+pages-dist/assets/stone_jagged-DCGWX5V_.png                     118.68 kB
+pages-dist/assets/sheep_idle_02-BG4Rggqi.png                    119.85 kB
+pages-dist/assets/armor_remove_00-DMBqRllg.png                  120.30 kB
+pages-dist/assets/armor_wobble_01-BZrP-Eev.png                  121.66 kB
+pages-dist/assets/dress_02-D07_LybA.png                         121.79 kB
+pages-dist/assets/food_carry-DKm3tmL1.png                       122.35 kB
+pages-dist/assets/armor_seated-HVTfxcL2.png                     122.39 kB
+pages-dist/assets/armor_step-DkuC0t3K.png                       123.02 kB
+pages-dist/assets/run_03-BqkClRpH.png                           123.13 kB
+pages-dist/assets/armor_idle-DFburnYm.png                       124.94 kB
+pages-dist/assets/armor_fall_01-zDJRazgo.png                    124.94 kB
+pages-dist/assets/armor_fall_00--pX0-zMQ.png                    127.10 kB
+pages-dist/assets/walk_03-C-h3B3uz.png                          128.55 kB
+pages-dist/assets/walk_00-D3ZhPRYp.png                          129.65 kB
+pages-dist/assets/run_02-DZbyV0Gs.png                           130.02 kB
+pages-dist/assets/sling-CqsokwRD.png                            131.45 kB
+pages-dist/assets/walk_02-CBMTS73r.png                          131.59 kB
+pages-dist/assets/pouch-CBCwb7wl.png                            131.65 kB
+pages-dist/assets/run_00-BA0IEOAs.png                           131.95 kB
+pages-dist/assets/fence-VjW8WN-L.png                            132.54 kB
+pages-dist/assets/shepherd_call-DcylBon_.png                    134.43 kB
+pages-dist/assets/maze_wall_stone-kphx2CwN.png                  134.46 kB
+pages-dist/assets/lion_walk_01-CT6DSTmu.png                     134.81 kB
+pages-dist/assets/food_offer-DxUnrmPE.png                       135.32 kB
+pages-dist/assets/armor_wobble_00-BEAN5Y-8.png                  135.64 kB
+pages-dist/assets/lion_idle-WUI2-J-h.png                        137.18 kB
+pages-dist/assets/brother_01_receive-CjwFTG4R.png               143.23 kB
+pages-dist/assets/lion_retreat-D470SKi_.png                     143.30 kB
+pages-dist/assets/lion_walk_00-CtZRF3-e.png                     145.66 kB
+pages-dist/assets/armor_sword-B68zPT_t.png                      147.77 kB
+pages-dist/assets/brother_02_idle-C5Hyq44K.png                  149.82 kB
+pages-dist/assets/brother_03_clap-Bltq1WQs.png                  158.62 kB
+pages-dist/assets/brother_01_welcome-8Ov6mHY4.png               161.60 kB
+pages-dist/assets/food_basket-C5UaWI8B.png                      163.32 kB
+pages-dist/assets/brother_02_cheer-LgvkJg_y.png                 163.87 kB
+pages-dist/assets/soldier-A2NGPPCD.png                          165.35 kB
+pages-dist/assets/noto-sans-arabic-BhzieyvS.woff2               165.96 kB
+pages-dist/assets/brother_03_idle-DS7tAvAi.png                  170.15 kB
+pages-dist/assets/saul-Wypkm8WA.png                             185.04 kB
+pages-dist/assets/armor_helmet-DEsEMIwh.png                     196.33 kB
+pages-dist/assets/maze_wall_shrub-aYwYsASt.png                  203.67 kB
+pages-dist/assets/stumble-COiPmai-.png                          230.18 kB
+pages-dist/assets/fall_00-DdhgC_wj.png                          241.58 kB
+pages-dist/assets/idle-CA0s7lEk.png                             246.55 kB
+pages-dist/assets/fall_02-D8YRNtSq.png                          255.96 kB
+pages-dist/assets/hit-CmvP8o2X.png                              259.86 kB
+pages-dist/assets/fall_01-bzDZJNx5.png                          261.25 kB
+pages-dist/assets/taunt-Bg8rce4H.png                            265.45 kB
+pages-dist/assets/fall_03-DgWkqSkB.png                          270.67 kB
+pages-dist/assets/armor_mail-DpOPsiFM.png                       361.47 kB
+pages-dist/assets/armor_tunic-CFZP8o3k.png                      396.72 kB
+pages-dist/assets/victory-N225R9UH.mp3                          482.74 kB
+pages-dist/assets/david-rig-Curf3T6a.png                      1,751.84 kB
+pages-dist/assets/animals-atlas-CG1G9G9U.png                  1,757.96 kB
+pages-dist/assets/forward-fall-atlas-Dwc9dR3D.png             1,823.15 kB
+pages-dist/assets/valley-plate-pIgGN1TU.png                   2,061.53 kB
+pages-dist/assets/props-atlas-DjdnhcGA.png                    2,127.20 kB
+pages-dist/assets/david-hero-Dx3CmoGV.png                     2,149.36 kB
+pages-dist/assets/cast-atlas-CnTjAnfi.png                     2,306.59 kB
+pages-dist/assets/magnific-buttons-and-pins-CzWCpyxh.mp3      2,322.85 kB
+pages-dist/assets/goliath-challenge-DTdpVJo9.png              2,362.18 kB
+pages-dist/assets/goliath-laugh-CU-MjwqP.png                  2,365.13 kB
+pages-dist/assets/goliath-actor-CoMfwyGs.png                  2,381.23 kB
+pages-dist/assets/jesse-close-BHuiOaQG.png                    2,415.09 kB
+pages-dist/assets/jesse-farewell-CE96C1Ux.png                 2,689.05 kB
+pages-dist/assets/jesse-handover-TT0yAS4p.png                 2,731.52 kB
+pages-dist/assets/jesse-welcome-12yGUEWw.png                  2,887.95 kB
+pages-dist/assets/countryside-C1_JJN4s.png                    2,924.33 kB
+pages-dist/assets/level05_battlefield_1920x1080-CF-eYL-u.png  3,077.69 kB
+pages-dist/assets/meadow-CWl6vboY.png                         3,203.83 kB
+pages-dist/assets/level03_saul_tent_1920x1080-DdnGZMzs.png    3,476.57 kB
+pages-dist/assets/level02_maze_ground_1920x1080-CSyyb2uR.png  3,599.88 kB
+pages-dist/assets/journey-map-1Ii7KeT4.png                    3,867.82 kB
+pages-dist/assets/level04_brook_1920x1080-B6WrD6lC.png        3,884.31 kB
+pages-dist/assets/index-CNYWBCFe.css                             46.13 kB │ gzip:  10.81 kB
+pages-dist/assets/index-_YJjhF09.js                           1,453.45 kB │ gzip: 395.28 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.03s
+PAGES BUILD PASS: {
+  "version": "b0754e7235747ce5",
+  "sourceBaseRevision": "821ef38c5872d868af2c96224f700d157a2ccec1",
+  "assetLimitBytes": 26214400,
+  "fileLimit": 20000,
+  "files": 141,
+  "totalBytes": 73887811,
+  "largest": {
+    "path": "assets/level04_brook_1920x1080-B6WrD6lC.png",
+    "bytes": 3884313
+  },
+  "precachedFiles": 137,
+  "offlineOptIn": true,
+  "runtimeServices": [],
+  "filesOverLimit": []
+}
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
