@@ -1,0 +1,115 @@
+{
+  "version": "1.11.0",
+  "date": "2026-10-23",
+  "baseline": "7fc009020ab233143005e6c8442f4d05c4e9af91",
+  "offlineHtmlSha256": "7404123abc65f9a39c6d0072b30ecfa5ca9da8ef20173736eceeaddff34e60ce",
+  "unitTests": 55,
+  "changes": [
+    "Four timed physical sheep rescues, then an additional fifth lamb for the lion encounter",
+    "Continuous waypoint movement with ring-timed SPACE/touch pickups",
+    "0.48-second sling-release whoosh",
+    "1.55-second armour landing thud and metal crash"
+  ],
+  "checks": [
+    "unit-1.11.0.log",
+    "build-1.11.0.log",
+    "lion-encounter-1.11.0.log",
+    "armor-1.11.0.log",
+    "sling-1.11.0.log",
+    "audio-brook-1.11.0.log",
+    "story-1.11.0.log"
+  ],
+  "fullStory": {
+    "seconds": 97.145,
+    "mode": "Easy; automation used solver route and read-only position feedback; not human/classroom timing",
+    "errors": [],
+    "completions": [
+      {
+        "mission": "sheep",
+        "pop": 3,
+        "background": 1,
+        "sheep": 5,
+        "roar": 4,
+        "staff": 1,
+        "complete": 1
+      },
+      {
+        "mission": "maze",
+        "pop": 4,
+        "background": 1,
+        "sheep": 5,
+        "roar": 4,
+        "staff": 1,
+        "complete": 2
+      },
+      {
+        "mission": "armor",
+        "pop": 5,
+        "background": 1,
+        "sheep": 5,
+        "roar": 4,
+        "staff": 1,
+        "complete": 3,
+        "voice": 3,
+        "armorCrash": 1
+      },
+      {
+        "mission": "brook",
+        "pop": 6,
+        "background": 1,
+        "sheep": 5,
+        "roar": 4,
+        "staff": 1,
+        "complete": 4,
+        "voice": 3,
+        "armorCrash": 1
+      },
+      {
+        "mission": "sling",
+        "pop": 7,
+        "background": 1,
+        "sheep": 5,
+        "roar": 4,
+        "staff": 1,
+        "complete": 5,
+        "voice": 3,
+        "armorCrash": 1,
+        "launch": 1,
+        "impact": 1
+      }
+    ],
+    "audio": {
+      "pop": 8,
+      "background": 1,
+      "sheep": 5,
+      "roar": 4,
+      "staff": 1,
+      "complete": 5,
+      "voice": 3,
+      "armorCrash": 1,
+      "launch": 1,
+      "impact": 1
+    },
+    "recordings": {
+      "roar": 5.0416326530612245,
+      "sheep": 4.365351473922902,
+      "complete": 12.06857142857143,
+      "background": 58.01385487528345,
+      "armorCrash": 1.55,
+      "launch": 0.48,
+      "impact": 1.9
+    },
+    "music": {
+      "started": true,
+      "loop": true,
+      "targetGain": 0.055,
+      "guidance": false,
+      "position": 38.517301587301596
+    }
+  },
+  "limits": [
+    "No physical mobile devices or physical controller tested",
+    "Cloud browser blocks file://; offline tests use disk-served HTML then disabled networking",
+    "No child playtest or classroom-speaker listening test"
+  ]
+}

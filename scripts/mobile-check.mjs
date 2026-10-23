@@ -1,3 +1,4 @@
+import { collectWithRing } from "./brook-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -268,11 +269,7 @@ try {
   await page.waitForTimeout(450);
   if ((await state()).stoneCount !== 0)
     throw Error("Jagged finger pickup counted");
-  for (const stone of stones.filter((s) => s.smooth).slice(0, 5)) {
-    point = await logical(stone.x, stone.y);
-    await page.touchscreen.tap(point.x, point.y);
-    await page.waitForTimeout(450);
-  }
+  await collectWithRing(page, 5, true);
   if ((await state()).stoneCount !== 5)
     throw Error("Touch brook collection failed");
   await page.waitForTimeout(1800);

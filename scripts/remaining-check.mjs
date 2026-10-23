@@ -1,3 +1,4 @@
+import { collectWithRing } from "./brook-input.mjs";
 import { playLionEncounter } from "./lion-input.mjs";
 import { chromium } from "@playwright/test";
 const browser = await chromium.launch({
@@ -57,7 +58,7 @@ async function moveTo(x, y) {
   }
   throw Error("Rescue route blocked");
 }
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 4; i++) {
   let s = (await state()).sheep[i];
   await moveTo(s.x - 30, s.y);
   if (i === 1) {
@@ -83,7 +84,7 @@ for (let i = 0; i < 3; i++) {
   await page.waitForTimeout(460);
   if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
   if (i === 1) await page.setViewportSize({ width: 1280, height: 720 });
-  if (i < 2) {
+  if (i < 3) {
     await moveTo(450, 498);
   }
 }
@@ -106,13 +107,7 @@ await page.waitForTimeout(100);
 if ((await state()).stoneCount !== 0) throw Error("Jagged scored");
 await page.screenshot({ path: "qa/26-brook-jagged.png" });
 await page.waitForTimeout(450);
-for (const s of stones.filter((s) => s.smooth).slice(0, 5)) {
-  await page.mouse.click(s.x, s.y);
-  await page.waitForTimeout(120);
-  if ((await state()).stoneCount === 3)
-    await page.screenshot({ path: "qa/26b-brook-pickup.png" });
-  await page.waitForTimeout(360);
-}
+await collectWithRing(page);
 await page.waitForTimeout(2800);
 await page.screenshot({ path: "qa/27-brook-success.png" });
 if ((await state()).stoneCount !== 5 || (await state()).phase !== "success")

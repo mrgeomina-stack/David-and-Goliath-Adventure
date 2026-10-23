@@ -300,6 +300,7 @@ export class SheepModel {
     return true;
   }
   penSpot(index: number): Point {
+    if (index === 4) return { x: 222, y: 497 };
     return { x: 185 + (index % 2) * 73, y: 465 + Math.floor(index / 2) * 64 };
   }
   update(dt: number, dir: Point) {
@@ -373,7 +374,7 @@ export class SheepModel {
     return this.sheep.filter((s) => s.saved).length;
   }
   get complete() {
-    return this.count === 4;
+    return this.count === this.sheep.length;
   }
 }
 export type Stone = Point & { smooth: boolean; collected: boolean; id: number };
@@ -384,7 +385,6 @@ export class BrookModel {
   private random: () => number;
   private route: number[] = [];
   private target = -1;
-  private rest = 0;
   count = 0;
   cooldown = 0;
   time = 0;
@@ -416,32 +416,35 @@ export class BrookModel {
     this.time += dt;
     this.cooldown = Math.max(0, this.cooldown - dt);
     this.errorTime = Math.max(0, this.errorTime - dt);
-    if (this.rest > 0) {
-      this.rest = Math.max(0, this.rest - dt);
-      return;
-    }
-    if (this.target < 0 || this.stones[this.target].collected) {
-      if (!this.route.length) {
-        this.route = this.stones.filter((s) => !s.collected).map((s) => s.id);
-        for (let i = this.route.length - 1; i > 0; i--) {
-          const j = Math.floor(this.random() * (i + 1));
-          [this.route[i], this.route[j]] = [this.route[j], this.route[i]];
+    // Spend the entire frame's travel budget, including after reaching a stone.
+    // A waypoint never creates a resting frame or an automatic collection.
+    let travel = (easy ? 320 : 410) * Math.max(0, dt);
+    for (let turns = 0; travel > 0 && turns < 32; turns++) {
+      if (this.target < 0 || this.stones[this.target]?.collected) {
+        while (this.route.length && this.stones[this.route[0]].collected)
+          this.route.shift();
+        if (!this.route.length) {
+          this.route = this.stones.filter((s) => !s.collected).map((s) => s.id);
+          for (let i = this.route.length - 1; i > 0; i--) {
+            const j = Math.floor(this.random() * (i + 1));
+            [this.route[i], this.route[j]] = [this.route[j], this.route[i]];
+          }
         }
+        this.target = this.route.shift() ?? -1;
       }
-      this.target = this.route.shift() ?? -1;
-    }
-    if (this.target < 0) return;
-    const target = this.stones[this.target];
-    const d = distance({ x: this.ring, y: this.ringY }, target);
-    const step = (easy ? 320 : 410) * dt;
-    if (d <= step) {
-      this.ring = target.x;
-      this.ringY = target.y;
-      this.rest = easy ? 0.22 : 0.12;
-      this.target = -1;
-    } else {
-      this.ring += ((target.x - this.ring) / d) * step;
-      this.ringY += ((target.y - this.ringY) / d) * step;
+      if (this.target < 0) break;
+      const target = this.stones[this.target];
+      const d = distance({ x: this.ring, y: this.ringY }, target);
+      if (d <= travel) {
+        this.ring = target.x;
+        this.ringY = target.y;
+        travel -= d;
+        this.target = -1;
+      } else {
+        this.ring += ((target.x - this.ring) / d) * travel;
+        this.ringY += ((target.y - this.ringY) / d) * travel;
+        travel = 0;
+      }
     }
   }
 
@@ -449,7 +452,12 @@ export class BrookModel {
     if (this.cooldown || this.count === 5) return false;
     this.cooldown = 0.4;
     const target = p
-      ? this.stones.find((s) => !s.collected && distance(s, p) < 50)
+      ? this.stones.find(
+          (s) =>
+            !s.collected &&
+            distance(s, p) < 50 &&
+            distance(s, { x: this.ring, y: this.ringY }) < 58,
+        )
       : this.stones
           .filter(
             (s) =>

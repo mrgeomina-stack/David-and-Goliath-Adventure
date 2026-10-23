@@ -1,3 +1,4 @@
+import { collectWithRing } from "./brook-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -66,10 +67,18 @@ try {
   await tap(first.stones.find((s) => !s.smooth));
   await page.waitForTimeout(450);
   if ((await state()).stoneCount !== 0) throw Error("Jagged stone scored");
-  for (const stone of first.stones.filter((s) => s.smooth).slice(0, 5)) {
-    await tap(stone);
-    await page.waitForTimeout(450);
-  }
+  const offRing = await state();
+  await tap(
+    offRing.stones.find(
+      (s) =>
+        s.smooth &&
+        Math.hypot(s.x - offRing.ring.x, s.y - offRing.ring.y) > 250,
+    ),
+  );
+  if ((await state()).stoneCount !== 0)
+    throw Error("A tap bypassed the moving ring timing requirement");
+  await page.waitForTimeout(450);
+  await collectWithRing(page, 5, true);
   await page.waitForFunction(
     () => window.adventureQA.snapshot().phase === "success",
   );
@@ -99,7 +108,7 @@ try {
     ),
   );
   console.log(
-    "AUDIO + BROOK PASS: offline Arabic fallback, pause/mute, supplied recording decoding, 2D motion, touch jagged rejection and five unique stones, one victory.",
+    "AUDIO + BROOK PASS: offline Arabic fallback, pause/mute, supplied recording decoding, 2D motion, touch jagged/off-ring rejection and five timed unique stones, one victory.",
   );
 } finally {
   await browser.close();

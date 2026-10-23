@@ -43,6 +43,8 @@ for (const [a, b] of [
 if ((await state()).fallTime !== -1) throw Error("Premature collapse");
 await page.screenshot({ path: "qa/09-armor-three.png" });
 await drag([1045, 482], [691, 441]);
+if ((await state()).audioEvents.armorCrash)
+  throw Error("Crash played before the landing");
 await page.screenshot({ path: "qa/10-armor-dressed.png" });
 await page.waitForTimeout(2400);
 await page.screenshot({ path: "qa/11-armor-fall.png" });
@@ -51,6 +53,8 @@ await page.screenshot({ path: "qa/12-armor-removal.png" });
 await page.waitForTimeout(2000);
 await page.screenshot({ path: "qa/13-armor-recovered.png" });
 if ((await state()).phase !== "success") throw Error("No armor success");
+if ((await state()).audioEvents.armorCrash !== 1)
+  throw Error("Armor landing crash missing or repeated");
 if (errors.length) throw Error(errors.join("\n"));
 console.log(
   "ARMOR PASS: wrong-zone reset, 3/4 gating, real drag of all four, staged 6.5s collapse/removal/recovery.",

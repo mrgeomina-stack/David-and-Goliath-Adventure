@@ -4,6 +4,21 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Fifth-lamb rescue, moving stone target and new effects · 1.11.0
+
+Rescue all four regular sheep within the existing 30-second countdown, then save
+an additional fifth lamb in the lion encounter. The checkpoint freezes the timer
+and preserves all four safe sheep through unlimited local retries. The counter
+changes from four to five when the new lamb appears. Free Play remains untimed.
+
+The brook ring now moves continuously through every waypoint with no arrival
+pause. Press SPACE or tap a smooth stone as the ring passes it; an early or late
+attempt misses without removing the stone. Five unique pickups still complete it.
+Each actual sling release has an air-sweep whoosh. David's armour landing has a
+layered body thud and metallic clatter, synchronized with ground contact. Both
+sounds are generated locally, cached, muted/paused with the game and work offline.
+The large landing UI, nine decorative cover sheep and other levels are preserved.
+
 ## Protect the Sheep encounter + large landing UI · 1.10.0
 
 After three physical sheep deliveries, the remaining lamb wanders away and is

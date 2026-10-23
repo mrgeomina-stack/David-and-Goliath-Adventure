@@ -631,7 +631,7 @@ export class World extends Phaser.Scene {
           this.armor.update(dt);
           if (before < 2.8 && this.armor.fallTime >= 2.8) {
             this.effects.burst(620, 589, "dust", 20);
-            this.hooks.sound.play("metal");
+            this.hooks.sound.play("armorCrash");
           }
           if (this.armor.complete) this.finish();
         }
@@ -684,7 +684,7 @@ export class World extends Phaser.Scene {
               this.hooks.changed();
             }
             if (
-              this.sheep.count === 3 &&
+              this.sheep.count === 4 &&
               this.lionEncounter.start(this.sheep)
             ) {
               this.clearInput();

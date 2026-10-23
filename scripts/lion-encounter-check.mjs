@@ -72,7 +72,7 @@ try {
     }
     throw Error("Rescue route blocked");
   }
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     let s = (await state()).sheep[i];
     await moveTo(s.x - 30, s.y);
     if (i === 1) {
@@ -100,14 +100,14 @@ try {
     await page.waitForTimeout(460);
     if (!(await state()).sheep[i].saved) throw Error("Sheep not penned");
     if (i === 1) await page.setViewportSize({ width: 1280, height: 720 });
-    if (i < 2) {
+    if (i < 3) {
       await moveTo(450, 498);
     }
   }
 
   const saved = (await state()).sheep.filter((s) => s.saved).length;
-  if (saved !== 3)
-    throw Error("Encounter did not retain three real pen deliveries");
+  if (saved !== 4)
+    throw Error("Encounter did not retain four real pen deliveries");
   const remaining = (await state()).sheepRemaining;
   await page.waitForFunction(
     () => window.adventureQA.snapshot().lionEncounter.stage === "seize",
@@ -186,17 +186,17 @@ try {
   );
   await page.waitForTimeout(2900);
   await page.screenshot({ path: "qa/99-lion-return-to-pen.png" });
-  if ((await state()).sheep.filter((s) => s.saved).length !== 3)
+  if ((await state()).sheep.filter((s) => s.saved).length !== 4)
     throw Error("Scored final lamb before physical pen return");
   await page.waitForFunction(
     () => window.adventureQA.snapshot().phase === "success",
   );
   if ((await state()).sheepRemaining !== remaining)
     throw Error("Encounter consumed the rescue timer");
-  if ((await state()).sheep.filter((s) => s.saved).length !== 4)
-    throw Error("Fourth lamb not delivered");
+  if ((await state()).sheep.filter((s) => s.saved).length !== 5)
+    throw Error("Fifth lamb not delivered");
   if (
-    (await state()).audioEvents.sheep !== 4 ||
+    (await state()).audioEvents.sheep !== 5 ||
     !(await state()).audioEvents.roar
   )
     throw Error("Uploaded sounds did not play during rescue");
@@ -209,13 +209,13 @@ try {
     throw Error("Next-level transition broken");
   if (errors.length) throw Error(errors.join("\n"));
   writeFileSync(
-    "qa/lion-encounter-1.10.0.json",
+    "qa/lion-encounter-1.11.0.json",
     JSON.stringify(
       {
         passed: true,
         offline: true,
         checks: [
-          "three real rescues",
+          "four real rescues plus a fifth lamb",
           "gamepad movement",
           "early miss",
           "timeout",

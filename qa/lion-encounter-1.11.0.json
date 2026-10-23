@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "offline": true,
+  "checks": [
+    "four real rescues plus a fifth lamb",
+    "gamepad movement",
+    "early miss",
+    "timeout",
+    "unlimited local retries",
+    "A rescue and held-button edge",
+    "pause",
+    "second-stage checkpoint",
+    "touch defense",
+    "staff contact",
+    "physical pen entry",
+    "uploaded roar and sheep audio",
+    "one victory",
+    "maze transition"
+  ],
+  "errors": []
+}

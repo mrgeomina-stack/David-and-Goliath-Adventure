@@ -45,6 +45,8 @@ await page.waitForTimeout(2100);
 await page.screenshot({ path: "qa/19-sling-success.png" });
 await page.click("#continue");
 await page.screenshot({ path: "qa/20-victory.png" });
+if ((await state()).audioEvents.launch !== 3)
+  throw Error("Release whoosh must play exactly once for each real throw");
 if (errors.length) throw Error(errors.join("\n"));
 console.log(
   "SLING PASS: low and high misses, ideal collision, pause during flight, victory.",

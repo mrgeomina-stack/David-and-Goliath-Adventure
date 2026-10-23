@@ -1,13 +1,13 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.10.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
+Version 1.11.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 The supplied music loops quietly after the first tap or click, with automatic volume reduction during voice guidance. UI buttons have soft pop feedback; global mute silences all audio. Pause also pauses the music.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
 (Android), then turn the device sideways. Use the large direction/action buttons,
-swipe the maze, drag armour with a finger and tap stones. Sheep carrying supports
+swipe the maze, drag armour with a finger and tap stones as the ring passes. Sheep carrying supports
 two fingers. Portrait rotation pauses a phone game safely. Use Safari Share → Add
 to Home Screen, Chrome Install app, or the ＋ toolbar button. Open the installed app
 online and wait for **Book → Offline ready** before going offline. See
@@ -20,11 +20,11 @@ account, installation or internet. Rehearse on your classroom laptop first.
 
 | Mission | Controls and goal |
 | --- | --- |
-| 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four. |
+| 1. Sheep | Arrows / WASD or big arrow buttons move David. Get close and press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four before the timer expires, then rescue a fifth lamb in the lion encounter. |
 | 2. Maze | Follow real corridors using arrows / WASD, finger swipes or arrow buttons. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
 | Goliath’s challenge | Walk right to hear the giant. David trusts God and volunteers to help: return left to Saul’s tent, then press SPACE / Speak. Spoken guidance is on initially. |
 | 3. Armour | Drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
-| 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone. The circle moves faster along shuffled routes over scattered stones. Collect exactly five; jagged rocks do not count. |
+| 4. Brook | SPACE / **Scoop** when the moving ring reaches a smooth stone, or tap a smooth stone while the ring passes it. The circle moves continuously without pausing over scattered stones. Collect exactly five; jagged rocks do not count. |
 | 5. Sling | Hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
 
 **Teacher controls:** Continue appears after each success animation. **Pause** / ESC
@@ -61,12 +61,12 @@ on an approved local server. See `TEST_REPORT.md` for evidence and limitations.
 **New interface:** Coral buttons are the main actions; teal controls are secondary actions. Framed blue instruction cards and gold chapter badges share the same visual style. Teacher help scrolls inside its card while Resume and guide buttons stay visible. Arabic and English have separate reading blocks; both fonts are included offline. Gameplay and controls are unchanged.
 
 
-**Lion encounter:** Deliver three sheep normally. The fourth lamb's rescue has two
+**Lion encounter:** Deliver four sheep normally. An additional fifth lamb's rescue has two
 large green timing windows. Press SPACE, tap the action button/the playfield, or
 press the standard gamepad south button (A/Cross) while the marker is green. On
 Easy the green window lasts 2.1 seconds; Normal allows 1.7 seconds. Misses offer
 unlimited retries of that part. The rescue timer pauses at this checkpoint, and
-three safe sheep remain in the pen. Holding a button cannot clear both challenges.
+four safe sheep remain in the pen. Holding a button cannot clear both challenges.
 A standard controller's left stick or D-pad moves David during normal rescues.
 The story is a gentle dramatization inspired by 1 Samuel 17:34–37; the lion is
 defeated and retreats without blood or graphic injury. All text stays editable.

@@ -65,10 +65,19 @@ export class LionEncounter {
       : enter;
   }
   start(sheep: SheepModel) {
-    if (this.started || sheep.count !== 3 || sheep.carriedIndex !== null)
+    if (this.started || sheep.count !== 4 || sheep.carriedIndex !== null)
       return false;
-    this.lambIndex = sheep.sheep.findIndex((s) => !s.saved);
-    if (this.lambIndex < 0) return false;
+    // Four timed rescues are complete. Introduce one additional lamb only now.
+    this.lambIndex = sheep.sheep.length;
+    sheep.sheep.push({
+      x: 850,
+      y: 378,
+      saved: false,
+      carried: false,
+      caught: false,
+      phase: 12,
+      startled: 0,
+    });
     this.origin = { ...sheep.david };
     this.hero = { ...this.origin };
     this.lambOrigin = { ...sheep.sheep[this.lambIndex] };

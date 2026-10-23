@@ -174,8 +174,8 @@ const instructions: Record<Mission, [string, string, string]> = {
   ],
   brook: [
     "SPACE  /  TAP",
-    "التقط لما الدايرة تعدّي، أو المس حجر أملس.",
-    "SPACE when the ring passes • Or tap a smooth stone",
+    "اضغط مسافة أو المس لما الدايرة المتحركة تعدّي فوق حجر أملس.",
+    "SPACE / Tap when the moving ring reaches a smooth stone",
   ],
   sling: [
     "HOLD  →  RELEASE",
@@ -371,7 +371,7 @@ function sync() {
   $("mission-badge").textContent = String(ORDER.indexOf(world.mission) + 1);
   $("progress").textContent =
     world.mission === "sheep"
-      ? `${world.sheep.count} / 4 🐑`
+      ? `${world.sheep.count} / ${world.lionEncounter.started ? 5 : 4} 🐑`
       : world.mission === "armor"
         ? `${world.armor.equipped.size} / 4`
         : world.mission === "brook"

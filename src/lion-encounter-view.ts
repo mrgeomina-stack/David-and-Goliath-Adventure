@@ -37,7 +37,7 @@ export const lionLines: Record<LionStage, [string, string]> = {
     "That was close! SPACE / A / Tap to try this part again.",
     "محاولة شجاعة! اضغط مسافة أو A أو المس لتجرب هذا الجزء مجددًا.",
   ],
-  done: ["All four sheep are safe!", "الخراف الأربعة بأمان!"],
+  done: ["All five sheep are safe!", "الخراف الخمسة بأمان!"],
 };
 export function drawLionActors(c: A.Ctx, b: LionEncounter, clock: number) {
   const t = b.time,

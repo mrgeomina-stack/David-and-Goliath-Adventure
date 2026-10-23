@@ -381,7 +381,69 @@ export class Sound {
     o.start(t);
     o.stop(t + length + 0.01);
   }
+  private animatedEffect(name: "launch" | "armorCrash") {
+    if (!this.context || this.muted || this.paused) return;
+    const c = this.context;
+    if (!this.samples.has(name)) {
+      const duration = name === "launch" ? 0.48 : 1.55;
+      const buffer = c.createBuffer(
+        1,
+        Math.ceil(c.sampleRate * duration),
+        c.sampleRate,
+      );
+      const data = buffer.getChannelData(0);
+      let seed = 701,
+        low = 0,
+        air = 0;
+      for (let i = 0; i < data.length; i++) {
+        const t = i / c.sampleRate;
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        const noise = (seed / 4294967296) * 2 - 1;
+        low += 0.06 * (noise - low);
+        air += 0.35 * (noise - air);
+        let value = 0;
+        if (name === "launch") {
+          // A short air sweep and string snap, aligned with actual projectile release.
+          const envelope = Math.sin((Math.PI * t) / duration) ** 1.3;
+          value =
+            (air - low) * envelope * 2.5 +
+            Math.sin(2 * Math.PI * 870 * t) * Math.exp(-t * 65) * 0.18;
+        } else {
+          const body =
+            Math.sin(2 * Math.PI * (65 * t + 3 * (1 - Math.exp(-t * 20)))) *
+            Math.exp(-t * 8) *
+            0.65;
+          value = body;
+          for (const [j, at] of [0, 0.065, 0.15, 0.27, 0.43, 0.66].entries()) {
+            const u = t - at;
+            if (u < 0) continue;
+            const strike = Math.min(1, u / 0.003) * Math.exp(-u * (8 + j));
+            const metal = [410, 649, 1087, 1713].reduce(
+              (sum, f, k) =>
+                sum +
+                (Math.sin(2 * Math.PI * (f + j * 29) * u) *
+                  Math.exp(-u * (3 + k * 3))) /
+                  (k + 1),
+              0,
+            );
+            value +=
+              ((metal * 0.25 + (air - low) * 1.6) * strike) / (1 + j * 0.18);
+          }
+        }
+        const fade = Math.min(1, (duration - t) / 0.05);
+        data[i] = Math.tanh(value) * fade * 0.72;
+      }
+      this.samples.set(name, buffer);
+    }
+    if (name === "armorCrash") this.featureSound(1.55);
+    this.sample(name);
+  }
   play(name: string) {
+    if (name === "launch" || name === "armorCrash") {
+      this.animatedEffect(name);
+      return;
+    }
+
     if (name === "staff") {
       if (!this.context || this.muted) return;
       this.rustle("step");
@@ -398,7 +460,7 @@ export class Sound {
       this.sample(name);
       return;
     }
-    if (["metal", "call", "plop", "launch"].includes(name))
+    if (["metal", "call", "plop"].includes(name))
       this.rustle(name === "plop" ? "water" : "cloth");
     if (name === "win") {
       [392, 494, 587, 784].forEach((f, i) =>
@@ -412,7 +474,6 @@ export class Sound {
       this.tone(550, 0.18);
       this.tone(680, 0.2, 0.15);
     } else if (name === "plop") this.tone(290, 0.15);
-    else if (name === "launch") this.tone(740, 0.3, 0, "triangle");
     else this.tone(580, 0.1);
   }
   setMuted(muted: boolean) {

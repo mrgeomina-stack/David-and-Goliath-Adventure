@@ -1,3 +1,4 @@
+import { collectWithRing } from "./brook-input.mjs";
 import { chromium } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 const browser = await chromium.launch({
@@ -78,8 +79,7 @@ try {
   await page.setViewportSize({ width: 1280, height: 720 });
   await open("brook");
   await page.screenshot({ path: "qa/80-david-cohesive-kneel.png" });
-  const stone = (await state()).stones.find((s) => s.smooth);
-  await page.mouse.click(stone.x, stone.y);
+  await collectWithRing(page, 1);
   await page.waitForTimeout(150);
   await page.screenshot({ path: "qa/81-david-cohesive-scoop.png" });
   if ((await state()).stoneCount !== 1)

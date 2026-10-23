@@ -151,3 +151,51 @@ it("keeps one background loop across mission resets and ducks beneath speech and
   sound.unlock();
   expect(sound.events.background).toBe(1);
 });
+it("release swish and armour crash are bounded, cached, cancellable and respect pause/mute", () => {
+  const sound = new Sound(),
+    buffers: Float32Array[] = [],
+    stops = vi.fn();
+  const context = {
+    state: "running",
+    currentTime: 0,
+    sampleRate: 48000,
+    destination: {},
+    createBuffer: (_channels: number, length: number) => {
+      const data = new Float32Array(length);
+      buffers.push(data);
+      return { getChannelData: () => data };
+    },
+    createBufferSource: () => ({
+      connect: vi.fn(),
+      start: vi.fn(),
+      stop: stops,
+    }),
+    createGain: () => ({ gain: { value: 0 }, connect: vi.fn() }),
+    suspend: vi.fn(),
+    resume: vi.fn(),
+  };
+  sound.context = context as unknown as AudioContext;
+  sound.play("launch");
+  sound.play("armorCrash");
+  expect(sound.events.launch).toBe(1);
+  expect(sound.events.armorCrash).toBe(1);
+  expect(buffers.map((b) => b.length)).toEqual([23040, 74400]);
+  for (const data of buffers) {
+    expect(data.every(Number.isFinite)).toBe(true);
+    expect(Math.max(...data.map(Math.abs))).toBeLessThanOrEqual(0.72);
+    expect(data.some((v) => Math.abs(v) > 0.1)).toBe(true);
+  }
+  sound.play("launch");
+  expect(buffers.length).toBe(2);
+  sound.stopSamples();
+  expect(stops).toHaveBeenCalledTimes(3);
+  sound.setMuted(true);
+  sound.play("launch");
+  sound.play("armorCrash");
+  sound.setMuted(false);
+  sound.pause(true);
+  sound.play("launch");
+  sound.play("armorCrash");
+  expect(sound.events.launch).toBe(2);
+  expect(sound.events.armorCrash).toBe(1);
+});

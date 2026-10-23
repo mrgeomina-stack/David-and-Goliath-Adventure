@@ -1,3 +1,20 @@
+# Release and armour impact effects · 1.11.0
+
+The existing real projectile-release hook now plays a cached 0.48-second filtered
+noise whoosh with a brief string snap, rather than a pitched beep. Each released
+shot plays once, including misses; charging alone does not trigger it.
+
+At armour fallTime crossing 2.8 seconds (ground contact), a cached 1.55-second body
+thud with six staggered metallic contacts and ringing partials replaces the generic
+clang. It plays once per collapse, ducks music and shares tracked effect sources,
+pause, mute and scene cancellation. No additional network or audio asset is needed.
+
+Four timed pen deliveries now precede the new fifth lamb. Encounter retries keep
+those four safe. Brook movement consumes the full frame travel budget through
+waypoints, with no arrival dwell; both SPACE and direct taps require the ring's
+existing 58px pickup window. The 0.4-second scoop cooldown and five unique pickups
+remain. This supersedes the arrival pauses/direct tapping described for 1.8 below.
+
 # Lion mini-boss audio · 1.10.0
 
 The newly supplied lion MP3 is kept unchanged at `src/assets/audio/lion-roar.mp3`

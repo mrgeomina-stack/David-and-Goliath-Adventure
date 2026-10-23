@@ -74,8 +74,12 @@ describe("brook", () => {
     expect(b.scoop(b.stones.find((s) => !s.smooth))).toBe(false);
     for (const s of b.stones.filter((s) => s.smooth).slice(0, 5)) {
       b.update(1);
+      b.ring = s.x;
+      b.ringY = s.y;
       expect(b.scoop(s)).toBe(true);
       b.update(1);
+      b.ring = s.x;
+      b.ringY = s.y;
       expect(b.scoop(s)).toBe(false);
     }
     expect(b.count).toBe(5);
@@ -292,4 +296,33 @@ it("scatters stones without overlapping finger targets and offers five timely ke
     expect(brook.stones.filter((s) => s.collected)).toHaveLength(5);
   }
   expect(new BrookModel(1).stones).not.toEqual(new BrookModel(2).stones);
+});
+
+it("the brook ring spends its full travel budget and never rests at a stone", () => {
+  const b = new BrookModel(1);
+  b.stones = [
+    { id: 0, x: 300, y: 300, smooth: true, collected: false },
+    { id: 1, x: 500, y: 300, smooth: true, collected: false },
+  ];
+  b.ring = 300;
+  b.ringY = 300;
+  b.update(0.5);
+  expect(b.ring).toBeCloseTo(460);
+  b.update(0.125);
+  expect(b.ring).toBeCloseTo(500);
+  b.update(0.01);
+  expect(b.ring).toBeCloseTo(496.8);
+  expect(b.count).toBe(0);
+});
+it("a direct tap cannot bypass ring timing and a missed opportunity returns on another pass", () => {
+  const b = new BrookModel(2),
+    s = b.stones.find((s) => s.smooth)!;
+  b.ring = s.x;
+  b.ringY = s.y + 140;
+  expect(b.scoop(s)).toBe(false);
+  b.update(0.5);
+  b.ring = s.x;
+  b.ringY = s.y;
+  expect(b.scoop(s)).toBe(true);
+  expect(b.count).toBe(1);
 });
