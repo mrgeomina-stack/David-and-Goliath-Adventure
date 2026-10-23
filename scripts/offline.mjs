@@ -4,7 +4,7 @@ const js = readFileSync("dist/game.js", "utf8").replace(
   /<\/script/gi,
   "<\\/script",
 );
-const css = readFileSync("src/style.css", "utf8");
+const css = readFileSync("dist/davids-big-adventure.css", "utf8");
 const template = readFileSync("index.html", "utf8")
   .replace(
     /<link rel="stylesheet" href="\/src\/style\.css"\s*\/?>/,

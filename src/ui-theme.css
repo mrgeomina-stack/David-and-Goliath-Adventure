@@ -1,0 +1,932 @@
+/* Adventure UI: shared tokens and surfaces. Geometry stays in style.css. */
+@font-face {
+  font-family: "Adventure Nunito";
+  src: url("./assets/fonts/nunito-latin.woff2") format("woff2");
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Adventure Arabic";
+  src: url("./assets/fonts/noto-sans-arabic.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+:root {
+  --ui-font:
+    "Adventure Nunito", "Adventure Arabic", ui-rounded, "Trebuchet MS", Tahoma,
+    sans-serif;
+  --ui-ink: #164e53;
+  --ui-teal: #157b79;
+  --ui-teal-dark: #105359;
+  --ui-coral: #ed7252;
+  --ui-gold: #ffd16a;
+  --ui-blue: #dff3ff;
+  --ui-cream: #fffaf0;
+  --ui-radius: 24px;
+  --ui-radius-card: 30px;
+  --ui-radius-control: 18px;
+  --ui-stroke: #1a5960;
+  --ui-lift: 0 6px 0 #105359, 0 11px 20px #103f4a26;
+  --ui-inset: inset 0 2px 0 #ffffffb3, inset 0 -3px 0 #103f4a14;
+  font-family: var(--ui-font);
+  font-weight: 650;
+  color: var(--ui-ink);
+}
+/* One tactile language for every action, including dynamically created buttons. */
+.ui-button,
+button,
+select {
+  font-family: var(--ui-font);
+  font-weight: 850;
+}
+.ui-button,
+button {
+  border: 2px solid #26696b;
+  border-radius: 17px;
+  background: linear-gradient(180deg, #ffffff 0%, #e6f6ef 52%, #c7e9df 100%);
+  color: var(--ui-ink);
+  box-shadow:
+    0 4px 0 #317577,
+    0 7px 12px #103f4a14,
+    var(--ui-inset);
+  transition:
+    filter 140ms ease,
+    translate 140ms ease,
+    box-shadow 140ms ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+button:hover {
+  filter: brightness(1.045) saturate(1.1);
+  background-color: #eefaf6;
+}
+button:active,
+button.is-pressed {
+  translate: 0 3px;
+  transform: none;
+  box-shadow:
+    0 1px 0 #317577,
+    inset 0 2px 5px #103f4a1f;
+}
+button:focus-visible,
+select:focus-visible {
+  outline: 4px solid #fff;
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 8px #218eb1,
+    var(--ui-lift),
+    var(--ui-inset);
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.65;
+  filter: saturate(0.45);
+  translate: none;
+  transform: none;
+  box-shadow:
+    0 2px 0 #758d8c,
+    var(--ui-inset);
+}
+.ui-button--primary,
+.primary,
+#modal-actions button:first-child,
+#portrait-continue {
+  background: linear-gradient(180deg, #ffb16f 0%, #e87552 22%, #c94934 100%);
+  color: #fffdf2;
+  border: 3px solid #ad4938;
+  border-radius: 20px;
+  box-shadow:
+    0 6px 0 #a54435,
+    0 11px 20px #883b3026,
+    inset 0 3px 0 #ffd7a9;
+  text-shadow: 0 2px 0 #9a3f3766;
+  font-weight: 950;
+  letter-spacing: 0.1px;
+}
+.primary:hover,
+#modal-actions button:first-child:hover {
+  background: linear-gradient(180deg, #ffc083, #eb7a55 22%, #cf4f36);
+}
+.primary:active,
+#modal-actions button:first-child:active {
+  box-shadow:
+    0 2px 0 #a54435,
+    inset 0 2px 5px #903c3440;
+}
+.primary:focus-visible,
+#modal-actions button:first-child:focus-visible {
+  outline: 4px solid white;
+  box-shadow:
+    0 0 0 8px #177d86,
+    0 6px 0 #a54435,
+    inset 0 3px 0 #ffd7a9;
+}
+.primary:disabled {
+  box-shadow:
+    0 3px 0 #8d6d60,
+    inset 0 2px 0 #ffffff66;
+}
+.ui-button--secondary,
+.text-button,
+#hint {
+  border: 2px solid #2d7779;
+  background: linear-gradient(#f8fffb, #def2e8);
+  color: #205d60;
+  border-radius: 17px;
+  box-shadow:
+    0 4px 0 #3c7b79,
+    var(--ui-inset);
+}
+.ui-chip,
+.eyebrow,
+#progress,
+#pwa-status {
+  font-family: var(--ui-font);
+  font-weight: 900;
+}
+/* Shared game-card frame: teal shell, cream reading surface, two edge highlights. */
+.ui-panel,
+#modal,
+#message,
+#tutorial,
+#practice {
+  border: 5px solid #fff3cf;
+  border-radius: var(--ui-radius-card);
+  background: linear-gradient(145deg, #fffdf5 0%, #fff8e8 65%, #e8f6ec 100%);
+  box-shadow:
+    0 0 0 3px #1b6469,
+    0 9px 0 #124e58,
+    0 20px 42px #103d4d52,
+    inset 0 3px 0 white;
+  color: var(--ui-ink);
+}
+#modal-backdrop {
+  background: radial-gradient(ellipse at 50% 30%, #194d5999, #0b3040da);
+  backdrop-filter: blur(7px);
+}
+#modal {
+  padding: 25px 33px 30px;
+  border-top: 12px solid #45b6b2;
+  max-height: 590px;
+  scrollbar-color: #6bbdb5 #e3f2e8;
+  scrollbar-width: thin;
+}
+#modal > .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: linear-gradient(#e1f6ff, #c5e9f7);
+  border: 2px solid #73b9ca;
+  border-radius: 100px;
+  padding: 5px 13px;
+  color: #1d6573;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+}
+#modal > .eyebrow::before {
+  content: "✦";
+  color: #b77710;
+  font-size: 19px;
+}
+#modal h2,
+.map-heading h2 {
+  font-family: var(--ui-font);
+  font-weight: 950;
+  color: #185a60;
+  letter-spacing: -0.6px;
+  line-height: 1.3;
+}
+#modal h2 {
+  font-size: 33px;
+  margin: 17px 0;
+}
+#modal-content {
+  font-size: 19px;
+  line-height: 1.65;
+  font-weight: 650;
+}
+#modal-content p {
+  background: linear-gradient(125deg, #ffffffdc, #e5f5f0b8);
+  border: 1px solid #bfddd1;
+  border-inline-start: 5px solid #3d9d99;
+  border-radius: 18px;
+  color: #25545a;
+  box-shadow:
+    inset 0 2px 0 #fff,
+    0 3px 0 #c9ded455;
+  padding: 11px 15px;
+}
+#modal-actions {
+  gap: 16px;
+  margin-top: 22px;
+  padding-bottom: 6px;
+}
+#modal-actions button {
+  font-size: 20px;
+  min-height: 56px;
+  border-radius: 18px;
+  padding: 11px 22px;
+}
+#modal-actions button:first-child {
+  padding-inline: 27px;
+}
+#modal[data-kind="pause"] {
+  border-top-color: #51b9d4;
+}
+#modal[data-kind="pause"] > .eyebrow {
+  background: linear-gradient(#dff5ff, #b6e3f4);
+}
+#modal[data-kind="teacher"] {
+  border-top-color: #a08ad5;
+}
+#modal[data-kind="teacher"] > .eyebrow {
+  background: linear-gradient(#f1eaff, #e3d7f8);
+  border-color: #b3a0d3;
+  color: #614f85;
+}
+/* Instruction cards use a strong sky accent and an illustrated medallion. */
+#tutorial {
+  border-top: 10px solid #63bbdc;
+  border-left: 5px solid #fff3cf;
+  background:
+    radial-gradient(ellipse at 0 0, #d6f3ff, transparent 62%),
+    linear-gradient(135deg, #fffdf5, #f0faf3);
+  padding: 23px 29px;
+  gap: 25px;
+}
+.tutorial-art {
+  border: 4px solid #fff9de;
+  border-radius: 35px;
+  background: linear-gradient(145deg, #fff2ab, #f4bd53);
+  box-shadow:
+    0 0 0 2px #b78735,
+    0 7px 0 #be8a36,
+    inset 0 3px 0 #fff8d7;
+  transform: rotate(-6deg);
+}
+#tutorial .eyebrow {
+  color: #25788a;
+  font-weight: 950;
+  letter-spacing: 1.2px;
+}
+#tutorial b {
+  font-family: var(--ui-font);
+  color: #185e69;
+  font-weight: 950;
+  font-size: 35px;
+  line-height: 1.35;
+}
+#tutorial p {
+  color: #294f58;
+  font-weight: 750;
+  font-size: 22px;
+}
+#tutorial small {
+  color: #4c7174;
+  font-weight: 750;
+}
+/* Success/retry shares the same frame; the chapter emblem is a floating gold medal. */
+#message {
+  border-top: 12px solid var(--chapter-color, #43a89c);
+  padding: 20px 29px 24px;
+}
+#message-emblem {
+  background: linear-gradient(145deg, #fff4b2, #f4c451);
+  border: 4px solid #fff7d4;
+  box-shadow:
+    0 0 0 2px #b3883d,
+    0 5px 0 #ba8938,
+    0 10px 16px #6a643f33;
+}
+#message .eyebrow {
+  color: #755229;
+  letter-spacing: 1px;
+}
+#message h2 {
+  font-family: var(--ui-font);
+  font-size: 28px;
+  font-weight: 900;
+  color: #196463;
+}
+#message p {
+  font-weight: 850;
+  color: #24565a;
+}
+#toast {
+  background: linear-gradient(#238b8e, #155e69);
+  border: 3px solid #ffe6a6;
+  border-radius: 22px;
+  color: #fffdf0;
+  box-shadow:
+    0 0 0 2px #155b64,
+    0 5px 0 #10434f,
+    0 12px 22px #103d4d38;
+  font-weight: 850;
+}
+/* Home: a colorful title treatment, tactile selector, two distinct CTA tiers. */
+.title-card {
+  top: 125px;
+  left: 65px;
+  width: 610px;
+}
+.title-card .eyebrow {
+  display: inline-block;
+  background: linear-gradient(#fff1b5, #ffdd84);
+  border: 2px solid #b18a3f;
+  border-radius: 100px;
+  padding: 5px 13px;
+  color: #715122;
+  letter-spacing: 1.4px;
+  box-shadow:
+    0 3px 0 #ac88432e,
+    inset 0 2px 0 #fff7d5;
+}
+.arabic-title {
+  font-family: var(--ui-font);
+  font-weight: 850;
+  color: #256d6b;
+  margin-top: 12px;
+  font-size: 27px;
+}
+h1 {
+  font-family: var(--ui-font);
+  font-size: 73px;
+  font-weight: 1000;
+  line-height: 0.99;
+  letter-spacing: -2.7px;
+  color: #1d6268;
+  margin: 12px 0 17px;
+  text-shadow:
+    0 3px 0 #fff7e0,
+    0 6px 0 #174d631f;
+}
+h1 em {
+  font-size: 65px;
+  font-family: inherit;
+  font-weight: 1000;
+  font-style: normal;
+  color: #cf593d;
+  letter-spacing: -2.8px;
+}
+.title-spark {
+  color: #dc9c24;
+  text-shadow: 0 2px #fff7d8;
+}
+.title-card p {
+  font-weight: 750;
+  color: #365f60;
+  font-size: 20px;
+  line-height: 1.45;
+  margin-bottom: 15px;
+}
+.settings {
+  margin-bottom: 16px;
+}
+.settings label {
+  font-weight: 900;
+  color: #32656b;
+  font-size: 13px;
+}
+.settings select {
+  font-family: var(--ui-font);
+  color: #205d65;
+  background: linear-gradient(#f5fdff, #daeff7);
+  border: 2px solid #5c9ba9;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 0 #498291,
+    inset 0 2px 0 white;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 850;
+  min-height: 47px;
+  width: 550px;
+}
+.settings select option {
+  background: #fffdf3;
+  color: #164e53;
+}
+#start {
+  min-width: 290px;
+  min-height: 62px;
+  font-size: 22px;
+  padding: 12px 23px;
+}
+#practice-toggle {
+  margin-inline-start: 12px;
+  padding: 15px 17px;
+  min-height: 58px;
+}
+.title-card small {
+  display: table;
+  color: #30626a;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: #fff9e8c9;
+  padding: 6px 11px;
+  border-radius: 100px;
+  margin-top: 20px;
+}
+.title-card small b {
+  color: #b37722;
+}
+/* Chrome is a slim teal dock, not a row of unframed website links. */
+#toolbar {
+  background: linear-gradient(105deg, #fffaf0 0%, #e9f7ef 65%, #e2f3ef 100%);
+  border-bottom: 3px solid #73b6ad;
+  box-shadow:
+    0 4px 0 #164e5322,
+    0 7px 20px #103d4d1a;
+}
+.brand {
+  color: #1b5e64;
+  font-weight: 1000;
+  letter-spacing: 1.6px;
+}
+.brand-mark {
+  color: #235c5d;
+  border: 2px solid #b28b38;
+  background: radial-gradient(ellipse at 35% 15%, #fff4b4, #f2be4e);
+  box-shadow:
+    0 3px 0 #b28b38,
+    inset 0 2px 0 #fff6d0;
+}
+#toolbar nav {
+  gap: 6px;
+}
+#toolbar nav button,
+#toolbar nav button#language {
+  background: linear-gradient(#f9fffc, #d0ece3);
+  border: 2px solid #70a69e;
+  border-radius: 14px;
+  color: #225e64;
+  box-shadow:
+    0 3px 0 #3c7e7c,
+    inset 0 2px 0 #fff;
+  min-height: 44px;
+  padding: 8px 9px;
+  font-weight: 950;
+  font-size: 16px;
+}
+#toolbar nav #help,
+#toolbar nav #install {
+  background: linear-gradient(#fff1b6, #f5d37e);
+  border-color: #bd9b50;
+  box-shadow:
+    0 3px 0 #a28444,
+    inset 0 2px #fff8dc;
+}
+#toolbar nav button:hover {
+  transform: none;
+}
+#toolbar nav button[aria-pressed="true"] {
+  background: linear-gradient(#1c8d8c, #17616d);
+  color: #fffdf1;
+  border-color: #14535d;
+}
+/* Readable HUD and bottom controller: status blues, gold rank medallions, teal keys. */
+#mission > div:first-of-type {
+  background: linear-gradient(130deg, #f7feffed, #dff2f7ed);
+  border: 2px solid #7bb5be;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 0 #3b7c7f88,
+    inset 0 2px 0 #fff;
+}
+#objective-ar,
+#objective-en {
+  font-family: var(--ui-font);
+  color: #205961;
+  font-weight: 850;
+}
+#objective-ar {
+  font-size: 22px;
+  line-height: 1.45;
+}
+#objective-en {
+  font-size: 18px;
+  line-height: 1.35;
+}
+#mission-badge {
+  background: linear-gradient(#fff5b3, #edbd55);
+  border: 3px solid #fff6d5;
+  color: #755127;
+  box-shadow:
+    0 0 0 2px #b88a3a,
+    0 5px 0 #ac7f32;
+  font-weight: 1000;
+}
+#progress {
+  background: linear-gradient(#e2f7ff, #bae2ef);
+  border: 2px solid #599aab;
+  color: #1c5a69;
+  box-shadow:
+    0 4px 0 #38798d,
+    inset 0 2px #fff;
+}
+#sheep-clock {
+  background: linear-gradient(120deg, #f5fff7, #daf2e4);
+  border: 2px solid #6eaa94;
+  border-radius: 19px;
+  box-shadow:
+    0 4px 0 #3e7d70,
+    inset 0 2px #fff;
+}
+#sheep-time {
+  font-family: var(--ui-font);
+  font-weight: 1000;
+}
+#sheep-warning {
+  font-family: var(--ui-font);
+  font-weight: 800;
+}
+#countdown-track {
+  background: #154d5326;
+  box-shadow: inset 0 2px 3px #164e5333;
+  border: 1px solid #ffffffb3;
+}
+#countdown-fill {
+  box-shadow: inset 0 2px 0 #ffffff5c;
+}
+#sheep-clock.warning {
+  background: linear-gradient(#fff6c7, #ffdf9d);
+  border-color: #ca963d;
+}
+#sheep-clock.urgent {
+  background: linear-gradient(#fff0e4, #ffd1bc);
+  border-color: #bb644f;
+  color: #853b2b;
+}
+#bottom {
+  background: linear-gradient(#f7fff7f7, #def0e7f7);
+  border-top: 3px solid #8bb8a5;
+  box-shadow:
+    0 -4px 0 #ffffff87,
+    0 -7px 20px #174e5320;
+}
+#directions button {
+  background: linear-gradient(#fffdfa, #cfece2);
+  border: 2px solid #679f94;
+  color: #255c64;
+  box-shadow:
+    0 4px 0 #3e7d76,
+    inset 0 2px #fff;
+  border-radius: 17px;
+}
+#instruction {
+  font-family: var(--ui-font);
+  color: #315f64;
+  font-weight: 750;
+}
+#hint {
+  background: linear-gradient(#fff0b2, #f8d583);
+  border-color: #b99a4e;
+  box-shadow:
+    0 4px 0 #a18944,
+    inset 0 2px #fff8db;
+  color: #725727;
+}
+/* The adventure book keeps its map and positions, with richer node/button framing. */
+#practice {
+  border-top: 10px solid #57afa6;
+  background: linear-gradient(135deg, #effbf8, #fff9e9 55%, #f8e7bc);
+  box-shadow:
+    0 0 0 1500px #123e4d9c,
+    0 0 0 3px #175f66,
+    0 10px 0 #124e58,
+    0 22px 45px #103d4d66;
+}
+.map-heading h2 {
+  font-size: 26px;
+  margin: 1px 0 8px;
+}
+.map-heading .eyebrow {
+  color: #397e82;
+  letter-spacing: 1.2px;
+}
+#practice #music-toggle,
+#practice #map-close {
+  background: linear-gradient(#f5ffff, #d0ecec);
+  border: 2px solid #5a9d9d;
+  color: #245d66;
+  box-shadow:
+    0 3px 0 #427d80,
+    inset 0 2px #fff;
+}
+#journey-landscape {
+  border: 4px solid #fff4cf;
+  box-shadow:
+    0 0 0 2px #729a83,
+    inset 0 0 25px #255c5426;
+  border-radius: 23px;
+}
+#practice [data-mission] {
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+#practice [data-mission]:active {
+  transform: translate(-50%, -50%);
+  translate: 0 3px;
+}
+#practice [data-mission]:focus-visible {
+  outline: 4px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 7px #1f7987;
+}
+.chapter-art {
+  border: 4px solid #fff6cb;
+  border-radius: 23px;
+  background: linear-gradient(#fff7bd, #f3c458);
+  box-shadow:
+    0 0 0 2px #9e7f36,
+    0 6px 0 #9c7a37,
+    0 10px 18px #183e4b33,
+    inset 0 2px #fff;
+}
+.chapter-label {
+  background: linear-gradient(#fffef5, #e4f6ee);
+  border: 2px solid #397f7d;
+  color: #1b5e61;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 #29696b;
+  font-weight: 900;
+}
+.chapter-label b {
+  box-shadow:
+    inset 0 2px 0 #ffffff75,
+    0 2px 0 #174f544d;
+}
+.chapter-tick {
+  background: #fff4cf;
+  border-color: #bd9646;
+  box-shadow: 0 2px 0 #9f793b;
+}
+.earned .chapter-tick {
+  background: linear-gradient(#46ad8d, #207663);
+  color: white;
+  border-color: #c7efd1;
+}
+.keepsake {
+  background: linear-gradient(#f7fcf5cc, #dcece3aa);
+  border: 2px dashed #91b1a4;
+  border-radius: 18px;
+  color: #486c65;
+  box-shadow: inset 0 2px #fff;
+}
+.keepsake.collected {
+  border: 2px solid #c39b4a;
+  background: linear-gradient(#fff5bb, #f1d078);
+  box-shadow:
+    0 4px 0 #b89245,
+    inset 0 2px #fff7d4;
+}
+#map-note {
+  font-weight: 800;
+  color: #3a676a;
+}
+#pwa-settings button {
+  background: linear-gradient(#e4f6ff, #bee4ef);
+  border: 2px solid #649ba8;
+  box-shadow: 0 3px 0 #42798a;
+}
+#pwa-status {
+  background: #effaf1;
+  border: 1px solid #8cb4a0;
+  border-radius: 100px;
+  padding: 4px 10px;
+}
+#rotate-notice {
+  font-family: var(--ui-font);
+  background: radial-gradient(ellipse at top, #2f8b8a, #143f51);
+  color: #fff8dd;
+}
+/* Arabic is intentionally shaped and spaced; never apply Latin tracking to it. */
+[dir="rtl"],
+body.lang-ar button,
+body.lang-ar select,
+body.lang-ar #modal h2 {
+  font-family: var(--ui-font);
+  letter-spacing: 0;
+}
+body.lang-ar .title-card p,
+body.lang-ar .settings select {
+  font-family: var(--ui-font);
+}
+body.lang-ar .arabic-title {
+  font-family: var(--ui-font);
+  font-size: 47px;
+  line-height: 1.7;
+}
+body.lang-ar #modal-title {
+  direction: rtl;
+  text-align: start;
+}
+body.lang-ar #modal-actions {
+  justify-content: flex-start;
+  direction: rtl;
+}
+body.lang-ar #tutorial .tutorial-copy {
+  direction: rtl;
+  text-align: start;
+}
+/* Keep existing native-size mobile targets, compact layout and portrait protection. */
+.compact #toolbar nav {
+  gap: calc(3px / var(--game-scale));
+}
+.compact #toolbar nav button,
+.compact #toolbar nav button#language {
+  padding: calc(2px / var(--game-scale));
+  min-height: calc(44px / var(--game-scale));
+  min-width: calc(44px / var(--game-scale));
+  border-radius: calc(10px / var(--game-scale));
+}
+.compact #toolbar nav button::after {
+  font-family: var(--ui-font);
+  font-weight: 900;
+}
+.compact .title-card {
+  padding: 0 calc(5px / var(--game-scale)) calc(10px / var(--game-scale)) 0;
+}
+.compact #practice-toggle {
+  margin-inline-start: 0;
+  margin-top: calc(5px / var(--game-scale));
+}
+.compact .settings select {
+  min-width: 0;
+  max-width: 100%;
+}
+.compact #modal {
+  border-width: calc(3px / var(--game-scale));
+  border-top-width: calc(7px / var(--game-scale));
+  padding: calc(11px / var(--game-scale));
+}
+.compact #modal-content {
+  font-size: calc(14px / var(--game-scale));
+}
+.compact #modal > .eyebrow {
+  padding: calc(2px / var(--game-scale)) calc(7px / var(--game-scale));
+  font-size: calc(9px / var(--game-scale));
+}
+.compact #modal-actions button {
+  min-height: calc(44px / var(--game-scale));
+}
+.compact #tutorial {
+  border-left-width: calc(2px / var(--game-scale));
+  border-top-width: calc(6px / var(--game-scale));
+}
+.compact #objective-ar,
+.compact #objective-en {
+  font-family: var(--ui-font);
+}
+.compact #mission > div:first-of-type {
+  box-shadow:
+    0 3px 0 #3b7c7f66,
+    inset 0 2px #fff;
+}
+.compact .map-heading h2 {
+  font-family: var(--ui-font);
+}
+@media (hover: none) {
+  button:hover {
+    filter: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+  .title-card {
+    animation: none;
+  }
+}
+
+/* Language blocks keep Arabic shaping and punctuation independent of English. */
+.ui-copy-ar,
+.ui-copy-en {
+  display: block;
+  unicode-bidi: isolate;
+  letter-spacing: 0;
+}
+.ui-copy-ar {
+  text-align: right;
+  line-height: 1.6;
+}
+.ui-copy-en {
+  text-align: left;
+  line-height: 1.5;
+}
+.ui-copy-ar + .ui-copy-en {
+  margin-top: 5px;
+}
+#modal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#modal > .eyebrow {
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+#modal h2 {
+  flex-shrink: 0;
+}
+#modal-content {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 0 1 auto;
+  padding: 2px 5px 4px 1px;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+#modal-content p:first-child {
+  margin-top: 0;
+}
+#modal-content p:last-child {
+  margin-bottom: 0;
+}
+#modal-actions {
+  flex-shrink: 0;
+  padding-top: 16px;
+  border-top: 1px solid #bedbd0;
+}
+#modal-actions button:not(:first-child) {
+  background: linear-gradient(#f8fffb, #d5eee5);
+  border: 2px solid #4d8f8c;
+  box-shadow:
+    0 4px 0 #367b7b,
+    inset 0 2px #fff;
+}
+#modal[data-kind="pause"] > .eyebrow::before {
+  content: "";
+  width: 13px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 1px;
+  background: linear-gradient(
+    to right,
+    #247a92 0 30%,
+    transparent 30% 70%,
+    #247a92 70% 100%
+  );
+}
+.map-heading {
+  width: 100%;
+}
+.chapter-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.chapter-label b {
+  flex-shrink: 0;
+}
+.chapter-copy {
+  min-width: 0;
+}
+.chapter-copy .ui-copy-ar,
+.chapter-copy .ui-copy-en {
+  text-align: center;
+  line-height: 1.35;
+}
+.chapter-copy .ui-copy-ar + .ui-copy-en {
+  margin-top: 1px;
+}
+.chapter-tick svg {
+  width: 70%;
+  height: 70%;
+}
+.keepsake .ui-copy-ar,
+.keepsake .ui-copy-en {
+  line-height: 1.35;
+}
+#tutorial small .ui-copy-ar,
+#tutorial small .ui-copy-en {
+  line-height: 1.4;
+}
+#tutorial small .ui-copy-ar + .ui-copy-en {
+  margin-top: 2px;
+}
+#rotate-notice h2 {
+  font-family: var(--ui-font);
+  font-weight: 950;
+}
+.compact #modal-actions {
+  padding-top: calc(8px / var(--game-scale));
+}
+
+/* Reusable pill for any future scripture, status or chapter tag. */
+.ui-chip {
+  border: 2px solid #82b6b3;
+  border-radius: 999px;
+  background: linear-gradient(#f6fffb, #daf0e7);
+  padding: 6px 12px;
+  box-shadow:
+    0 3px 0 #61928d,
+    inset 0 2px 0 #fff;
+}

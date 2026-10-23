@@ -15,17 +15,18 @@ with ZipFile(root / 'Davids_Big_Adventure_Web.zip', 'w', ZIP_DEFLATED) as archiv
     for file in web_files:
         archive.write(file, str(file.relative_to(root / 'dist')))
     archive.write(root / 'docs/MOBILE_PWA.md', 'MOBILE_PWA.md')
-    for name in ['TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/AUDIO_AND_ENCOUNTER.md']:
+    for name in ['TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
         archive.write(root / name, name)
 with ZipFile(root / 'Davids_Big_Adventure_Offline.zip', 'w', ZIP_DEFLATED) as archive:
     for file in web_files:
         archive.write(file, str(file.relative_to(root / 'dist')))
-    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/CHILD_PLAYTEST.md', 'docs/MOBILE_PWA.md', 'docs/AUDIO_AND_ENCOUNTER.md']:
+    for name in ['README_FOR_TEACHER.md', 'TEST_REPORT.md', 'docs/PHASER_LICENSE.md', 'docs/EVENTEMITTER3_LICENSE.txt', 'docs/CHILD_PLAYTEST.md', 'docs/MOBILE_PWA.md', 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/UI_DESIGN_SYSTEM.md', 'docs/NUNITO_OFL.txt', 'docs/NOTO_ARABIC_OFL.txt']:
         archive.write(root / name, name)
 # Keep the playable download small; detailed QA evidence is a separate archive.
 with ZipFile(root / 'Davids_Big_Adventure_QA.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(root / 'TEST_REPORT.md', 'TEST_REPORT.md')
     archive.write(root / 'docs/AUDIO_AND_ENCOUNTER.md', 'docs/AUDIO_AND_ENCOUNTER.md')
+    archive.write(root / 'docs/UI_DESIGN_SYSTEM.md', 'docs/UI_DESIGN_SYSTEM.md')
     # Focused integrated-game evidence keeps this download below large-file limits.
     evidence_prefixes = ('10-', '11-', '12-', '13-', '26b-', '33-', '34-', '48-',
                          '49-', '51-', '55-', '56-', '57-', '58-', '59-', '61-',
@@ -46,7 +47,13 @@ with ZipFile(root / 'Davids_Big_Adventure_Source.zip', 'w', ZIP_DEFLATED) as arc
     for name in ['index.html', 'package.json', 'package-lock.json', 'tsconfig.json',
                  'vite.config.ts', '.gitignore', 'README.md', 'README_FOR_TEACHER.md', 'TEST_REPORT.md']:
         archive.write(root / name, name)
-for name in ['Davids_Big_Adventure_Web.zip', 'Davids_Big_Adventure_Offline.zip', 'Davids_Big_Adventure_Source.zip', 'Davids_Big_Adventure_QA.zip']:
+with ZipFile(root / 'Davids_Big_Adventure_UI_Before_After.zip', 'w', ZIP_DEFLATED) as archive:
+    for file in sorted((root / 'qa/ui-redesign').rglob('*')):
+        if file.is_file():
+            archive.write(file, str(file.relative_to(root / 'qa/ui-redesign')))
+    for name in ['TEST_REPORT.md', 'docs/UI_DESIGN_SYSTEM.md']:
+        archive.write(root / name, name)
+for name in ['Davids_Big_Adventure_Web.zip', 'Davids_Big_Adventure_Offline.zip', 'Davids_Big_Adventure_Source.zip', 'Davids_Big_Adventure_QA.zip', 'Davids_Big_Adventure_UI_Before_After.zip']:
     with ZipFile(root / name) as archive:
         assert archive.testzip() is None
     print(f'{name}: {(root / name).stat().st_size:,} bytes, ZIP integrity verified')

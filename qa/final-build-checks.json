@@ -1,31 +1,15 @@
 {
-  "version": "1.8.0",
-  "htmlSha256": "f4100766282e085d3b4a18e0ed6786e049a55437a3e42cf19c9113093e2ed093",
+  "version": "1.9.0",
+  "htmlSha256": "c9d9c5321672b25c34668299d505d57989479a12e2300aea7ba9e13e455c01f0",
+  "gameJsMatchesFullRegression": true,
   "results": [
     {
-      "script": "premium-check",
-      "code": 0,
-      "seconds": 42.068
-    },
-    {
-      "script": "audio-brook-check",
-      "code": 0,
-      "seconds": 17.25
-    },
-    {
-      "script": "story-check",
-      "code": 0,
-      "seconds": 95.62
+      "script": "ui-redesign-check",
+      "code": 0
     },
     {
       "script": "ui-offline-check",
-      "code": 0,
-      "seconds": 20.635
-    },
-    {
-      "script": "mobile-check",
-      "code": 0,
-      "seconds": 101.142
+      "code": 0
     }
   ]
 }

@@ -45,12 +45,12 @@
           </nav>
         </header>
         <div id="mission" hidden>
-          <span id="mission-badge"></span>
+          <span id="mission-badge" class="ui-chip"></span>
           <div>
             <div id="objective-ar" dir="rtl"></div>
             <div id="objective-en"></div>
           </div>
-          <span id="progress"></span>
+          <span id="progress" class="ui-chip"></span>
           <div
             id="sheep-clock"
             hidden
@@ -88,8 +88,12 @@
               </select></label
             >
           </div>
-          <button id="start" class="primary">Let’s begin <span>→</span></button
-          ><button id="practice-toggle" class="text-button">
+          <button id="start" class="primary ui-button ui-button--primary">
+            Let’s begin <span>→</span></button
+          ><button
+            id="practice-toggle"
+            class="text-button ui-button ui-button--secondary"
+          >
             Choose a mission <span>↗</span>
           </button>
           <small>1 SAMUEL 17 <b>•</b> AGES 5–8 <b>•</b> OFFLINE PLAY</small>
@@ -97,6 +101,7 @@
         <div id="title-note">✦ &nbsp; Small steps. Big faith.</div>
         <section
           id="practice"
+          class="ui-panel"
           hidden
           role="dialog"
           aria-modal="true"
@@ -129,7 +134,8 @@
             Complete a chapter to add a keepsake to your adventure book.
           </p>
           <div id="pwa-settings" hidden>
-            <span id="pwa-status" role="status">Saving adventure…</span
+            <span id="pwa-status" class="ui-chip" role="status"
+              >Saving adventure…</span
             ><button id="offline-retry" hidden>Try saving again</button
             ><button id="pwa-update" hidden>Update adventure</button>
           </div>
@@ -142,21 +148,27 @@
               ><button data-dir="0,1" aria-label="Move down">↓</button
               ><button data-dir="1,0" aria-label="Move right">→</button>
             </div>
-            <button id="action" class="primary"></button>
+            <button
+              id="action"
+              class="primary ui-button ui-button--primary"
+            ></button>
           </div>
           <div id="instruction"></div>
           <button id="hint">✧ Hint</button>
         </div>
-        <div id="message" hidden>
+        <div id="message" class="ui-panel" hidden>
           <div id="message-emblem" aria-hidden="true"></div>
           <div class="eyebrow" id="message-tag">A LITTLE MOMENT OF COURAGE</div>
           <h2 id="message-ar" dir="rtl"></h2>
           <p id="message-en"></p>
-          <button id="continue" class="primary">Continue adventure →</button>
+          <button id="continue" class="primary ui-button ui-button--primary">
+            Continue adventure →
+          </button>
         </div>
         <div id="modal-backdrop" hidden>
           <section
             id="modal"
+            class="ui-panel"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -167,7 +179,7 @@
             <div id="modal-actions"></div>
           </section>
         </div>
-        <div id="tutorial" hidden></div>
+        <div id="tutorial" class="ui-panel" hidden></div>
         <div id="toast" role="status" hidden></div>
       </main>
     </div>

@@ -1,0 +1,92 @@
+{
+  "version": "1.9.0",
+  "gameJsSha256": "a327d0891faf7d69968ff96f09f8bf094aa7fe9f5fc01f2ddfc3563731536641",
+  "htmlSha256": "3eb29f3956a338b0a7e3d62f75fffeba2866e6d93be4a9db82e8cdaae1431bae",
+  "browserResults": [
+    {
+      "script": "maze-check",
+      "code": 0,
+      "seconds": 19.782
+    },
+    {
+      "script": "armor-check",
+      "code": 0,
+      "seconds": 24.788
+    },
+    {
+      "script": "sling-check",
+      "code": 0,
+      "seconds": 23.726
+    },
+    {
+      "script": "remaining-check",
+      "code": 0,
+      "seconds": 51.522
+    },
+    {
+      "script": "story-check",
+      "code": 0,
+      "seconds": 89.788
+    },
+    {
+      "script": "ui-offline-check",
+      "code": 0,
+      "seconds": 21.052
+    },
+    {
+      "script": "visual-check",
+      "code": 0,
+      "seconds": 59.806
+    },
+    {
+      "script": "timeout-check",
+      "code": 0,
+      "seconds": 56.06
+    },
+    {
+      "script": "premium-check",
+      "code": 0,
+      "seconds": 33.274
+    },
+    {
+      "script": "mobile-check",
+      "code": 0,
+      "seconds": 96.744
+    },
+    {
+      "script": "pwa-check",
+      "code": 0,
+      "seconds": 86.865
+    },
+    {
+      "script": "food-check",
+      "code": 0,
+      "seconds": 16.93
+    },
+    {
+      "script": "v1-integration-check",
+      "code": 0,
+      "seconds": 42.649
+    },
+    {
+      "script": "character-check",
+      "code": 0,
+      "seconds": 29.131
+    },
+    {
+      "script": "direction-maze-timer-check",
+      "code": 0,
+      "seconds": 231.974
+    },
+    {
+      "script": "audio-brook-check",
+      "code": 0,
+      "seconds": 15.296
+    },
+    {
+      "script": "ui-redesign-check",
+      "code": 0,
+      "seconds": 17.001
+    }
+  ]
+}

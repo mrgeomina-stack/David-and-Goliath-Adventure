@@ -42,6 +42,29 @@ page.on("request", (r) => {
 await page.goto("http://offline-game.test/?qa");
 await page.waitForSelector('#stage[data-ready="true"]');
 await page.waitForSelector("canvas");
+await page.evaluate(() => document.fonts.ready);
+if (
+  !(await page.evaluate(
+    () =>
+      document.fonts.check('850 18px "Adventure Nunito"') &&
+      document.fonts.check('750 18px "Adventure Arabic"', "مغامرة"),
+  ))
+)
+  throw Error("Bilingual UI fonts unavailable offline");
+const loadedFaces = await page.evaluate(() =>
+  Array.from(document.fonts)
+    .filter(
+      (face) =>
+        face.family.includes("Adventure Nunito") ||
+        face.family.includes("Adventure Arabic"),
+    )
+    .map((face) => ({ family: face.family, status: face.status })),
+);
+if (
+  loadedFaces.length !== 2 ||
+  loadedFaces.some((face) => face.status !== "loaded")
+)
+  throw Error("Bundled font faces did not load offline");
 const state = () => page.evaluate(() => window.adventureQA.snapshot());
 await page.click("#start");
 await page.waitForTimeout(100);

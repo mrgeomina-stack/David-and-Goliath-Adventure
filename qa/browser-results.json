@@ -2,76 +2,86 @@
   {
     "script": "maze-check",
     "code": 0,
-    "seconds": 20.174
+    "seconds": 19.782
   },
   {
     "script": "armor-check",
     "code": 0,
-    "seconds": 24.771
+    "seconds": 24.788
   },
   {
     "script": "sling-check",
     "code": 0,
-    "seconds": 24.033
+    "seconds": 23.726
   },
   {
     "script": "remaining-check",
     "code": 0,
-    "seconds": 52.336
+    "seconds": 51.522
   },
   {
     "script": "story-check",
     "code": 0,
-    "seconds": 90.908
+    "seconds": 89.788
   },
   {
     "script": "ui-offline-check",
     "code": 0,
-    "seconds": 19.7
+    "seconds": 21.052
   },
   {
     "script": "visual-check",
     "code": 0,
-    "seconds": 60.603
+    "seconds": 59.806
   },
   {
     "script": "timeout-check",
     "code": 0,
-    "seconds": 55.843
+    "seconds": 56.06
   },
   {
     "script": "premium-check",
-    "code": 1,
-    "seconds": 11.854
+    "code": 0,
+    "seconds": 33.274
   },
   {
     "script": "mobile-check",
     "code": 0,
-    "seconds": 106.656
+    "seconds": 96.744
   },
   {
     "script": "pwa-check",
     "code": 0,
-    "seconds": 87.453
+    "seconds": 86.865
   },
   {
     "script": "food-check",
     "code": 0,
-    "seconds": 17.549
+    "seconds": 16.93
   },
   {
     "script": "v1-integration-check",
     "code": 0,
-    "seconds": 42.914
+    "seconds": 42.649
   },
   {
     "script": "character-check",
     "code": 0,
-    "seconds": 29.022
+    "seconds": 29.131
   },
   {
     "script": "direction-maze-timer-check",
     "code": 0,
-    "seconds": 225.814
+    "seconds": 231.974
+  },
+  {
+    "script": "audio-brook-check",
+    "code": 0,
+    "seconds": 15.296
+  },
+  {
+    "script": "ui-redesign-check",
+    "code": 0,
+    "seconds": 17.001
   }
 ]

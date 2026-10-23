@@ -1,0 +1,114 @@
+{
+  "version": "1.9.0",
+  "baseline": "aa4993cd4aef88479d5555fb77e4d9a5812b91c4",
+  "htmlSha256": "c9d9c5321672b25c34668299d505d57989479a12e2300aea7ba9e13e455c01f0",
+  "gameJsSha256": "a327d0891faf7d69968ff96f09f8bf094aa7fe9f5fc01f2ddfc3563731536641",
+  "gameJsMatchesFullRegression": true,
+  "unitTests": 43,
+  "browserChecks": [
+    {
+      "script": "maze-check",
+      "code": 0,
+      "seconds": 19.782
+    },
+    {
+      "script": "armor-check",
+      "code": 0,
+      "seconds": 24.788
+    },
+    {
+      "script": "sling-check",
+      "code": 0,
+      "seconds": 23.726
+    },
+    {
+      "script": "remaining-check",
+      "code": 0,
+      "seconds": 51.522
+    },
+    {
+      "script": "story-check",
+      "code": 0,
+      "seconds": 89.788
+    },
+    {
+      "script": "ui-offline-check",
+      "code": 0,
+      "seconds": 21.052
+    },
+    {
+      "script": "visual-check",
+      "code": 0,
+      "seconds": 59.806
+    },
+    {
+      "script": "timeout-check",
+      "code": 0,
+      "seconds": 56.06
+    },
+    {
+      "script": "premium-check",
+      "code": 0,
+      "seconds": 33.274
+    },
+    {
+      "script": "mobile-check",
+      "code": 0,
+      "seconds": 96.744
+    },
+    {
+      "script": "pwa-check",
+      "code": 0,
+      "seconds": 86.865
+    },
+    {
+      "script": "food-check",
+      "code": 0,
+      "seconds": 16.93
+    },
+    {
+      "script": "v1-integration-check",
+      "code": 0,
+      "seconds": 42.649
+    },
+    {
+      "script": "character-check",
+      "code": 0,
+      "seconds": 29.131
+    },
+    {
+      "script": "direction-maze-timer-check",
+      "code": 0,
+      "seconds": 231.974
+    },
+    {
+      "script": "audio-brook-check",
+      "code": 0,
+      "seconds": 15.296
+    },
+    {
+      "script": "ui-redesign-check",
+      "code": 0,
+      "seconds": 17.001
+    }
+  ],
+  "finalVisualAndOfflineFontChecks": "passed",
+  "gameplayModelsUnchanged": true,
+  "screenshotSha256": {
+    "before": {
+      "home": "2b4a6fbd28649b1600a58aaf9f61ba4ecd221de40cbc56870ff7e5f6ad7172ae",
+      "missions": "5cead3620d731dd34318e72a6f1a99e42e3ca42c151a27b15693ee8b10c92265",
+      "pause": "8f0cbd7ab5a9009fa5e643c2054c4e60b3015eacf4d44af6544f4b232de697b5",
+      "teacher": "ef8f4aaf4f2652dbd68df0b014aedd7e77cd3af81f2050b6f5a0018cf7044869",
+      "instruction": "f5ac4ece9093d3a7ca953c411cabaf13b9955500762ae2905623d34af5fd48ac"
+    },
+    "after": {
+      "home": "f82b8e3480a67a87f55b18c881bd37b63542576bbd6e9fb652be8bf8b18f18f7",
+      "missions": "1b1816c748d5b8e1f5638daef5f97504e7a563842d820cbd14a80492936c00a5",
+      "pause": "ceed495118c27ac0eabf66fc865bbc2be084f9d1d8232ee37576fbffc0812507",
+      "teacher": "58c8e2387e6575e50bbf0add6ca79f5187b667688572fbb64df2cb3e97e9d5a4",
+      "instruction": "94ae73fd4785dafb2257262079513bc4b62e5f63d7db2bd7a83426c082734faf"
+    }
+  },
+  "physicalDevicesTested": false
+}

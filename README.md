@@ -4,6 +4,16 @@ An original illustrated five-mission Bible adventure for ages 5–8, built with
 TypeScript, Phaser 3 and Vite. Arabic + English captions, mouse/keyboard/touch,
 teacher controls, fully bundled illustrated artwork, supplied recordings and procedural audio.
 
+## Playful game UI · 1.9.0
+
+A reusable vector/CSS design system brings raised coral action buttons, teal
+control chips, gold medallions, sky instruction cards and layered popup frames.
+Nunito and Noto Sans Arabic variable fonts are bundled for offline play. Longer
+bilingual text is independently shaped in RTL/LTR blocks; teacher help scrolls
+without losing its action buttons. Gameplay, hit geometry, timers and story order
+remain unchanged. See [design system and changed components](docs/UI_DESIGN_SYSTEM.md).
+The separate UI Before/After ZIP contains five actual-game comparison pairs.
+
 ## Audio, scattered stones and spoken story · 1.8.0
 
 Your sheep recording plays on successful lifts; occasional gentle synthesized lion

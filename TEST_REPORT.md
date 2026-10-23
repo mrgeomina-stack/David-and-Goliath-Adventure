@@ -1,66 +1,68 @@
-# David’s Big Adventure — validation report · 1.8.0
+# David’s Big Adventure — UI redesign validation · 1.9.0
 
-22 October 2026. This release adds the uploaded sheep/victory recordings,
-periodic synthesized lion growls, faster two-dimensional brook-circle movement,
-seeded scattered stones, and an explicit spoken Goliath → volunteer to Saul →
-armour story bridge. Narration starts enabled. The interlude has bundled synthetic
-English/Arabic fallback speech, so it does not depend on installed system voices.
-The 30-second Easy/Normal activity bars and untimed Free Play remain.
+23 October 2026. Presentation-only update from baseline
+`aa4993cd4aef88479d5555fb77e4d9a5812b91c4` (1.8.0): rounded bilingual typography,
+raised coral buttons, teal control chips, framed game cards, gold badges and clearer
+Arabic/English reading blocks. All five levels, controls, scoring, difficulty,
+collisions, animations, audio, progression and educational text remain.
 
-## Validation
+## Results
 
-Node 24.19.0, TypeScript 5.9.3, Phaser 3.90.0 Canvas, Vite 7.3.1,
-Vitest 4.0.18, Playwright 1.58.2 and system Chromium. Logical scene 1280×720.
+| Check | Outcome |
+| --- | --- |
+| TypeScript + production offline build | Passed. Compiled CSS includes both data-URL WOFF2 fonts and the full theme. |
+| Unit tests | **43 passed**, eight files, no failures or skips. |
+| Browser suite | **17/17 scripts passed in one batch**. See `qa/browser-results.json` and `qa/ui-browser-1.9.log`. |
+| Final visual polish | UI screenshot/bounds and disconnected-font checks rerun after replacing the decorative pause glyph with CSS bars. The JavaScript bundle hash is identical to the full regression run. |
+| Before/after evidence | Five requested actual-game pairs, plus hover/focus, scrolled teacher help and English/Arabic phone/tablet popup captures. |
+| Offline fonts | Both Nunito and Noto Sans Arabic verified with networking disabled; no external font host or runtime text-image assets. |
 
-- Typecheck and production build: passed.
-- Unit tests: **43 passed**. New checks cover offline speech selection/cancellation,
-  immediate pause/mute audio behavior, and 100 seeded scattered-stone layouts with
-  five genuine ring pickups inside 27 simulated seconds. The seeds also verify separated finger targets.
-- Browser regression checks: **16 final outcomes passed**, including five clean
-  final-build checks (story/audio counts, Voice controls, offline Arabic audio/touch,
-  mobile regression and disconnected HTML). See `qa/browser-results.json` and the release result
-  index for original outcomes and final reruns. The initial run exposed an old
-  test assuming Voice started disabled; the test now verifies both toggle states.
-  A pre-final harness metadata read overlapped a rebuild; a clean final-build rerun
-  is indexed separately. Neither issue was a failed gameplay interaction.
-- Full-story input test: real sheep carries, maze walls/route, explicit approach/
-  return/Speak interaction, all four armour drops and recovery, five keyboard ring
-  pickups, and a genuine ballistic hit. Completion-audio counts are checked after
-  all five missions; the maze cue follows actual food transfer. Read-only QA
-  feedback guides automation; it cannot change game state or force outcomes.
-- Offline phone audio/touch test: no installed speech voices, Arabic fallback,
-  audio pause/mute, both supplied recordings decoded, faster 2D ring movement,
-  jagged rejection, five unique touch pickups and exactly one completion track.
-- Existing regression coverage includes low/high sling misses, failure/retry,
-  restarts, timed/untimed activities, touch armour, rotation, responsive bounds,
-  service-worker cache failure/retry, offline play and offline relaunch.
+The browser suite covers: real maze collision and delivery; all four armour drags,
+wrong drops and complete tumble/recovery; four physical sheep carries and pen
+entry; five unique stones and jagged rejection; underpowered/overpowered sling
+misses and genuine forehead collision; full-story transitions; restart and retry;
+pause; 30-second bar warnings and expiry; untimed Free Play; source-art alignment;
+mobile touch/swipes/multitouch and rotation; audio; PWA cache failure/retry, offline
+play and offline relaunch. The story audio check still records four sheep calls,
+periodic lion calls and exactly five completion tracks.
 
-Actual integrated-game screenshots 90–95 show the story instructions, Saul armour
-transition, moving-circle pickups, Arabic phone guidance and scattered phone brook.
-The screenshots and machine-readable logs are included in the separate QA archive.
-See `docs/AUDIO_AND_ENCOUNTER.md` for audio provenance, generation and editable
-scripts. The original uploaded sheep file is retained; the victory MP3 is unchanged.
+The dedicated UI check captures home, mission selection, pause, teacher corner and
+instruction cards. It checks bundled font readiness, actual keyboard focus/hover,
+teacher-body scrolling, visible footer actions and popup bounds at 568×320,
+844×390, 1024×768 and 1180×820 in English and Arabic. The existing mobile suite
+also exercises 667×375, 915×412 and 1366×1024, plus portrait rotation protection.
 
-## Practical limits and unchanged asset gaps
+`src/model.ts`, `src/touch.ts`, `src/activity-timer.ts`, `src/audio.ts`,
+`src/narration.ts` and the hero rig are unchanged. Changes in `src/world.ts` only
+replace drawing calls for existing card surfaces. `src/main.ts` changes UI classes,
+decorative icons, language presentation and popup visual metadata.
 
-These are headless Chromium tests with emulated phone/tablet touch, not physical
-iPhone/iPad/Android or Safari certification. No human listening or child classroom
-playtest is claimed. The fallback speech is synthetic rather than an actor recording;
-a professional recording remains an optional production improvement. Other chapters
-still need an installed local voice for speech, with bilingual captions always present.
+## Deliverables and review
 
-Managed Chromium blocks direct `file://` navigation in this environment. Offline
-checks therefore load the self-contained production HTML with networking disabled;
-this does not certify every desktop file-opening policy. The ZIP contains a classic
-inline script and inline artwork/audio, without module/CDN/runtime internet imports.
-Phones/tablets should use the HTTPS/PWA setup in `docs/MOBILE_PWA.md`.
+Extract `Davids_Big_Adventure_UI_Before_After.zip`, then open its `index.html`.
+It contains five paired comparisons, original full-size screenshots, an overview,
+and extra phone/tablet captures. Game screenshots are from the integrated build;
+the comparison page is a review gallery, not a replacement game.
 
-The supplied art pack still has one damaged meadow background, 24 absent optional
-effect frames and provisional character frames. Those remain quarantined or replaced
-by the better existing painting/procedural animation. No asset inspector replaces the
-game. David’s coherent painted rig, lateral facing, food handover, sheep pen physics,
-armour drop geometry, exactly five stones, sling ballistics and real Goliath forehead
-collision remain. Earlier validation detail is retained in docs/VALIDATION_1_7_0.md.
+The editable design system and file/component map are in
+`docs/UI_DESIGN_SYSTEM.md`. Font notices are in `docs/NUNITO_OFL.txt` and
+`docs/NOTO_ARABIC_OFL.txt`; they ship in the playable/Web/source archives.
+The offline ZIP includes the self-contained game, fonts, artwork and recordings.
+The source and QA ZIPs are supplied separately.
+
+## Limits
+
+Validation used Node 24, Phaser 3.90 Canvas, TypeScript 5.9, Vite 7.3, Vitest 4
+and Playwright 1.58 with headless Chromium and emulated native touch. Physical
+Safari/iPad/iPhone/Android and classroom child playtesting were not performed.
+Managed Chromium blocks direct `file://` navigation; the actual self-contained
+HTML was tested with networking disabled instead. No claim of physical-device
+certification or human audio listening is made.
+
+The original asset-pack gaps remain handled by existing fallbacks: one damaged
+meadow background, absent optional effects and provisional character frames.
+No art pack or gameplay rebuild was introduced. Earlier release validation is
+retained in `docs/VALIDATION_1_8_0.md` and `docs/VALIDATION_1_7_0.md`.
 
 ## Reproduce
 
@@ -68,12 +70,10 @@ collision remain. Earlier validation detail is retained in docs/VALIDATION_1_7_0
 npm ci
 npm test
 npm run build
-BROWSER_PORT=4175 npm run test:browser
+BROWSER_PORT=4215 npm run test:browser
+node scripts/ui-comparison.mjs
 npm run package
 ```
 
-The browser runner defaults to port 4174; override BROWSER_PORT if occupied.
-It uses two workers (BROWSER_WORKERS=1 for sequential runs). Do not run duplicate
-suites concurrently. npm run preview -- --port 4173 previews the production game;
-GAME_URL=http://localhost:4173/ node scripts/audio-brook-check.mjs runs the focused
-sound/touch check. Extract the complete offline ZIP before opening index.html.
+The browser runner defaults to port 4174; the UI capture script uses 4211.
+Run one suite at a time. The read-only QA inspector cannot move actors or force wins.

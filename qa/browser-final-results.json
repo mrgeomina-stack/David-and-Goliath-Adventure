@@ -2,112 +2,86 @@
   {
     "script": "maze-check",
     "code": 0,
-    "seconds": 20.174,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 19.782
   },
   {
     "script": "armor-check",
     "code": 0,
-    "seconds": 24.771,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 24.788
   },
   {
     "script": "sling-check",
     "code": 0,
-    "seconds": 24.033,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 23.726
   },
   {
     "script": "remaining-check",
     "code": 0,
-    "seconds": 52.336,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 51.522
   },
   {
     "script": "story-check",
     "code": 0,
-    "seconds": 95.62,
-    "initialCode": 0,
-    "finalBuildTested": true
+    "seconds": 89.788
   },
   {
     "script": "ui-offline-check",
     "code": 0,
-    "seconds": 20.635,
-    "initialCode": 0,
-    "finalBuildTested": true
+    "seconds": 21.052
   },
   {
     "script": "visual-check",
     "code": 0,
-    "seconds": 60.603,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 59.806
   },
   {
     "script": "timeout-check",
     "code": 0,
-    "seconds": 55.843,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 56.06
   },
   {
     "script": "premium-check",
     "code": 0,
-    "seconds": 42.068,
-    "initialCode": 1,
-    "finalBuildTested": true
+    "seconds": 33.274
   },
   {
     "script": "mobile-check",
     "code": 0,
-    "seconds": 101.142,
-    "initialCode": 0,
-    "finalBuildTested": true
+    "seconds": 96.744
   },
   {
     "script": "pwa-check",
     "code": 0,
-    "seconds": 87.453,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 86.865
   },
   {
     "script": "food-check",
     "code": 0,
-    "seconds": 17.549,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 16.93
   },
   {
     "script": "v1-integration-check",
     "code": 0,
-    "seconds": 42.914,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 42.649
   },
   {
     "script": "character-check",
     "code": 0,
-    "seconds": 29.022,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 29.131
   },
   {
     "script": "direction-maze-timer-check",
     "code": 0,
-    "seconds": 225.814,
-    "initialCode": 0,
-    "finalBuildTested": false
+    "seconds": 231.974
   },
   {
     "script": "audio-brook-check",
     "code": 0,
-    "seconds": 17.25,
-    "finalBuildTested": true
+    "seconds": 15.296
+  },
+  {
+    "script": "ui-redesign-check",
+    "code": 0,
+    "seconds": 17.001
   }
 ]

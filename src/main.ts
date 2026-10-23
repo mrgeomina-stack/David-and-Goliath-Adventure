@@ -9,6 +9,7 @@ import { bindPress } from "./touch";
 import { fittedScale, compactLayout, ensureCanvasSupport } from "./mobile";
 ensureCanvasSupport();
 import "./style.css";
+import "./ui-theme.css";
 import { World } from "./world";
 import { ORDER, path, GEAR, type Mission, type Point } from "./model";
 import {
@@ -176,6 +177,12 @@ const instructions: Record<Mission, [string, string, string]> = {
 function bilingual(en: string, ar: string) {
   return lang === "ar" ? ar : lang === "en" ? en : `${ar} · ${en}`;
 }
+/** Presentational bilingual text with independent shaping and reading direction. */
+function readingPair(en: string, ar: string) {
+  const arabic = `<span class="ui-copy-ar" lang="ar" dir="rtl">${ar}</span>`;
+  const english = `<span class="ui-copy-en" lang="en" dir="ltr">${en}</span>`;
+  return lang === "ar" ? arabic : lang === "en" ? english : arabic + english;
+}
 function textPair(arId: string, enId: string, key: CopyKey) {
   $(arId).textContent = copy[key][0];
   $(enId).textContent = copy[key][1];
@@ -275,13 +282,13 @@ function sync() {
         ["Goliath", "جليات"],
       ];
       const chapterName = mobile
-        ? bilingual(shortNames[i][0], shortNames[i][1])
-        : bilingual(ch.name[0], ch.name[1]);
-      button.innerHTML = `<span class="chapter-art">${emblem(ch.icon)}</span><span class="chapter-label"><b>${i + 1}</b> ${chapterName}</span><span class="chapter-tick">${journal.completed.has(ch.mission) ? "✓" : "↗"}</span>`;
+        ? readingPair(shortNames[i][0], shortNames[i][1])
+        : readingPair(ch.name[0], ch.name[1]);
+      button.innerHTML = `<span class="chapter-art">${emblem(ch.icon)}</span><span class="chapter-label"><b>${i + 1}</b><span class="chapter-copy">${chapterName}</span></span><span class="chapter-tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="${journal.completed.has(ch.mission) ? "m5 12 4 4 10-10" : "m7 17 10-10M7 7h10v10"}"/></svg></span>`;
     }
     $("keepsakes").innerHTML = CHAPTERS.map(
       (ch) =>
-        `<div class="keepsake ${journal.completed.has(ch.mission) ? "collected" : ""}" aria-label="${bilingual(ch.gift[0], ch.gift[1])}: ${journal.completed.has(ch.mission) ? "earned" : "not yet earned"}">${emblem(ch.giftIcon)}<span>${bilingual(ch.gift[0], ch.gift[1])}</span>${journal.completed.has(ch.mission) ? "<b>✓</b>" : "<b>·</b>"}</div>`,
+        `<div class="keepsake ${journal.completed.has(ch.mission) ? "collected" : ""}" aria-label="${bilingual(ch.gift[0], ch.gift[1])}: ${journal.completed.has(ch.mission) ? "earned" : "not yet earned"}">${emblem(ch.giftIcon)}<span>${readingPair(ch.gift[0], ch.gift[1])}</span>${journal.completed.has(ch.mission) ? "<b>✓</b>" : "<b>·</b>"}</div>`,
     ).join("");
   }
   if (world.paused || title) heldDirections.clear();
@@ -491,7 +498,7 @@ function sync() {
       label(miss ? "retry" : victory ? "restart" : "next", lang) + " →";
   }
   $("pause").textContent = world.paused
-    ? "▶ " + label("resume", lang)
+    ? "▷ " + label("resume", lang)
     : "II " + label("pause", lang);
   $("sound").textContent =
     (sound.muted ? "♬ " : "♫ ") +
@@ -512,7 +519,7 @@ function sync() {
     world.phase !== "play" || world.tutorialTime <= 0 || world.paused;
   if (!$("tutorial").hidden)
     $("tutorial").innerHTML =
-      `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "ar" ? "rtl" : "ltr"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${bilingual("Move or press an arrow to begin", "حرّك داود أو اضغط سهم عشان تبدأ")}</small></div>`;
+      `<span class="tutorial-art">${emblem(chapter.icon)}</span><div class="tutorial-copy"><span class="eyebrow">${bilingual("YOUR NEXT BRAVE STEP", "خطوتك الشجاعة الجاية")}</span><b>${legend}</b><p dir="${lang === "en" ? "ltr" : "rtl"}">${lang === "en" ? instruction[2] : instruction[1]}</p><small>${readingPair("Move or press an arrow to begin", "حرّك داود أو اضغط سهم عشان تبدأ")}</small></div>`;
   if (!$("message").hidden) {
     const icon = world.failed && !world.timedOut ? "sheep" : chapter.icon;
     if ($("message-emblem").dataset.icon !== icon) {
@@ -525,19 +532,22 @@ function modal(
   title: string,
   content: string,
   actions: { label: string; run: () => void }[],
+  kind: "teacher" | "pause" = "teacher",
 ) {
   modalOpen = true;
+  $("modal").dataset.kind = kind;
   world.setPaused(true);
-  document.querySelector("#modal .eyebrow")!.textContent = bilingual(
-    "TEACHER’S CORNER",
-    "ركن المعلم",
-  );
+  document.querySelector("#modal .eyebrow")!.textContent =
+    kind === "pause"
+      ? bilingual("A LITTLE BREATHER", "استراحة صغيرة")
+      : bilingual("TEACHER’S CORNER", "ركن المعلم");
   $("modal-content").dir = lang === "ar" ? "rtl" : "ltr";
   $("modal-title").textContent = title;
   $("modal-content").innerHTML = content;
   $("modal-actions").replaceChildren();
   for (const action of actions) {
     const b = document.createElement("button");
+    b.className = "ui-button";
     b.textContent = action.label;
     b.onclick = action.run;
     $("modal-actions").append(b);
@@ -558,9 +568,9 @@ function pause() {
   }
   modal(
     bilingual("A moment to pause", "وقفة صغيرة"),
-    `<p>${bilingual("Take your time. Your adventure will be right here.", "خد وقتك. المغامرة مستنّياك.")}</p>`,
+    `<p>${readingPair("Take your time. Your adventure will be right here.", "خد وقتك. المغامرة مستنّياك.")}</p>`,
     [
-      { label: "▶ " + label("resume", lang), run: close },
+      { label: "▷ " + label("resume", lang), run: close },
       {
         label: bilingual("Replay mission", "إعادة المهمة"),
         run: () => {
@@ -569,6 +579,7 @@ function pause() {
         },
       },
     ],
+    "pause",
   );
 }
 $("start").onclick = () => {
@@ -656,7 +667,7 @@ $("fullscreen").onclick = async () => {
 $("restart").onclick = () =>
   modal(
     bilingual("Begin a new adventure?", "نبدأ من الأول؟"),
-    `<p>${bilingual("This will return to the beginning.", "هنرجع للبداية.")}</p>`,
+    `<p>${readingPair("This will return to the beginning.", "هنرجع للبداية.")}</p>`,
     [
       { label: label("resume", lang), run: close },
       {
@@ -675,7 +686,7 @@ $("offline-retry").onclick = () => void pwa.start();
 $("pwa-update").onclick = () =>
   modal(
     bilingual("A fresh adventure is ready", "تحديث المغامرة جاهز"),
-    `<p>${bilingual("Reload to use the saved update. Keepsakes stay in your book; the current mission will restart.", "حدّث اللعبة. التذكارات هتفضل محفوظة والمهمة الحالية هتبدأ تاني.")}</p>`,
+    `<p>${readingPair("Reload to use the saved update. Keepsakes stay in your book; the current mission will restart.", "حدّث اللعبة. التذكارات هتفضل محفوظة والمهمة الحالية هتبدأ تاني.")}</p>`,
     [
       { label: label("resume", lang), run: close },
       {
@@ -692,14 +703,14 @@ $("install").onclick = async () => {
       "Keep the adventure on your Home Screen",
       "ضيف المغامرة للشاشة الرئيسية",
     ),
-    `<p>${bilingual("On iPhone or iPad: open this hosted game in Safari, tap Share, then Add to Home Screen. On Android: open it in Chrome and choose Install app or Add to Home screen.", "على آيفون أو آيباد: افتح اللعبة في سفاري واختار مشاركة ثم إضافة للشاشة الرئيسية. على أندرويد: افتحها في كروم واختار تثبيت التطبيق أو إضافة للشاشة الرئيسية.")}</p><p>${bilingual("For offline play, keep the game open online until the adventure book says Offline ready. Installation needs an HTTPS game link; a downloaded HTML file cannot install as an app.", "للعب بدون إنترنت، استنى لحد ما كتاب المغامرة يقول إنها جاهزة بدون إنترنت. التثبيت محتاج رابط HTTPS للعبة.")}</p>`,
+    `<p>${readingPair("On iPhone or iPad: open this hosted game in Safari, tap Share, then Add to Home Screen. On Android: open it in Chrome and choose Install app or Add to Home screen.", "على آيفون أو آيباد: افتح اللعبة في سفاري واختار مشاركة ثم إضافة للشاشة الرئيسية. على أندرويد: افتحها في كروم واختار تثبيت التطبيق أو إضافة للشاشة الرئيسية.")}</p><p>${readingPair("For offline play, keep the game open online until the adventure book says Offline ready. Installation needs an HTTPS game link; a downloaded HTML file cannot install as an app.", "للعب بدون إنترنت، استنى لحد ما كتاب المغامرة يقول إنها جاهزة بدون إنترنت. التثبيت محتاج رابط HTTPS للعبة.")}</p>`,
     [{ label: label("resume", lang), run: close }],
   );
 };
 $("help").onclick = () =>
   modal(
     bilingual("Every little explorer can help", "كل مستكشف صغير يقدر يساعد"),
-    teacherHelp.map(([ar, en]) => `<p>${bilingual(en, ar)}</p>`).join(""),
+    teacherHelp.map(([ar, en]) => `<p>${readingPair(en, ar)}</p>`).join(""),
     [
       { label: label("resume", lang), run: close },
       {
@@ -707,7 +718,7 @@ $("help").onclick = () =>
         run: () =>
           modal(
             bilingual("Watch, listen, then help", "شوف واسمع وبعدين ساعد"),
-            `<p>${bilingual("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 30-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الثلاثين ثانية؟")}</p><p>${bilingual("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${bilingual("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
+            `<p>${readingPair("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 30-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الثلاثين ثانية؟")}</p><p>${readingPair("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${readingPair("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
             [{ label: label("resume", lang), run: close }],
           ),
       },

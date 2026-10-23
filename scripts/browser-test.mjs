@@ -22,6 +22,7 @@ const scripts = [
   "character-check",
   "direction-maze-timer-check",
   "audio-brook-check",
+  "ui-redesign-check",
 ];
 const results = [];
 let cursor = 0;

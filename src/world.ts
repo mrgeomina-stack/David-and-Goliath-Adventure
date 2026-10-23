@@ -742,7 +742,7 @@ export class World extends Phaser.Scene {
     A.sheep(c, 1132, 652, 1.12, Math.sin(this.clock * 2) * 0.08);
     A.sheep(c, 708, 675, 0.82, Math.sin(this.clock * 1.7) * 0.07);
     motes(c, this.clock, 24);
-    A.round(c, 1052, 175, 163, 39, 19, "#fff6dfa8", "#f1e0b1");
+    A.gameCard(c, 1052, 175, 163, 39, "#edbd55");
     A.text(
       c,
       this.say("1 SAMUEL · 17", "١ صموئيل · ١٧"),
@@ -856,7 +856,7 @@ export class World extends Phaser.Scene {
         headcloth: ["#756b52", "#9f6544", "#557a72"][i],
         arm: 0.5 + Math.sin(this.clock * 2 + i) * 0.2,
       });
-    A.round(c, 865, 580, 326, 35, 12, "#f9ebcbeb", "#ccb98b");
+    A.gameCard(c, 865, 580, 326, 35);
     A.text(
       c,
       this.say("THE ISRAELITE CAMP", "معسكر إسرائيل"),
@@ -998,7 +998,7 @@ export class World extends Phaser.Scene {
     c.beginPath();
     c.roundRect(px, py, pw, ph, 26);
     c.stroke();
-    A.round(c, 440, 196, 400, 50, 22, "#fff4d7e0");
+    A.gameCard(c, 440, 196, 400, 50, "#edbd55");
     A.text(
       c,
       t < 1.3
@@ -1027,7 +1027,7 @@ export class World extends Phaser.Scene {
     const t = this.armor.fallTime;
     for (const item of GEAR) {
       const p = trays[item];
-      A.round(c, p.x - 104, p.y - 82, 208, 173, 23, "#fff1d9dc", "#c6a86f");
+      A.gameCard(c, p.x - 104, p.y - 82, 208, 173, "#a58acb");
       if (this.hintTime > 0 && !this.armor.equipped.has(item)) {
         A.ellipse(
           c,
@@ -1127,7 +1127,7 @@ export class World extends Phaser.Scene {
       }
     }
     if (t >= 2.8) {
-      A.round(c, 446, 104, 390, 58, 17, "#fff2d9f0");
+      A.gameCard(c, 446, 104, 390, 58, "#a58acb");
       if (this.lang !== "ar")
         A.text(c, "This armor isn’t right for me!", 640, 127, 22, "#76533b");
       if (this.lang !== "en")
@@ -1523,7 +1523,7 @@ export class World extends Phaser.Scene {
       A.shadow(c, p.x, 600, 6);
       pebble(c, 0, p.x, p.y, 16, 13);
     }
-    A.round(c, 58, 216, 255, 82, 19, "#fff2d9e8");
+    A.gameCard(c, 58, 216, 255, 82, "#edbd55");
     A.text(
       c,
       this.say("YOUR SLING POWER", "قوة الرمية"),
@@ -1585,7 +1585,7 @@ export class World extends Phaser.Scene {
       facing: this.facing,
       walk: this.dir.x ? Math.sin(this.clock * 13) : 0,
     });
-    A.round(c, 390, 272, 370, 103, 20, "#fff2d7f0");
+    A.gameCard(c, 390, 272, 370, 103);
     A.text(
       c,
       this.heard

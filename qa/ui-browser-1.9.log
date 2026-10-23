@@ -1,0 +1,26 @@
+
+> davids-big-adventure@1.9.0 test:browser
+> node scripts/browser-test.mjs
+
+MAZE PASS: real keyboard route, wall rejection, handover, success; zero browser errors.
+ARMOR PASS: wrong-zone reset, 3/4 gating, real drag of all four, staged 6.5s collapse/removal/recovery.
+SLING PASS: low and high misses, ideal collision, pause during flight, victory.
+SHEEP + BROOK PASS: four individual carries, keyboard/touch lifts, pen scoring, distant pickup rejection, jagged rejection, five unique pickups.
+UI + OFFLINE PASS: production HTML runs with networking disabled and no external gameplay-asset requests; 1920/1024 scaled touch, EN/AR, sound unlock/mute, focus cancel, pointer release outside.
+FULL STORY PASS: {"seconds":85.932,"mode":"Easy; automation used solver route and read-only position feedback; not human/classroom timing","errors":[],"completions":[{"mission":"sheep","sheep":4,"roar":4,"complete":1},{"mission":"maze","sheep":4,"roar":4,"complete":2},{"mission":"armor","sheep":4,"roar":4,"complete":3,"voice":3},{"mission":"brook","sheep":4,"roar":4,"complete":4,"voice":3},{"mission":"sling","sheep":4,"roar":4,"complete":5,"voice":3}],"audio":{"sheep":4,"roar":4,"complete":5,"voice":3},"recordings":{"sheep":4.365351473922902,"complete":12.06857142857143}}
+VISUAL + TOUCH PASS: {"frames":120,"seconds":1.9832999999999992,"estimatedFps":60.00100842030961}
+COUNTDOWN PASS: warnings, paused time, real lion catch, four-sheep retry, untimed label.
+PREMIUM PASS: map, actual earned keepsake, persistence, audio controls, colourful instructions, book pause, playtest guide.
+PWA PASS: partial-cache failure and retry, install manifest, scoped cache, real offline play and offline relaunch.
+MOBILE PASS: phone/tablet bounds, native touch maze and armour, multi-touch rescue, rotation and sling.
+FOOD PASS: real maze, continuous handover, transfer and transition; direct file blocked.
+CHARACTER PASS: unified painted rig in cover, movement, actual sheep carry, phone, kneel, pickup and ballistic throw.
+V1 ART PASS: 64 decoded candidates, five real scenes, original rig, forehead alignment, actual projectile and hit reaction.
+AUDIO + BROOK PASS: offline Arabic fallback, pause/mute, supplied recording decoding, 2D motion, touch jagged rejection and five unique stones, one victory.
+UI screenshots and bounds PASS: after
+DIRECTION + MAZE + TIMER PASS: real carry facing, start forks, colour bar, per-activity expiry/retry, pause and untimed Free Play.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

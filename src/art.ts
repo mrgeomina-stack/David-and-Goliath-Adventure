@@ -61,6 +61,39 @@ export function round(
     c.stroke();
   }
 }
+/** Shared vector game-card skin for labels drawn inside the Canvas world. */
+export function gameCard(
+  c: Ctx,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  accent = "#3e9eaa",
+) {
+  c.save();
+  const radius = Math.min(23, h / 3);
+  round(c, x, y + 5, w, h, radius, "#164e5366");
+  c.shadowColor = "#103d4d33";
+  c.shadowBlur = 14;
+  c.shadowOffsetY = 5;
+  round(c, x, y, w, h, radius, "#fff5d4", "#205f68");
+  c.shadowColor = "transparent";
+  round(
+    c,
+    x + 4,
+    y + 4,
+    w - 8,
+    h - 8,
+    Math.max(5, radius - 3),
+    gradient(c, x, y, w, h, ["#fbffff", "#e3f3ec"]),
+  );
+  c.beginPath();
+  c.roundRect(x + 3, y + 3, w - 6, h - 6, Math.max(5, radius - 2));
+  c.clip();
+  c.fillStyle = accent;
+  c.fillRect(x + 3, y + 3, w - 6, 4);
+  c.restore();
+}
 export function line(c: Ctx, points: number[][], color: Paint, width = 3) {
   c.beginPath();
   points.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y)));
@@ -91,7 +124,7 @@ export function text(
   color = "#253d43",
   align: CanvasTextAlign = "center",
 ) {
-  c.font = `700 ${size}px 'Trebuchet MS',Arial,sans-serif`;
+  c.font = `800 ${size}px 'Adventure Nunito','Adventure Arabic','Trebuchet MS',Arial,sans-serif`;
   c.textAlign = align;
   c.textBaseline = "middle";
   c.fillStyle = color;

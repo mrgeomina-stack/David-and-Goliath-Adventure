@@ -1,7 +1,7 @@
 # David’s Big Adventure — teacher guide
 
 For ages 5–8 · 1 Samuel 17 · Arabic + English captions by default.
-Version 1.8.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
+Version 1.9.0: a cohesive high-resolution painted David with connected anatomy and textured animation across every activity and the cover. Supplied visual-assets-v1 artwork, mechanics, mobile controls, offline PWA, keepsakes, colourful instructions and the 30-second activity challenges are included.
 Screenshots are in the separate QA ZIP; the playable ZIP contains the game.
 
 **Phones and tablets:** Open the hosted HTTPS game in Safari (iPhone/iPad) or Chrome
@@ -56,3 +56,5 @@ on an approved local server. See `TEST_REPORT.md` for evidence and limitations.
 **Child playtesting:** The teacher help menu includes an observation guide. The full printable worksheet is in `docs/CHILD_PLAYTEST.md`. No supervised sessions with children have been conducted by this development agent. Automated checks cover inputs, bounds, real completion, rewards, timer behavior and offline operation; they do not measure child comprehension or comfort.
 
 **New sound:** Successful sheep lifts play your sheep recording. The lion gives occasional gentle growls. Your victory recording plays once after each completed mission. Voice starts on; English/Arabic Goliath and Saul guidance has bundled synthetic fallback speech when a local voice is unavailable. Sound mutes all audio; Voice controls speech separately. See [audio and encounter notes](docs/AUDIO_AND_ENCOUNTER.md).
+
+**New interface:** Coral buttons are the main actions; teal controls are secondary actions. Framed blue instruction cards and gold chapter badges share the same visual style. Teacher help scrolls inside its card while Resume and guide buttons stay visible. Arabic and English have separate reading blocks; both fonts are included offline. Gameplay and controls are unchanged.

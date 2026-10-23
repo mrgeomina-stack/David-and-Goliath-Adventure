@@ -1,0 +1,11 @@
+{
+  "phase": "before",
+  "screens": [
+    "home",
+    "missions",
+    "instruction",
+    "pause",
+    "teacher"
+  ],
+  "errors": []
+}

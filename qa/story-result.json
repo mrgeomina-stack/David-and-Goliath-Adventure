@@ -1,45 +1,45 @@
 {
-  "seconds": 86.316,
+  "seconds": 85.932,
   "mode": "Easy; automation used solver route and read-only position feedback; not human/classroom timing",
   "errors": [],
   "completions": [
     {
       "mission": "sheep",
       "sheep": 4,
-      "roar": 3,
+      "roar": 4,
       "complete": 1
     },
     {
       "mission": "maze",
       "sheep": 4,
-      "roar": 3,
+      "roar": 4,
       "complete": 2
     },
     {
       "mission": "armor",
       "sheep": 4,
-      "roar": 3,
+      "roar": 4,
       "complete": 3,
       "voice": 3
     },
     {
       "mission": "brook",
       "sheep": 4,
-      "roar": 3,
+      "roar": 4,
       "complete": 4,
       "voice": 3
     },
     {
       "mission": "sling",
       "sheep": 4,
-      "roar": 3,
+      "roar": 4,
       "complete": 5,
       "voice": 3
     }
   ],
   "audio": {
     "sheep": 4,
-    "roar": 3,
+    "roar": 4,
     "complete": 5,
     "voice": 3
   },
