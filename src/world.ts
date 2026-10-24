@@ -39,7 +39,12 @@ import {
 import * as A from "./art";
 import { receivingBrother } from "./npcs";
 import { foodBasket, deliveryAt } from "./food";
-import { configureHero, heroRigUrl, drawHeroHand } from "./hero";
+import {
+  configureHero,
+  heroRigUrl,
+  heroDeterminedRigUrl,
+  drawHeroHand,
+} from "./hero";
 import { visualLibrary, visualRoles } from "./visual-assets";
 import { bindCanvasGestures } from "./touch";
 import { Effects, depth, cinematicFrame } from "./effects";
@@ -143,6 +148,7 @@ export class World extends Phaser.Scene {
     this.load.image("goliath-forward-fall", goliathDefeatAtlasUrl);
     visualLibrary.preload(this.load);
     this.load.image("david-cohesive-rig", heroRigUrl);
+    this.load.image("david-determined-rig", heroDeterminedRigUrl);
     this.load.image("painted-landscape", landscapeUrl);
     this.load.image("painted-david", heroUrl);
     for (const [key, url] of Object.entries({
@@ -167,6 +173,9 @@ export class World extends Phaser.Scene {
     configureHero(
       this.textures
         .get("david-cohesive-rig")
+        .getSourceImage() as HTMLImageElement,
+      this.textures
+        .get("david-determined-rig")
         .getSourceImage() as HTMLImageElement,
     );
     this.landscape = this.textures
@@ -526,7 +535,7 @@ export class World extends Phaser.Scene {
     this.successTime = 0;
     this.deliveryCheered = false;
     this.clearInput();
-    if (this.mission !== "maze" && this.mission !== "sling")
+    if (!["maze", "sling", "armor"].includes(this.mission))
       this.hooks.sound.play("complete");
     this.hooks.changed();
   }
@@ -764,9 +773,11 @@ export class World extends Phaser.Scene {
         if (this.mission === "armor") {
           const before = this.armor.fallTime;
           this.armor.update(dt);
+          if (before < 1.9 && this.armor.fallTime >= 1.9)
+            this.hooks.sound.play("armorFall");
           if (before < 2.8 && this.armor.fallTime >= 2.8) {
             this.effects.burst(620, 589, "dust", 20);
-            this.hooks.sound.play("armorCrash");
+            this.hooks.sound.play("armorClatter");
           }
           if (this.armor.complete) this.finish();
         }
@@ -1414,6 +1425,16 @@ export class World extends Phaser.Scene {
     if (this.gearTween?.success) dressed.delete(this.gearTween.item);
     A.person(c, x, y, 2.4, {
       gear: dressed,
+      determined: t >= 2.8 ? clamp((t - 2.8) / 0.3, 0, 1) : 0,
+      hands:
+        t >= 5.2
+          ? {
+              right: {
+                x: 33,
+                y: lerp(-64, -112, clamp((t - 5.2) / 1.1, 0, 1)),
+              },
+            }
+          : undefined,
       strain,
       sit,
       tilt,

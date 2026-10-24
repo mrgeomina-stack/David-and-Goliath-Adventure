@@ -6,6 +6,7 @@ import { clamp, lerp, type Point } from "./model";
 import { CharacterMesh } from "./character-mesh";
 import { skinPoint, solveChain, type Chain } from "./character-skin";
 export { default as heroRigUrl } from "./assets/david-rig.png";
+export { default as heroDeterminedRigUrl } from "./assets/david-determined-rig.png";
 
 // All materials, anatomy and lighting come from ONE 1024×1536 illustration.
 // Neck, face, shoulders, vest and tunic form one continuous painted surface.
@@ -79,6 +80,8 @@ const outlines = [
 let art: HTMLImageElement | undefined;
 let body: CharacterMesh;
 let limbs: CharacterMesh[] = [];
+let determinedBody: CharacterMesh;
+let determinedLimbs: CharacterMesh[] = [];
 export const heroRigInfo = {
   ready: false,
   source: "david-rig.png",
@@ -86,9 +89,12 @@ export const heroRigInfo = {
   height: 1536,
   paintedParts: 5,
 };
-export function configureHero(image: HTMLImageElement) {
+export function configureHero(
+  image: HTMLImageElement,
+  determined: HTMLImageElement,
+) {
   art = image;
-  body = new CharacterMesh(image, [
+  const bodyOutline = [
     [287, 44],
     [737, 44],
     [735, 573],
@@ -103,7 +109,12 @@ export function configureHero(image: HTMLImageElement) {
     [280, 574],
     [340, 436],
     [302, 376],
-  ]);
+  ];
+  body = new CharacterMesh(image, bodyOutline);
+  determinedBody = new CharacterMesh(determined, bodyOutline);
+  determinedLimbs = outlines.map(
+    (outline) => new CharacterMesh(determined, outline, 40),
+  );
   limbs = outlines.map((outline) => new CharacterMesh(image, outline, 40));
   heroRigInfo.ready = true;
 }
@@ -148,6 +159,20 @@ export function drawHero(
     visualLibrary.drawAt(c, "david_idle", { x, y }, 0.45 * scale);
     return;
   }
+  const resolve = clamp(p.determined || 0, 0, 1);
+  if (resolve > 0 && resolve < 1) {
+    c.save();
+    c.globalAlpha *= 1 - resolve;
+    drawHero(c, x, y, scale, { ...p, determined: 0 }, time);
+    c.restore();
+    c.save();
+    c.globalAlpha *= resolve;
+    drawHero(c, x, y, scale, { ...p, determined: 1 }, time);
+    c.restore();
+    return;
+  }
+  const activeBody = resolve === 1 ? determinedBody : body;
+  const activeLimbs = resolve === 1 ? determinedLimbs : limbs;
   const stride = p.walk || 0,
     sit = p.sit || 0,
     kneel = p.action === "kneel";
@@ -204,7 +229,15 @@ export function drawHero(
     const lower =
       Math.hypot(source.end.x - source.joint.x, source.end.y - source.joint.y) *
       UNIT;
-    poses.push(solveChain(root, end, upper, lower, -side));
+    poses.push(
+      solveChain(
+        root,
+        end,
+        upper,
+        lower,
+        resolve === 1 && i === 1 && explicit ? side : -side,
+      ),
+    );
   }
   for (let i = 2; i < 4; i++) {
     const side = i === 2 ? -1 : 1,
@@ -230,16 +263,16 @@ export function drawHero(
     (source, i) => (v: Point) =>
       skinPoint(v, source, poses[i], i < 2 ? 23 : 28),
   );
-  limbs[2].draw(c, transforms[2]);
-  limbs[3].draw(c, transforms[3]);
-  limbs[0].draw(c, transforms[0]);
-  limbs[1].draw(c, transforms[1]);
+  activeLimbs[2].draw(c, transforms[2]);
+  activeLimbs[3].draw(c, transforms[3]);
+  activeLimbs[0].draw(c, transforms[0]);
+  activeLimbs[1].draw(c, transforms[1]);
   if (sit < 0.01 && !kneel) {
     c.save();
     c.translate(0, bodyY);
-    body.drawFlat(c, ORIGIN, UNIT);
+    activeBody.drawFlat(c, ORIGIN, UNIT);
     c.restore();
-  } else body.draw(c, torso);
+  } else activeBody.draw(c, torso);
   // Use the same torso compression and settling for clothing and the painted body.
   const clothingPose = (q: Point): Point => ({
     x: q.x,
@@ -252,7 +285,7 @@ export function drawHero(
     wornGear(c, "sword", clothingPose, compression !== 1);
   // Forearms stay above clothing while cuff roots remain naturally tucked under sleeves.
   for (let i = 0; i < 2; i++)
-    limbs[i].draw(c, transforms[i], (v) => v.y > chains[i].joint.y - 12);
+    activeLimbs[i].draw(c, transforms[i], (v) => v.y > chains[i].joint.y - 12);
   if (p.food) {
     foodBasket(c, 0, -62, 1);
     drawHeroHand(c, -30, -74, 0.82, -1);

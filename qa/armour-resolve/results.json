@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "touch": false,
+      "hiddenControls": true,
+      "wrongDropRejected": true,
+      "twoTapPlacementDisabled": true,
+      "fourCorrectDrops": true,
+      "collapseAndSuccess": true,
+      "sheepJoystickPreserved": true,
+      "audioEvents": {
+        "pop": 2,
+        "background": 1,
+        "voice": 1,
+        "armorFall": 1,
+        "armorClatter": 1
+      },
+      "sampleDurations": {
+        "fall": 3.0563265306122447,
+        "clatter": 4.0751020408163265
+      },
+      "noArmourVictorySound": true,
+      "errors": []
+    },
+    {
+      "touch": true,
+      "hiddenControls": true,
+      "wrongDropRejected": true,
+      "twoTapPlacementDisabled": true,
+      "fourCorrectDrops": true,
+      "collapseAndSuccess": true,
+      "sheepJoystickPreserved": true,
+      "audioEvents": {
+        "pop": 2,
+        "background": 1,
+        "voice": 1,
+        "armorFall": 1,
+        "armorClatter": 1
+      },
+      "sampleDurations": {
+        "fall": 3.0563265306122447,
+        "clatter": 4.0751020408163265
+      },
+      "noArmourVictorySound": true,
+      "errors": []
+    }
+  ]
+}

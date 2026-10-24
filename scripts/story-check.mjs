@@ -85,7 +85,10 @@ try {
       throw Error(
         "Background music restarted or lost its loop across chapters",
       );
-    if (snapshot.audioEvents.complete !== completions.length)
+    if (
+      snapshot.audioEvents.complete !==
+      completions.filter((c) => c.mission !== "armor").length
+    )
       throw Error("Missing or repeated completion recording");
     await page.click("#continue");
   }

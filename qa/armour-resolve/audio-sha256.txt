@@ -1,0 +1,2 @@
+cdb7abd5fec565d2335642e9376f5d3d01293c7f042f5135db10b7e872b247a5  src/assets/audio/armor-fall.mp3
+5a3619d20a3b5c70a5c652554a7cec807c09cd1839e38da096e50bcca61b61be  src/assets/audio/armor-clatter.mp3

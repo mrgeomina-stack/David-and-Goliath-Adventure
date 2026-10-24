@@ -1,3 +1,5 @@
+import armorFallUrl from "./assets/audio/armor-fall.mp3";
+import armorClatterUrl from "./assets/audio/armor-clatter.mp3";
 import goliathLaughUrl from "./assets/audio/goliath-laugh.mp3";
 import sheepUrl from "./assets/audio/sheep.mp3";
 import victoryUrl from "./assets/audio/victory.mp3";
@@ -67,6 +69,8 @@ export class Sound {
         ["complete", victoryUrl],
         ["background", musicUrl],
         ["giantLaugh", goliathLaughUrl],
+        ["armorFall", armorFallUrl],
+        ["armorClatter", armorClatterUrl],
       ].map(async ([key, url]) => {
         try {
           const response = await fetch(url);
@@ -105,7 +109,8 @@ export class Sound {
       const source = this.context.createBufferSource();
       const gain = this.context.createGain();
       source.buffer = buffer;
-      gain.gain.value = name === "complete" ? 0.55 : 0.7;
+      gain.gain.value =
+        name === "complete" ? 0.55 : name === "armorClatter" ? 0.45 : 0.7;
       source.connect(gain);
       gain.connect(this.context.destination);
       this.sources.add(source);
@@ -115,7 +120,15 @@ export class Sound {
         if (this.roarSource === source) this.roarSource = null;
       };
       this.events[name] = (this.events[name] ?? 0) + 1;
-      if (name === "complete" || name === "roar" || name === "giantLaugh")
+      if (
+        [
+          "complete",
+          "roar",
+          "giantLaugh",
+          "armorFall",
+          "armorClatter",
+        ].includes(name)
+      )
         this.featureSound(buffer.duration);
       source.start();
     };
@@ -477,6 +490,11 @@ export class Sound {
     this.sample(name);
   }
   play(name: string) {
+    if (name === "armorFall" || name === "armorClatter") {
+      if (!this.context || this.muted || this.paused) return;
+      this.sample(name);
+      return;
+    }
     if (name === "stomp" || name === "giantLaugh") {
       this.storyEffect(name);
       return;

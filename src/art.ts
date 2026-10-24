@@ -381,6 +381,7 @@ export type Pose = {
   tunic?: string;
   headcloth?: string;
   helmetSlip?: number;
+  determined?: number;
   happy?: boolean;
   mature?: boolean;
   beard?: boolean;

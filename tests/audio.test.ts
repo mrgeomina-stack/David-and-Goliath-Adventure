@@ -302,3 +302,81 @@ it("plays the supplied Goliath laugh recording, ducks music, and respects replay
     fetchMock.mock.calls.filter(([url]) => url.includes("goliath-laugh")),
   ).toHaveLength(1);
 });
+
+it("plays the supplied armour recordings without synthesized effects and respects pause/mute", async () => {
+  const recording = { duration: 3.056313 };
+  const clatter = { duration: 4.075063 };
+  const other = { duration: 58.04 };
+  const sources: {
+    buffer: unknown;
+    start: ReturnType<typeof vi.fn>;
+    stop: ReturnType<typeof vi.fn>;
+  }[] = [];
+  const createBuffer = vi.fn();
+  const fetchMock = vi.fn(async (url: string) => ({
+    arrayBuffer: async () =>
+      url.includes("armor-fall")
+        ? recording
+        : url.includes("armor-clatter")
+          ? clatter
+          : other,
+  }));
+  vi.stubGlobal("fetch", fetchMock);
+  const context = {
+    state: "running",
+    currentTime: 0,
+    destination: {},
+    resume: vi.fn(),
+    suspend: vi.fn(),
+    createBuffer,
+    decodeAudioData: async (data: unknown) => data,
+    createBufferSource: () => {
+      const source = {
+        buffer: null as unknown,
+        start: vi.fn(),
+        stop: vi.fn(),
+        connect: vi.fn(),
+      };
+      sources.push(source);
+      return source;
+    },
+    createGain: () => ({
+      gain: { value: 0, setTargetAtTime: vi.fn() },
+      connect: vi.fn(),
+    }),
+  };
+  const sound = new Sound();
+  sound.context = context as unknown as AudioContext;
+  sound.unlock();
+  await vi.waitFor(() =>
+    expect(sound.sampleDurations.armorFall).toBe(3.056313),
+  );
+  sound.play("armorFall");
+  const played = sources.filter((s) => s.buffer === recording);
+  expect(played).toHaveLength(1);
+  expect(played[0].start).toHaveBeenCalledOnce();
+  expect(createBuffer).not.toHaveBeenCalled();
+  expect(sound.musicState.targetGain).toBe(0.055);
+  sound.play("armorClatter");
+  expect(sources.filter((s) => s.buffer === clatter)).toHaveLength(1);
+  expect(sound.events.armorClatter).toBe(1);
+  expect(sound.events.armorCrash).toBeUndefined();
+  expect(sound.events.complete).toBeUndefined();
+  sound.stopSamples();
+  expect(played[0].stop).toHaveBeenCalledOnce();
+  sound.setMuted(true);
+  sound.play("armorFall");
+  sound.setMuted(false);
+  sound.pause(true);
+  sound.play("armorFall");
+  expect(sound.events.armorFall).toBe(1);
+  sound.pause(false);
+  sound.play("armorFall");
+  expect(sound.events.armorFall).toBe(2);
+  expect(
+    fetchMock.mock.calls.filter(([url]) => url.includes("armor-fall")),
+  ).toHaveLength(1);
+  expect(
+    fetchMock.mock.calls.filter(([url]) => url.includes("armor-clatter")),
+  ).toHaveLength(1);
+});
