@@ -1,6 +1,26 @@
 import { describe, it, expect } from "vitest";
-import { ActivityTimer, countdownHue } from "../src/activity-timer";
+import {
+  ActivityTimer,
+  SHEEP_SECONDS,
+  countdownHue,
+} from "../src/activity-timer";
 describe("30-second activity countdown", () => {
+  it("gives sheep 36 seconds with three 12-second color bands", () => {
+    const timer = new ActivityTimer(SHEEP_SECONDS);
+    expect(timer.remaining).toBe(36);
+    expect(countdownHue(timer.remaining!, SHEEP_SECONDS)).toBe(140);
+    timer.tick(12);
+    expect(timer.remaining).toBe(24);
+    expect(countdownHue(timer.remaining!, SHEEP_SECONDS)).toBe(32);
+    timer.tick(12);
+    expect(timer.remaining).toBe(12);
+    expect(countdownHue(timer.remaining!, SHEEP_SECONDS)).toBe(0);
+    timer.tick(12);
+    expect(timer.remaining).toBe(0);
+    expect(new ActivityTimer(SHEEP_SECONDS).remaining).toBe(36);
+    expect(new ActivityTimer(null).remaining).toBe(null);
+    expect(new ActivityTimer().remaining).toBe(30);
+  });
   it("counts only active play and clamps at zero", () => {
     const timer = new ActivityTimer();
     expect(timer.remaining).toBe(30);

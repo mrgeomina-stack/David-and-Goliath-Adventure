@@ -1,6 +1,10 @@
 import { lionLines } from "./lion-encounter-view";
 import { TITLE_DAVID, titleFlockAt } from "./title-flock";
-import { countdownHue } from "./activity-timer";
+import {
+  ACTIVITY_SECONDS,
+  SHEEP_SECONDS,
+  countdownHue,
+} from "./activity-timer";
 import { heroRigInfo } from "./hero";
 import Phaser from "phaser";
 import { visualLibrary } from "./visual-assets";
@@ -432,13 +436,22 @@ function sync() {
   const clock = $("sheep-clock");
   const lionActive = world.mission === "sheep" && world.lionEncounter.active;
   clock.hidden = !["play", "encounter"].includes(world.phase) || lionActive;
+  const limit =
+    world.mission === "sheep" && world.phase !== "encounter"
+      ? SHEEP_SECONDS
+      : ACTIVITY_SECONDS;
+  const orangeAt = (limit * 2) / 3;
+  const redAt = limit / 3;
   const remaining = world.activityRemaining;
   const seconds = remaining === null ? null : Math.ceil(remaining);
   const stamp =
     seconds === null ? "∞" : `0:${String(seconds).padStart(2, "0")}`;
   $("sheep-time").textContent = stamp;
-  clock.classList.toggle("warning", remaining !== null && remaining <= 20);
-  clock.classList.toggle("urgent", remaining !== null && remaining < 10);
+  clock.classList.toggle(
+    "warning",
+    remaining !== null && remaining <= orangeAt,
+  );
+  clock.classList.toggle("urgent", remaining !== null && remaining < redAt);
   $("sheep-warning").textContent =
     remaining === null
       ? bilingual("Free play", "لعب حر")
@@ -448,7 +461,7 @@ function sync() {
             world.mission === "sheep" &&
             world.phase !== "encounter"
           ? bilingual("Lion is chasing! Run!", "الأسد بيجري! اجري!")
-          : remaining <= 20
+          : remaining <= orangeAt
             ? bilingual("Keep going!", "كمّل يا بطل!")
             : bilingual("Time remaining", "الوقت المتبقي");
   if (mobile)
@@ -464,17 +477,18 @@ function sync() {
     "aria-label",
     bilingual("Activity time remaining", "الوقت المتبقي للمهمة"),
   );
-  track.setAttribute("aria-valuenow", String(seconds ?? 30));
+  track.setAttribute("aria-valuemax", String(limit));
+  track.setAttribute("aria-valuenow", String(seconds ?? limit));
   track.setAttribute(
     "aria-valuetext",
     remaining === null ? "Untimed" : `${seconds} seconds remaining`,
   );
   clock.style.setProperty(
     "--time-color",
-    `hsl(${countdownHue(remaining ?? 30).toFixed(1)} 70% 40%)`,
+    `hsl(${countdownHue(remaining ?? limit, limit).toFixed(1)} 70% 40%)`,
   );
   $("countdown-fill").style.transform =
-    `scaleX(${Math.max(0, (remaining ?? 30) / 30)})`;
+    `scaleX(${Math.max(0, (remaining ?? limit) / limit)})`;
   clock.setAttribute("aria-label", `Activity time remaining: ${stamp}`);
   const controlLocked =
     world.paused ||
@@ -837,7 +851,7 @@ $("help").onclick = () =>
         run: () =>
           modal(
             bilingual("Watch, listen, then help", "شوف واسمع وبعدين ساعد"),
-            `<p>${readingPair("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 30-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الثلاثين ثانية؟")}</p><p>${readingPair("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${readingPair("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
+            `<p>${readingPair("Let a child try independently. Can they explain the card, pick up one sheep, find the pen and understand the 36-second timer?", "خلّي الطفل يجرّب بنفسه. هل فهم التعليمات وشال خروف ولقى الحظيرة وفهم عداد الستة وثلاثين ثانية؟")}</p><p>${readingPair("Note the first hesitation, hints needed, sheep rescued, and response to a retry. Try ages 5–8 with keyboard and tablet. Switch to Free Play if needed.", "سجّل أول حاجة حيّرته والمساعدة اللي احتاجها وعدد الخراف ورد فعله على المحاولة الجديدة. جرّب بالكيبورد والتابلت واختار اللعب الحر لو محتاج.")}</p><p>${readingPair("This is an observation guide. Child playtesting has not yet been conducted. A printable worksheet is included with the source.", "ده دليل للملاحظة. تجربة الأطفال لسه ما اتعملتش. ورقة ملاحظات للطباعة موجودة مع المصدر.")}</p>`,
             [{ label: label("resume", lang), run: close }],
           ),
       },

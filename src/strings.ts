@@ -71,7 +71,7 @@ export function label(key: CopyKey, lang: Language) {
 export const teacherHelp: [string, string][] = [
   [
     "١ · الخراف: حرّك داود بالدائرة أو الأسهم. المس خروف قريب أو اضغط SPACE لشيله. أنقذ الأربعة من فتحة الحظيرة قبل انتهاء الوقت، وبعدين أنقذ خروف خامس من الأسد.",
-    "1 · Sheep: Move with the circle or arrows / WASD. Tap a nearby sheep or press SPACE to lift it. Run through the right pen opening to set it down. Save all four before the 30-second countdown ends, then rescue a fifth lamb from the lion. Free Play has no deadline.",
+    "1 · Sheep: Move with the circle or arrows / WASD. Tap a nearby sheep or press SPACE to lift it. Run through the right pen opening to set it down. Save all four before the 36-second countdown ends, then rescue a fifth lamb from the lion. Free Play has no deadline.",
   ],
   [
     "٢ · المتاهة: الدائرة أو الأسهم. المساعدة بتنوّر الخطوة الجاية بس.",

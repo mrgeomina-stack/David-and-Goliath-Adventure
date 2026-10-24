@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "samples": [
+    {
+      "remaining": 36,
+      "limit": 36,
+      "max": "36",
+      "color": "hsl(140.0 70% 40%)",
+      "classes": "",
+      "fill": "scaleX(1)"
+    },
+    {
+      "remaining": 23.850510000000085,
+      "limit": 36,
+      "max": "36",
+      "color": "hsl(31.6 70% 40%)",
+      "classes": "warning",
+      "fill": "scaleX(0.662977)"
+    },
+    {
+      "remaining": 11.750999999999905,
+      "limit": 36,
+      "max": "36",
+      "color": "hsl(0.0 70% 40%)",
+      "classes": "warning urgent",
+      "fill": "scaleX(0.32688)"
+    }
+  ],
+  "errors": []
+}

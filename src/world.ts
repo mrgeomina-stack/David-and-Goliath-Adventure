@@ -9,7 +9,11 @@ import { StoryInterlude } from "./interlude";
 import { interludeAssets, drawInterlude } from "./interlude-view";
 import { drawLionActors, drawLionPrompt } from "./lion-encounter-view";
 import { TITLE_DAVID, titleFlockAt } from "./title-flock";
-import { ActivityTimer, ACTIVITY_SECONDS } from "./activity-timer";
+import {
+  ActivityTimer,
+  ACTIVITY_SECONDS,
+  SHEEP_SECONDS,
+} from "./activity-timer";
 import Phaser from "phaser";
 import {
   MazeModel,
@@ -272,7 +276,7 @@ export class World extends Phaser.Scene {
     this.run++;
     this.maze = new MazeModel(this.seed + this.run * 41);
     this.armor = new ArmorModel();
-    this.sheep = new SheepModel(this.run, this.free ? null : ACTIVITY_SECONDS);
+    this.sheep = new SheepModel(this.run, this.free ? null : SHEEP_SECONDS);
     this.lionEncounter = new LionEncounter(this.easy);
     this.brook = new BrookModel(this.run);
     this.sling = new SlingModel();
