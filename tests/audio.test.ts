@@ -1,7 +1,7 @@
 import { it, expect, vi, afterEach } from "vitest";
 import { Sound } from "../src/audio";
 afterEach(() => vi.unstubAllGlobals());
-it("story footsteps and laughter are bounded cached local effects cancelled with the scene", () => {
+it("story footsteps are bounded cached local effects cancelled with the scene", () => {
   const sound = new Sound(),
     buffers: Float32Array[] = [],
     stop = vi.fn();
@@ -21,8 +21,7 @@ it("story footsteps and laughter are bounded cached local effects cancelled with
   } as unknown as AudioContext;
   sound.play("stomp");
   sound.play("stomp");
-  sound.play("giantLaugh");
-  expect(buffers.map((b) => b.length)).toEqual([37440, 120000]);
+  expect(buffers.map((b) => b.length)).toEqual([37440]);
   for (const b of buffers) {
     expect(b.every(Number.isFinite)).toBe(true);
     expect(b.reduce((m, v) => Math.max(m, Math.abs(v)), 0)).toBeLessThanOrEqual(
@@ -31,16 +30,16 @@ it("story footsteps and laughter are bounded cached local effects cancelled with
     expect(b.some((v) => Math.abs(v) > 0.1)).toBe(true);
   }
   expect(sound.events.stomp).toBe(2);
-  expect(sound.events.giantLaugh).toBe(1);
+  expect(sound.events.giantLaugh).toBeUndefined();
   sound.stopSamples();
-  expect(stop).toHaveBeenCalledTimes(3);
+  expect(stop).toHaveBeenCalledTimes(2);
   sound.setMuted(true);
   sound.play("giantLaugh");
   sound.setMuted(false);
   sound.pause(true);
   sound.play("stomp");
   expect(sound.events.stomp).toBe(2);
-  expect(sound.events.giantLaugh).toBe(1);
+  expect(sound.events.giantLaugh).toBeUndefined();
 });
 function audio() {
   const sound = new Sound();
@@ -239,4 +238,67 @@ it("release swish and armour crash are bounded, cached, cancellable and respect 
   sound.play("armorCrash");
   expect(sound.events.launch).toBe(2);
   expect(sound.events.armorCrash).toBe(1);
+});
+
+it("plays the supplied Goliath laugh recording, ducks music, and respects replay, mute and pause", async () => {
+  const recording = { duration: 3.288 };
+  const other = { duration: 58.04 };
+  const sources: {
+    buffer: unknown;
+    start: ReturnType<typeof vi.fn>;
+    stop: ReturnType<typeof vi.fn>;
+  }[] = [];
+  const createBuffer = vi.fn();
+  const fetchMock = vi.fn(async (url: string) => ({
+    arrayBuffer: async () =>
+      url.includes("goliath-laugh") ? recording : other,
+  }));
+  vi.stubGlobal("fetch", fetchMock);
+  const context = {
+    state: "running",
+    currentTime: 0,
+    destination: {},
+    resume: vi.fn(),
+    suspend: vi.fn(),
+    createBuffer,
+    decodeAudioData: async (data: unknown) => data,
+    createBufferSource: () => {
+      const source = {
+        buffer: null as unknown,
+        start: vi.fn(),
+        stop: vi.fn(),
+        connect: vi.fn(),
+      };
+      sources.push(source);
+      return source;
+    },
+    createGain: () => ({
+      gain: { value: 0, setTargetAtTime: vi.fn() },
+      connect: vi.fn(),
+    }),
+  };
+  const sound = new Sound();
+  sound.context = context as unknown as AudioContext;
+  sound.unlock();
+  await vi.waitFor(() => expect(sound.sampleDurations.giantLaugh).toBe(3.288));
+  sound.play("giantLaugh");
+  const played = sources.filter((s) => s.buffer === recording);
+  expect(played).toHaveLength(1);
+  expect(played[0].start).toHaveBeenCalledOnce();
+  expect(createBuffer).not.toHaveBeenCalled();
+  expect(sound.musicState.targetGain).toBe(0.055);
+  sound.stopSamples();
+  expect(played[0].stop).toHaveBeenCalledOnce();
+  sound.setMuted(true);
+  sound.play("giantLaugh");
+  sound.setMuted(false);
+  sound.pause(true);
+  sound.play("giantLaugh");
+  expect(sound.events.giantLaugh).toBe(1);
+  sound.pause(false);
+  sound.play("giantLaugh");
+  expect(sound.events.giantLaugh).toBe(2);
+  expect(
+    fetchMock.mock.calls.filter(([url]) => url.includes("goliath-laugh")),
+  ).toHaveLength(1);
 });

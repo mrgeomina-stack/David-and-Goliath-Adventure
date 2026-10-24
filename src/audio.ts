@@ -1,3 +1,4 @@
+import goliathLaughUrl from "./assets/audio/goliath-laugh.mp3";
 import sheepUrl from "./assets/audio/sheep.mp3";
 import victoryUrl from "./assets/audio/victory.mp3";
 import roarUrl from "./assets/audio/lion-roar.mp3";
@@ -65,6 +66,7 @@ export class Sound {
         ["roar", roarUrl],
         ["complete", victoryUrl],
         ["background", musicUrl],
+        ["giantLaugh", goliathLaughUrl],
       ].map(async ([key, url]) => {
         try {
           const response = await fetch(url);
@@ -113,7 +115,7 @@ export class Sound {
         if (this.roarSource === source) this.roarSource = null;
       };
       this.events[name] = (this.events[name] ?? 0) + 1;
-      if (name === "complete" || name === "roar")
+      if (name === "complete" || name === "roar" || name === "giantLaugh")
         this.featureSound(buffer.duration);
       source.start();
     };
@@ -440,8 +442,13 @@ export class Sound {
   }
   private storyEffect(name: "stomp" | "giantLaugh") {
     if (!this.context || this.muted || this.paused) return;
+    if (name === "giantLaugh") {
+      // The supplied recording replaces the generated laugh at the existing cue.
+      this.sample(name);
+      return;
+    }
     const c = this.context;
-    const duration = name === "stomp" ? 0.78 : 2.5;
+    const duration = 0.78;
     if (!this.samples.has(name)) {
       const buffer = c.createBuffer(
         1,
@@ -450,40 +457,18 @@ export class Sound {
       );
       const data = buffer.getChannelData(0);
       let seed = 147,
-        low = 0,
-        phase = 0;
+        low = 0;
       for (let i = 0; i < data.length; i++) {
         const t = i / c.sampleRate;
         seed = (seed * 1664525 + 1013904223) >>> 0;
         const noise = seed / 2147483648 - 1;
         low += 0.13 * (noise - low);
-        let v = 0;
-        if (name === "stomp") {
-          const envelope = Math.min(1, t / 0.008) * Math.exp(-t * 7);
-          v =
-            (Math.sin(2 * Math.PI * (52 * t + 1.4 * (1 - Math.exp(-t * 25)))) *
-              0.8 +
-              low * 1.7) *
-            envelope;
-        } else {
-          // Seven voiced “ha” pulses: low, boastful character laughter, not a shriek.
-          const syllable = Math.floor(t / 0.34),
-            u = t % 0.34;
-          if (syllable < 7 && u < 0.28) {
-            const f0 = 108 - (26 * u) / 0.28 + Math.sin(syllable * 1.8) * 8;
-            phase += (2 * Math.PI * f0) / c.sampleRate;
-            const envelope = Math.sin((Math.PI * u) / 0.28) ** 1.5;
-            for (let h = 1; h <= 24; h++) {
-              const f = h * f0;
-              const formant =
-                0.12 +
-                1.8 * Math.exp(-(((f - 580) / 180) ** 2)) +
-                Math.exp(-(((f - 1150) / 240) ** 2));
-              v += (Math.sin(phase * h) * formant) / h;
-            }
-            v = (v * 0.6 + low * 0.18) * envelope;
-          }
-        }
+        const envelope = Math.min(1, t / 0.008) * Math.exp(-t * 7);
+        const v =
+          (Math.sin(2 * Math.PI * (52 * t + 1.4 * (1 - Math.exp(-t * 25)))) *
+            0.8 +
+            low * 1.7) *
+          envelope;
         data[i] = Math.tanh(v) * 0.68 * Math.min(1, (duration - t) / 0.04);
       }
       this.samples.set(name, buffer);

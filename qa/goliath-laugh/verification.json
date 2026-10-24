@@ -1,0 +1,22 @@
+{
+  "assetSha256": "d30374e783280face758376e4c6a97992cdb5584a2842774e9e039d457f01ccd",
+  "identicalToAttachment": true,
+  "decodedSeconds": 3.3119954648526075,
+  "laughPlays": 1,
+  "stomps": 2,
+  "offlineFullStoryPassed": true,
+  "archives": {
+    "Davids_Big_Adventure_Cloudflare_Pages.zip": {
+      "bytes": 72059246,
+      "sha256": "d21f3b8dcfb20629fe21d849e2868775db339ab31eb97e8086933ed2ef63186d",
+      "crcVerified": true,
+      "suppliedRecordingIncluded": true
+    },
+    "Davids_Big_Adventure_Offline.zip": {
+      "bytes": 83520071,
+      "sha256": "bb3d77c4205010710057cc96feeb65c48383a00476b3df67b49a454f9b209384",
+      "crcVerified": true,
+      "suppliedRecordingIncluded": true
+    }
+  }
+}
