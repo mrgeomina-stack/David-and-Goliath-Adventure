@@ -179,23 +179,29 @@ try {
     ["mail", { x: 1045, y: 280 }, { x: 650, y: 370 }],
     ["sword", { x: 1045, y: 482 }, { x: 691, y: 441 }],
   ];
+  if (await page.locator("#input-controls").isVisible())
+    throw Error("Armour must have no joystick or Pick / Place controls");
+  async function dragPiece(from, to) {
+    const a = await logical(from.x, from.y),
+      b = await logical(to.x, to.y);
+    await dispatch("touchStart", [a]);
+    for (let i = 1; i <= 8; i++) {
+      await dispatch("touchMove", [
+        { x: a.x + ((b.x - a.x) * i) / 8, y: a.y + ((b.y - a.y) * i) / 8 },
+      ]);
+      await page.waitForTimeout(18);
+    }
+    await dispatch("touchEnd", []);
+  }
   for (const [item, tray, anchor] of gear) {
-    await moveTo(tray, true);
-    await tap("#action");
-    if ((await state()).selectedGear !== item)
-      throw Error("Cursor did not pick " + item);
     if (item === "helmet") {
-      await moveTo({ x: 691, y: 500 }, true);
-      await tap("#action");
+      await dragPiece(tray, { x: 691, y: 500 });
       if ((await state()).equipped.includes(item))
         throw Error("Wrong armour placement accepted");
-      await moveTo(tray, true);
-      await tap("#action");
     }
-    await moveTo(anchor, true);
-    await tap("#action");
+    await dragPiece(tray, anchor);
     if (!(await state()).equipped.includes(item))
-      throw Error("Cursor did not attach " + item);
+      throw Error("Drag did not attach " + item);
   }
   await page.waitForTimeout(3100);
   await page.screenshot({ path: folder + "/armour-collapse.png" });

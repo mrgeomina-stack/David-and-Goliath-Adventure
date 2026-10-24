@@ -8,7 +8,7 @@ teacher controls, fully bundled illustrated artwork, supplied recordings and pro
 
 Every activity now has a two-circle thumb joystick and contextual action buttons
 on the right. Steer David through the meadow/maze, tap a nearby sheep once to lift
-it, steer a hand for armour/stone selection, or pull/hold/release for the sling.
+it, drag armour directly, steer a hand for stone selection, or pull/hold/release for the sling.
 Existing keyboard controls, direct armour dragging, stone timing, animations and
 collision rules remain intact. See [controls and tests](docs/JOYSTICK_CONTROLS.md).
 

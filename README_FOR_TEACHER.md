@@ -24,7 +24,7 @@ account, installation or internet. Rehearse on your classroom laptop first.
 | 1. Sheep | The joystick or arrows / WASD move David. Get close and tap a sheep once, or press SPACE / **Lift sheep**. David raises one sheep into both hands; run through the opening on the pen’s right. He gently sets it down automatically. Repeat for all four before the timer expires, then rescue a fifth lamb in the lion encounter. |
 | 2. Maze | Follow real corridors using arrows / WASD, finger swipes or the joystick. Reach the flag beside the brothers’ camp and watch the food delivery. **Hint** reveals one next step. |
 | Goliath’s challenge | Watch Goliath stomp, laugh and challenge the army. Then guide David left to Saul’s tent and press SPACE / Speak to volunteer. Spoken guidance is on initially. |
-| 3. Armour | Use the joystick hand and Pick / Place, or drag each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Alternatively, tap a piece, then its body part. Wrong drops return safely. Watch the full tumble and recovery. |
+| 3. Armour | Drag and drop each piece onto David: tunic and mail → chest, helmet → head, sword → waist. Wrong drops return safely. Watch the full tumble and recovery. |
 | 4. Brook | Steer the hand and **Scoop**, or press SPACE when the moving ring reaches a smooth stone, or tap a smooth stone while the ring passes it. The circle moves continuously without pausing over scattered stones. Collect exactly five; jagged rocks do not count. |
 | 5. Sling | Pull and hold the circle, or hold SPACE / **Hold-release** to whirl the two-cord sling; release to throw. Try a little past halfway. Too little or too much power misses. Only forehead/head contact wins. Retry freely. |
 

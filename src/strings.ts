@@ -78,8 +78,8 @@ export const teacherHelp: [string, string][] = [
     "2 · Maze: Steer with the circle or arrows / WASD. Hint shows one next step.",
   ],
   [
-    "٣ · الدرع: اسحب القطعة أو المسها وبعدين المس رأس أو صدر أو وسط داود.",
-    "3 · Armour: Steer the hand and Pick / Place, drag a piece, or tap it then David’s head, chest or hip.",
+    "٣ · الدرع: اسحب كل قطعة لمكانها الصحيح على رأس أو صدر أو وسط داود.",
+    "3 · Armour: Drag and drop each piece onto David’s matching head, chest or hip.",
   ],
   [
     "٤ · الجدول: اضغط SPACE أو المس حجر أملس لما الدايرة المتحركة تعدّي عليه.",

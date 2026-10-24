@@ -17,11 +17,10 @@ over 44 pixels. It works with touch, a stylus or a mouse, with no new dependency
   holding continues to walk, and releasing stops. Walls, maze branches, movement
   cooldown and the actual basket-delivery celebration are unchanged. Swipes and
   keyboard arrows/WASD remain available.
-- **Armour:** the joystick moves a visible hand. Steer to a tray, tap **Pick piece**,
-  steer the piece over David's matching body part, then tap **Place piece**. Wrong
-  placements return it to its tray. All four correct pieces are still required
-  before the original collapse/recovery. Direct finger dragging and tap-piece /
-  tap-body placement remain available.
+- **Armour:** drag each piece directly onto David's matching body part with a
+  finger or mouse. There is no joystick or Pick / Place button in this activity.
+  Wrong placements return to the tray; all four correct drops are still required
+  before the original collapse and recovery.
 - **Stones:** steer the hand over a smooth stone and tap **Scoop** as the existing
   moving ring passes it. Early/late attempts miss; exactly five unique stones are
   still required. Direct stone taps and keyboard SPACE retain their timing rules.

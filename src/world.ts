@@ -336,11 +336,8 @@ export class World extends Phaser.Scene {
       if (dir.x) this.facing = dir.x < 0 ? -1 : 1;
     } else if (this.mission === "maze") {
       if (!wasMoving && this.moveWait <= 0) this.stepMaze(dir);
-    } else if (this.mission === "armor" || this.mission === "brook") {
-      this.controlCursor ??=
-        this.mission === "armor"
-          ? { ...trays.helmet }
-          : { x: this.brook.ring, y: this.brook.ringY };
+    } else if (this.mission === "brook") {
+      this.controlCursor ??= { x: this.brook.ring, y: this.brook.ringY };
     } else if (this.mission === "sling" && !wasMoving) this.action(true);
   }
   releaseSteering(cancelled: boolean) {
@@ -357,15 +354,7 @@ export class World extends Phaser.Scene {
       (this.phase !== "play" && this.phase !== "encounter")
     )
       return;
-    if (down && this.controlCursor && this.mission === "armor") {
-      this.fingerGesture = true;
-      if (this.selected) {
-        const item = this.selected;
-        this.selected = null;
-        this.drag = null;
-        this.drop(item, this.controlCursor);
-      } else this.pointerDown(this.controlCursor);
-    } else if (down && this.controlCursor && this.mission === "brook") {
+    if (down && this.controlCursor && this.mission === "brook") {
       this.pointerDown(this.controlCursor);
     } else this.action(down);
   }
@@ -460,11 +449,6 @@ export class World extends Phaser.Scene {
       this.scoop(target);
     }
     if (this.mission === "armor") {
-      if (this.selected) {
-        this.drop(this.selected, p);
-        this.selected = null;
-        return;
-      }
       const item = GEAR.find(
         (i) => !this.armor.equipped.has(i) && distance(p, trays[i]) < 83,
       );
@@ -479,8 +463,8 @@ export class World extends Phaser.Scene {
     const d = this.drag;
     if (distance(p, trays[d.item]) > 20) {
       this.drop(d.item, p);
-      this.selected = null;
     }
+    this.selected = null;
     this.drag = null;
   }
   drop(item: Gear, p: Point) {

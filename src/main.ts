@@ -178,8 +178,8 @@ const instructions: Record<Mission, [string, string, string]> = {
   ],
   armor: [
     "DRAG → DROP",
-    "حرّك اليد بالدائرة واختار القطعة ثم حطها على داود، أو اسحبها بإصبعك.",
-    "Drag pieces • Or steer the hand and tap Pick / Place",
+    "اسحب كل قطعة بإصبعك وحطها في مكانها الصحيح على داود.",
+    "Drag each piece onto the matching body part",
   ],
   brook: [
     "SPACE  /  TAP",
@@ -528,7 +528,8 @@ function sync() {
       world.mission === "armor" &&
       (!world.controlCursor || world.armor.fallTime >= 0)) ||
     (!encounter && world.mission === "sling" && world.sling.state !== "ready");
-  $("input-controls").hidden = success || world.failed;
+  $("input-controls").hidden =
+    success || world.failed || (!encounter && world.mission === "armor");
   $("input-controls").dataset.activity = encounter ? "walk" : world.mission;
   const instruction = instructions[world.mission];
   const legend =
