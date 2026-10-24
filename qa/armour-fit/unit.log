@@ -1,0 +1,34 @@
+
+> davids-big-adventure@1.12.0 test
+> vitest run
+
+
+ RUN  v4.0.18 /workspace/David-and-Goliath-Adventure
+
+ ✓ tests/audio.test.ts (7 tests) 300ms
+ ✓ tests/character-skin.test.ts (4 tests) 20ms
+ ✓ tests/lion-encounter.test.ts (4 tests) 31ms
+ ✓ tests/title-flock.test.ts (2 tests) 926ms
+   ✓ keeps nine large cover sheep clear of the controls, grounded and depth sorted  887ms
+ ✓ tests/joystick.test.ts (3 tests) 4ms
+ ✓ tests/model.test.ts (20 tests) 1143ms
+     ✓ 200 seeds have six route decisions and delayed dead ends in connected mazes  703ms
+     ✓ allows four real round trips across varied starts within the 30-second deadline  309ms
+ ✓ tests/narration.test.ts (4 tests) 8ms
+ ✓ tests/visual-assets.test.ts (5 tests) 9ms
+ ✓ tests/interlude.test.ts (5 tests) 3ms
+ ✓ tests/goliath-defeat.test.ts (3 tests) 5ms
+ ✓ tests/mobile.test.ts (6 tests) 4ms
+ ✓ tests/journal.test.ts (2 tests) 3ms
+ ✓ tests/activity-timer.test.ts (4 tests) 3ms
+
+ Test Files  13 passed (13)
+      Tests  69 passed (69)
+   Start at  04:16:56
+   Duration  1.92s (transform 864ms, setup 0ms, import 1.35s, tests 2.46s, environment 2ms)
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

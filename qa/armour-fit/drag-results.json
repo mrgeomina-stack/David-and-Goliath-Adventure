@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "touch": false,
+      "hiddenControls": true,
+      "wrongDropRejected": true,
+      "twoTapPlacementDisabled": true,
+      "fourCorrectDrops": true,
+      "collapseAndSuccess": true,
+      "sheepJoystickPreserved": true,
+      "errors": []
+    },
+    {
+      "touch": true,
+      "hiddenControls": true,
+      "wrongDropRejected": true,
+      "twoTapPlacementDisabled": true,
+      "fourCorrectDrops": true,
+      "collapseAndSuccess": true,
+      "sheepJoystickPreserved": true,
+      "errors": []
+    }
+  ]
+}

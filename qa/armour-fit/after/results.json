@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "equipped": [
+    "tunic",
+    "mail",
+    "helmet",
+    "sword"
+  ],
+  "errors": []
+}

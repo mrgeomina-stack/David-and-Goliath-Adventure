@@ -240,12 +240,16 @@ export function drawHero(
     body.drawFlat(c, ORIGIN, UNIT);
     c.restore();
   } else body.draw(c, torso);
-  c.save();
-  c.translate(0, bodyY);
-  if (p.gear?.has("tunic")) wornGear(c, "tunic");
-  if (p.gear?.has("mail")) wornGear(c, "mail");
-  if (p.gear?.has("sword")) wornGear(c, "sword");
-  c.restore();
+  // Use the same torso compression and settling for clothing and the painted body.
+  const clothingPose = (q: Point): Point => ({
+    x: q.x,
+    y: (q.y > -94 ? -94 + (q.y + 94) * compression : q.y) + bodyY,
+  });
+  if (p.gear?.has("tunic"))
+    wornGear(c, "tunic", clothingPose, compression !== 1);
+  if (p.gear?.has("mail")) wornGear(c, "mail", clothingPose, compression !== 1);
+  if (p.gear?.has("sword"))
+    wornGear(c, "sword", clothingPose, compression !== 1);
   // Forearms stay above clothing while cuff roots remain naturally tucked under sleeves.
   for (let i = 0; i < 2; i++)
     limbs[i].draw(c, transforms[i], (v) => v.y > chains[i].joint.y - 12);
