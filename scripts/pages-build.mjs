@@ -42,6 +42,11 @@ if (
   html.includes("/src/main.ts")
 )
   throw Error("Unbundled entry or remote dependency");
+// Optional production-only analytics. The game and offline copy never depend on it.
+const analyticsHost = "david-and-goliath-adventure.mrgeomina.workers.dev";
+const analyticsToken = "0e75498abbff4b7a8a1b03b9c3149dc1";
+const analyticsSnippet = `<script>(function(){if(location.hostname!==${JSON.stringify(analyticsHost)}||!navigator.onLine)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",JSON.stringify({token:${JSON.stringify(analyticsToken)}}));document.body.appendChild(s);})();</script>`;
+writeFileSync(join(root, "index.html"), html.replace("</body>", analyticsSnippet + "\\n</body>"));
 const hash = createHash("sha256");
 hash.update(readFileSync("scripts/pages-worker.js"));
 for (const path of files)
@@ -84,6 +89,7 @@ const report = {
   precachedFiles: files.length,
   offlineOptIn: true,
   runtimeServices: [],
+  optionalAnalytics: "Cloudflare Web Analytics (production hostname only)",
   filesOverLimit: inventory.filter((f) => f.bytes > 25 * 1024 * 1024),
 };
 if (report.filesOverLimit.length || report.files > report.fileLimit)
