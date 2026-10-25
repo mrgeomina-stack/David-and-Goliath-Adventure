@@ -275,7 +275,9 @@ export class World extends Phaser.Scene {
     this.failed = false;
     this.timedOut = false;
     this.facing = 1;
-    this.activityTimer = new ActivityTimer(this.free ? null : ACTIVITY_SECONDS);
+    this.activityTimer = new ActivityTimer(
+      this.free || mission === "sling" ? null : ACTIVITY_SECONDS,
+    );
     this.effects.particles = [];
     this.successTime = 0;
     this.deliveryCheered = false;
@@ -863,8 +865,16 @@ export class World extends Phaser.Scene {
             this.sling.state === "flying" &&
             distance(this.sling.stone, SHOT.target) < 150;
           this.sling.update(dt * (close ? 0.65 : 1));
-          if (this.sling.state === "hit") this.finish();
-          else if (before !== this.sling.state) this.hooks.changed();
+          if (this.sling.state === "hit") {
+            this.hooks.sound.stopLaugh();
+            this.finish();
+          } else if (before !== this.sling.state) {
+            if (this.sling.state === "miss") {
+              this.clearInput();
+              this.hooks.sound.play("giantLaugh");
+            }
+            this.hooks.changed();
+          }
         }
       }
     }
@@ -1779,7 +1789,15 @@ export class World extends Phaser.Scene {
     });
     const t = this.phase === "success" ? this.successTime : 0;
     if (this.phase === "success") drawGoliathDefeat(c, t);
-    else A.giant(c, 1000, 590, this.clock);
+    else if (this.sling.state === "miss") {
+      c.save();
+      c.translate(1000, 590);
+      c.rotate(Math.sin(this.sling.missTime * 22) * 0.012);
+      c.scale(1, 1 + Math.sin(this.sling.missTime * 22) * 0.012);
+      c.translate(-1000, -590);
+      A.giant(c, 1000, 590, this.clock, 0, true);
+      c.restore();
+    } else A.giant(c, 1000, 590, this.clock);
     // Forehead center (1000,259) corresponds to the visible upper face, not the whole giant.
     if (this.hintTime > 0) {
       c.strokeStyle = "#fff3bd";

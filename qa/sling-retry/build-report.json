@@ -1,0 +1,16 @@
+{
+  "version": "75ea47425a383cbe",
+  "sourceBaseRevision": "3ef386e5dedc659618381d71e468b83ed1797a03",
+  "assetLimitBytes": 26214400,
+  "fileLimit": 20000,
+  "files": 145,
+  "totalBytes": 75878673,
+  "largest": {
+    "path": "assets/level04_brook_1920x1080-B6WrD6lC.png",
+    "bytes": 3884313
+  },
+  "precachedFiles": 141,
+  "offlineOptIn": true,
+  "runtimeServices": [],
+  "filesOverLimit": []
+}

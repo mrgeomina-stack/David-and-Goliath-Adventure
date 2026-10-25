@@ -31,7 +31,11 @@ try {
     );
     if ((await state()).audioEvents.impact)
       throw Error("A missed shot triggered landing audio");
-    await page.click("#continue");
+    if (await page.locator("#message").isVisible())
+      throw Error("Miss opened a retry popup");
+    await page.waitForFunction(
+      () => window.adventureQA.snapshot().shot === "ready",
+    );
   }
   await shoot(1000);
   await page.waitForFunction(
@@ -47,12 +51,19 @@ try {
   if (s.successTime !== frozen || s.audioEvents.impact)
     throw Error("Paused fall did not freeze sound timing");
   await page.click("#modal-actions button:first-child");
+  // The established forward fall lands at 1.62s, not the earlier backward fall's 1.1s.
+  await page.waitForFunction(
+    () => window.adventureQA.snapshot().successTime >= 1.4,
+  );
+  s = await state();
+  if (s.successTime < 1.62 && (s.audioEvents.impact || s.audioEvents.complete))
+    throw Error("Impact/music played before the forward ground frame");
   await page.waitForFunction(
     () => window.adventureQA.snapshot().audioEvents.impact === 1,
   );
   s = await state();
-  if (s.successTime < 1 || s.successTime > 1.4 || s.audioEvents.complete)
-    throw Error("Impact not synchronized with ground frame");
+  if (s.successTime < 1.62 || s.successTime > 1.95)
+    throw Error("Impact not synchronized with forward ground frame");
   await page.screenshot({ path: "qa/96-giant-ground-impact.png" });
   await page.waitForFunction(
     () => window.adventureQA.snapshot().audioEvents.complete === 1,
@@ -111,7 +122,7 @@ try {
         passed: true,
         serviceWorkers: "block",
         checks: [
-          "weak/strong misses silent",
+          "weak/strong misses trigger laughs without landing sounds or retry popups",
           "impact waits for landing",
           "pause freezes landing",
           "one impact per hit",

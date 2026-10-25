@@ -13,6 +13,11 @@ export class Sound {
   private voiceSource: AudioBufferSourceNode | null = null;
   private voiceGeneration = 0;
   private roarSource: AudioBufferSourceNode | null = null;
+  private laughSource: AudioBufferSourceNode | null = null;
+  stopLaugh() {
+    this.laughSource?.stop();
+    this.laughSource = null;
+  }
   stopVoice() {
     this.voiceGeneration++;
     this.voiceSource?.stop();
@@ -91,6 +96,7 @@ export class Sound {
     this.sources.clear();
     this.roarWait = 5;
     this.roarSource = null;
+    this.laughSource = null;
     this.featureUntil = 0;
     this.mixMusic();
   }
@@ -115,9 +121,14 @@ export class Sound {
       gain.connect(this.context.destination);
       this.sources.add(source);
       if (name === "roar") this.roarSource = source;
+      if (name === "giantLaugh") {
+        this.stopLaugh();
+        this.laughSource = source;
+      }
       source.onended = () => {
         this.sources.delete(source);
         if (this.roarSource === source) this.roarSource = null;
+        if (this.laughSource === source) this.laughSource = null;
       };
       this.events[name] = (this.events[name] ?? 0) + 1;
       if (

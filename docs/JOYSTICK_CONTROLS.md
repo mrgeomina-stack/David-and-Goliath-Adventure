@@ -27,7 +27,9 @@ over 44 pixels. It works with touch, a stylus or a mouse, with no new dependency
 - **Sling:** pull the inner circle, hold, then release to throw. Charge depends on
   holding time, with the same ballistic path, weak/strong misses and real forehead
   collision. Cancelling a touch cancels charging rather than releasing a stone.
-  The action button and SPACE also retain hold/release behaviour.
+  The action button and SPACE also retain hold/release behaviour. Misses trigger
+  Goliath’s laugh and automatically ready another throw after a brief reaction;
+  no retry button or deadline interrupts this final stage.
 
 The fixed-position armour, brook and sling activities keep their original game
 models; steering controls their existing interaction rather than adding unrelated

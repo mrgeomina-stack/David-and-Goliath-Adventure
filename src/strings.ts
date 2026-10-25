@@ -86,8 +86,8 @@ export const teacherHelp: [string, string][] = [
     "4 · Brook: Steer the hand and Scoop, press SPACE, or tap a smooth stone as the moving ring passes it.",
   ],
   [
-    "٥ · المقلاع: دوس مطوّل على SPACE أو الزر وسيب عشان ترمي. جرّب تاني لو الرمية ما أصابتش.",
-    "5 · Sling: Pull and hold the circle, or hold SPACE / the button, then release. Retry freely after a miss.",
+    "٥ · المقلاع: دوس مطوّل على SPACE أو الزر وسيب عشان ترمي. لو الرمية ما أصابتش جليات بيضحك والمقلاع بيجهز لوحده. كمّل لحد ما تصيب وجهه.",
+    "5 · Sling: Pull and hold the circle, or hold SPACE / the button, then release. After a miss Goliath laughs and the sling readies automatically. Keep trying until you hit his face; no time limit.",
   ],
   [
     "ست فرق، كل فريق خمس أطفال: شجّعوا وعدّوا وساعدوا. بدّلوا طفل واحد بيلعب عند كل مهمة. خمس دقايق مش كفاية لكل الثلاثين طفل يمسكوا الأزرار. اللعب الحر بيدي وقت أطول.",

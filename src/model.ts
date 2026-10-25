@@ -517,6 +517,8 @@ export class SlingModel {
   stone: Point = { ...SHOT.origin };
   trail: Point[] = [];
   elapsed = 0;
+  missTime = 0;
+  misses = 0;
   hold() {
     if (this.state === "ready") this.charging = true;
   }
@@ -534,6 +536,19 @@ export class SlingModel {
   update(dt: number) {
     this.elapsed += dt;
     if (this.charging) this.charge = Math.min(SHOT.maxCharge, this.charge + dt);
+    if (this.state === "miss") {
+      this.missTime += dt;
+      if (this.missTime >= 1.1) {
+        this.state = "ready";
+        this.charge = 0;
+        this.charging = false;
+        this.time = 0;
+        this.missTime = 0;
+        this.stone = { ...SHOT.origin };
+        this.trail = [];
+      }
+      return;
+    }
     if (this.state !== "flying") return;
     const old = this.stone;
     this.time += dt;
@@ -543,6 +558,10 @@ export class SlingModel {
       this.state = "hit";
       return;
     }
-    if (this.stone.y > 598 || this.stone.x > 1330) this.state = "miss";
+    if (this.stone.y > 598 || this.stone.x > 1330) {
+      this.state = "miss";
+      this.missTime = 0;
+      this.misses++;
+    }
   }
 }

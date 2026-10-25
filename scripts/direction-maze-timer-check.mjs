@@ -116,7 +116,7 @@ try {
   checks.push(
     "fresh green timer, genuine start choice, pause freeze, orange at20/red below10, actual expiry and fresh retry",
   );
-  for (const mission of ["armor", "brook", "sling"]) {
+  for (const mission of ["armor", "brook"]) {
     await open(mission);
     if ((await state()).activityRemaining !== 30)
       throw Error(mission + " timer not 30");

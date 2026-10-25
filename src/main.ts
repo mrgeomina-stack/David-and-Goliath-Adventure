@@ -402,9 +402,6 @@ function sync() {
   $("message").hidden = !(
     (success && world.successTime >= world.payoffDuration) ||
     victory ||
-    (world.phase === "play" &&
-      world.mission === "sling" &&
-      world.sling.state === "miss") ||
     world.failed
   );
   document.querySelector(".title-card p")!.innerHTML =
@@ -455,7 +452,9 @@ function sync() {
   clock.classList.toggle("urgent", remaining !== null && remaining < redAt);
   $("sheep-warning").textContent =
     remaining === null
-      ? bilingual("Free play", "لعب حر")
+      ? world.mission === "sling"
+        ? bilingual("Keep trying", "كمّل المحاولة")
+        : bilingual("Free play", "لعب حر")
       : world.failed
         ? bilingual("Try again", "جرّب تاني")
         : remaining === 0 &&
@@ -468,7 +467,9 @@ function sync() {
   if (mobile)
     $("sheep-warning").textContent =
       remaining === null
-        ? bilingual("Free", "حر")
+        ? world.mission === "sling"
+          ? bilingual("Unlimited", "بلا وقت")
+          : bilingual("Free", "حر")
         : world.failed
           ? bilingual("Retry", "تاني")
           : bilingual("Time", "الوقت");
@@ -589,8 +590,7 @@ function sync() {
   }
   $("hint").textContent = "✧ " + label("hint", lang);
   $("hint").hidden = success || encounter || lionActive;
-  const miss =
-    world.failed || (world.mission === "sling" && world.sling.state === "miss");
+  const miss = world.failed;
   if (!$("message").hidden) {
     let k: CopyKey = miss
       ? "miss"
@@ -1004,6 +1004,8 @@ if (new URL(location.href).searchParams.has("qa"))
         stones: world.brook.stones,
         stoneCount: world.brook.count,
         shot: world.sling.state,
+        missedThrows: world.sling.misses,
+        missTime: world.sling.missTime,
         charge: world.sling.charge,
         controlCursor: world.controlCursor,
         selectedGear: world.selected,

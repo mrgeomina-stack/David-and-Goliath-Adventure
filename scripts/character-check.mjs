@@ -100,7 +100,9 @@ try {
   );
   if ((await state()).shot === "miss") {
     // Screenshot encoding can extend a hold; retry through the real game controls.
-    await page.click("#continue");
+    await page.waitForFunction(
+      () => window.adventureQA.snapshot().shot === "ready",
+    );
     await page.keyboard.down("Space");
     await page.waitForFunction(
       () => window.adventureQA.snapshot().charge >= 0.99,

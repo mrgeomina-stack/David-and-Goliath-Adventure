@@ -326,3 +326,30 @@ it("a direct tap cannot bypass ring timing and a missed opportunity returns on a
   expect(b.scoop(s)).toBe(true);
   expect(b.count).toBe(1);
 });
+
+it("automatically readies unlimited missed throws while retaining genuine forehead hits", () => {
+  const s = new SlingModel();
+  for (const charge of [0.01, 1.8, 0.01, 1.8]) {
+    s.hold();
+    s.charge = charge;
+    s.release();
+    for (let i = 0; i < 600 && s.state === "flying"; i++) s.update(1 / 120);
+    expect(s.state).toBe("miss");
+    s.update(0.5);
+    expect(s.state).toBe("miss");
+    s.update(0.61);
+    expect(s.state).toBe("ready");
+    expect(s.charge).toBe(0);
+    expect(s.charging).toBe(false);
+    expect(s.trail).toEqual([]);
+  }
+  expect(s.misses).toBe(4);
+  s.hold();
+  s.charge = 0.99;
+  s.release();
+  for (let i = 0; i < 600 && s.state === "flying"; i++) s.update(1 / 120);
+  expect(s.state).toBe("hit");
+  s.update(20);
+  expect(s.state).toBe("hit");
+  expect(s.misses).toBe(4);
+});

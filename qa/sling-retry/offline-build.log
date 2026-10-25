@@ -1,0 +1,27 @@
+
+> davids-big-adventure@1.12.0 package:offline
+> npm run build && python3 scripts/package-offline.py
+
+
+> davids-big-adventure@1.12.0 build
+> tsc --noEmit && vite build && node scripts/offline.mjs
+
+vite v7.3.1 building client environment for production...
+transforming...
+✓ 172 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/davids-big-adventure.css      322.71 kB │ gzip:    219.66 kB
+dist/game.js                   113,509.64 kB │ gzip: 84,054.08 kB
+✓ built in 19.17s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+Davids_Big_Adventure_Offline.zip: 85,401,333 bytes, ZIP integrity verified
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

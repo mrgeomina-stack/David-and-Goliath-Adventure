@@ -298,6 +298,13 @@ it("plays the supplied Goliath laugh recording, ducks music, and respects replay
   sound.pause(false);
   sound.play("giantLaugh");
   expect(sound.events.giantLaugh).toBe(2);
+  const previousLaugh = sources.at(-1)!;
+  sound.play("giantLaugh");
+  expect(previousLaugh.stop).toHaveBeenCalledOnce();
+  const currentLaugh = sources.at(-1)!;
+  sound.stopLaugh();
+  expect(currentLaugh.stop).toHaveBeenCalledOnce();
+  expect(sound.events.giantLaugh).toBe(3);
   expect(
     fetchMock.mock.calls.filter(([url]) => url.includes("goliath-laugh")),
   ).toHaveLength(1);
