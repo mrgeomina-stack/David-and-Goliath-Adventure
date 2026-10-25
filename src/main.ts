@@ -369,6 +369,7 @@ function sync() {
   $<HTMLButtonElement>("practice-toggle").disabled = !world.ready;
   $("title").hidden = !title;
   $("title-note").hidden = !title;
+  $("production-credit").hidden = !title;
   $("mission").hidden = title || victory || world.phase === "interlude";
   $("bottom").hidden = title || victory || world.phase === "interlude";
   $("story-interlude").hidden = world.phase !== "interlude";

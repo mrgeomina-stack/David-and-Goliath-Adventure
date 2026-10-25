@@ -930,3 +930,19 @@ body.lang-ar #tutorial .tutorial-copy {
     0 3px 0 #61928d,
     inset 0 2px 0 #fff;
 }
+
+/* Editable landing-page credit sits with the brand without moving the hero UI. */
+#toolbar #production-credit {
+  padding-top: 3px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.15px;
+  color: #805b24;
+  white-space: nowrap;
+}
+.compact #toolbar #production-credit {
+  padding-top: calc(2px / var(--game-scale));
+  font-size: calc(8px / var(--game-scale));
+  letter-spacing: 0;
+}
