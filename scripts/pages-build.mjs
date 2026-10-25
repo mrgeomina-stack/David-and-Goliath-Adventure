@@ -46,7 +46,7 @@ if (
 const analyticsHost = "david-and-goliath-adventure.mrgeomina.workers.dev";
 const analyticsToken = "0e75498abbff4b7a8a1b03b9c3149dc1";
 const analyticsSnippet = `<script>(function(){if(location.hostname!==${JSON.stringify(analyticsHost)}||!navigator.onLine)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",JSON.stringify({token:${JSON.stringify(analyticsToken)}}));document.body.appendChild(s);})();</script>`;
-writeFileSync(join(root, "index.html"), html.replace("</body>", analyticsSnippet + "\\n</body>"));
+writeFileSync(join(root, "index.html"), html.replace("</body>", analyticsSnippet + "\n</body>"));
 const hash = createHash("sha256");
 hash.update(readFileSync("scripts/pages-worker.js"));
 for (const path of files)
